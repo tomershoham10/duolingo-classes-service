@@ -1,6 +1,5 @@
 import Express, { NextFunction } from "express";
 import OptionManager from "./manager.js";
-import { OptionType, Types } from "./model.js";
 
 export default class OptionController {
   static async create(
@@ -9,7 +8,7 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
-      const { name, type } = req.body as { name: string; type: Types };
+      const { name, type } = req.body as { name: string; type: OTypes };
       const option = await OptionManager.createOption(name, type);
       res
         .status(201)
@@ -44,6 +43,7 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
+      console.log("option controller getAll");
       const options = await OptionManager.getAllOption();
       console.log(options);
       res.status(200).json({ options });

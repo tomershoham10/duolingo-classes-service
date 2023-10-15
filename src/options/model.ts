@@ -1,14 +1,8 @@
 import mongoose, { Schema } from "mongoose";
-
 enum Types {
   VESSEL = "vessel",
   COUNTRY = "country",
   SONAR = "sonar",
-}
-
-interface OptionType {
-  name: string;
-  type: Types;
 }
 
 const optionSchema: Schema = new Schema({
@@ -18,4 +12,4 @@ const optionSchema: Schema = new Schema({
 
 const OptionModel = mongoose.model<OptionType>("Option", optionSchema);
 
-export { OptionModel, OptionType, Types };
+export default OptionModel;

@@ -1,6 +1,10 @@
-import { OptionModel } from "./model.js";
+import OptionModel from "./model.js";
 export default class OptionRepository {
     static async createOption(option) {
+        const existingOption = await OptionModel.findOne({ name: option.name });
+        if (existingOption) {
+            throw new Error("Option already exists");
+        }
         const newOption = await OptionModel.create(option);
         return newOption;
     }
@@ -13,13 +17,13 @@ export default class OptionRepository {
         const options = await OptionModel.find({});
         return options;
     }
-    static async updateOption(optionId, filedsToUpdate) {
-        const updatedOption = await OptionModel.findByIdAndUpdate(optionId, filedsToUpdate, { new: true });
+    static async updateOption(optionId, fieldsToUpdate) {
+        const updatedOption = await OptionModel.findByIdAndUpdate(optionId, fieldsToUpdate, { new: true });
         return updatedOption;
     }
     static async deleteOption(optionId) {
-        const option = await OptionModel.findOneAndDelete({ _id: optionId });
-        return option;
+        const status = await OptionModel.findOneAndDelete({ _id: optionId });
+        return status;
     }
 }
 //# sourceMappingURL=repository.js.map

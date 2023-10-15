@@ -1,19 +1,14 @@
-import { OptionModel, OptionType, Types } from "./model.js";
 import OptionRepository from "./repository.js";
 
 export default class OptionManager {
-  static async createOption(name: string, type: Types): Promise<OptionType> {
-    const existingUser = await OptionModel.findOne({ name });
-    if (existingUser) {
-      throw new Error("Option already exists");
-    }
-
-    const newUser: OptionType = {
+  static async createOption(name: string, type: OTypes): Promise<OptionType> {
+    const newOption: OptionType = {
       name,
       type,
     };
 
-    return OptionRepository.createOption(newUser);
+    const response = await OptionRepository.createOption(newOption);
+    return response
   }
 
   static async getOptionById(optionId: string): Promise<OptionType | null> {
@@ -39,7 +34,7 @@ export default class OptionManager {
   }
 
   static async deleteOption(optionId: string): Promise<OptionType | null> {
-    const option = await OptionRepository.deleteOption(optionId);
-    return option;
+    const status = await OptionRepository.deleteOption(optionId);
+    return status;
   }
 }

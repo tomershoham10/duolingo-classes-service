@@ -10,5 +10,5 @@ const optionSchema = new Schema({
     type: { type: String, enum: Object.values(Types), required: true },
 });
 const OptionModel = mongoose.model("Option", optionSchema);
-export { OptionModel, Types };
+export default OptionModel;
 //# sourceMappingURL=model.js.map

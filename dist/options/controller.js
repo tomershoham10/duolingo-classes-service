@@ -28,6 +28,7 @@ export default class OptionController {
     }
     static async getMany(_req, res, next) {
         try {
+            console.log("option controller getAll");
             const options = await OptionManager.getAllOption();
             console.log(options);
             res.status(200).json({ options });

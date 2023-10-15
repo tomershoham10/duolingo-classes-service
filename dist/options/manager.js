@@ -1,16 +1,12 @@
-import { OptionModel } from "./model.js";
 import OptionRepository from "./repository.js";
 export default class OptionManager {
     static async createOption(name, type) {
-        const existingUser = await OptionModel.findOne({ name });
-        if (existingUser) {
-            throw new Error("Option already exists");
-        }
-        const newUser = {
+        const newOption = {
             name,
             type,
         };
-        return OptionRepository.createOption(newUser);
+        const response = await OptionRepository.createOption(newOption);
+        return response;
     }
     static async getOptionById(optionId) {
         const option = await OptionRepository.getOptionById(optionId);
@@ -26,8 +22,8 @@ export default class OptionManager {
         return updatedOption;
     }
     static async deleteOption(optionId) {
-        const option = await OptionRepository.deleteOption(optionId);
-        return option;
+        const status = await OptionRepository.deleteOption(optionId);
+        return status;
     }
 }
 //# sourceMappingURL=manager.js.map
