@@ -37,9 +37,18 @@ enum TypesOfLessons {
     senior = "SENIOR"
 }
 
+
+/////////////// LESSONS ///////////////
+
 interface LessonsType {
     name: string;
     exercises: string[];
-    index: number;
     type: TypesOfLessons;
+}
+
+/////////////// SECTIONS ///////////////
+
+interface SectionsType {
+    name: string;
+    lessons: string[];
 }

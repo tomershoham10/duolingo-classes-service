@@ -8,17 +8,15 @@ export default class LessonsController {
         next: NextFunction
     ) {
         try {
-            const { name, exercises, index, type } = req.body as {
+            const { name, exercises, type } = req.body as {
                 name: string,
                 exercises: string[],
-                index: number,
                 type: TypesOfLessons,
 
             };
             const reqLesson = {
                 name: name,
                 exercises: exercises,
-                index: index,
                 type: type,
             }
 

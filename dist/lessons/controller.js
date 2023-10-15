@@ -2,11 +2,10 @@ import LessonsManager from "./manager.js";
 export default class LessonsController {
     static async create(req, res, next) {
         try {
-            const { name, exercises, index, type } = req.body;
+            const { name, exercises, type } = req.body;
             const reqLesson = {
                 name: name,
                 exercises: exercises,
-                index: index,
                 type: type,
             };
             const newLesson = await LessonsManager.createLesson(reqLesson);

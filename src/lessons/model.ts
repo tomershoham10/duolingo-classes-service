@@ -13,7 +13,6 @@ const LessonsSchema = new Schema<LessonsType>({
         ref: 'FSA',
         required: false
     }],
-    index: { type: Number, required: false },
     type: {
         type: String,
         enum: Object.values(TypesOfLessons),
@@ -21,6 +20,6 @@ const LessonsSchema = new Schema<LessonsType>({
     }
 });
 
-const LessonsModel = mongoose.model<LessonsType>('Lesson', LessonsSchema);
+const LessonsModel = mongoose.model<LessonsType>('Lessons', LessonsSchema);
 
 export default LessonsModel;

@@ -12,13 +12,12 @@ const LessonsSchema = new Schema({
             ref: 'FSA',
             required: false
         }],
-    index: { type: Number, required: false },
     type: {
         type: String,
         enum: Object.values(TypesOfLessons),
         required: true
     }
 });
-const LessonsModel = mongoose.model('Lesson', LessonsSchema);
+const LessonsModel = mongoose.model('Lessons', LessonsSchema);
 export default LessonsModel;
 //# sourceMappingURL=model.js.map
