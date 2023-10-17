@@ -2,9 +2,8 @@ import SectionsManager from "./manager.js";
 export default class SectionsController {
     static async create(req, res, next) {
         try {
-            const { name, lessons } = req.body;
+            const { lessons } = req.body;
             const reqSection = {
-                name: name,
                 lessons: lessons,
             };
             const newSection = await SectionsManager.createSection(reqSection);

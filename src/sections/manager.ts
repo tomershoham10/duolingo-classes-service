@@ -2,7 +2,7 @@ import SectionsRepository from "./repository.js";
 
 export default class SectionsManager {
     static async createSection(
-        section: SectionsType): Promise<SectionsType> {
+        section: Partial<SectionsType>): Promise<SectionsType> {
         const response = await SectionsRepository.createSection(section);
         return response
     }

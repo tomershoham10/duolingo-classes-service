@@ -8,13 +8,11 @@ export default class SectionsController {
         next: NextFunction
     ) {
         try {
-            const { name, lessons } = req.body as {
-                name: string,
+            const {  lessons } = req.body as {
                 lessons: string[],
 
             };
             const reqSection = {
-                name: name,
                 lessons: lessons,
             }
 

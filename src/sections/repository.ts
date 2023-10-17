@@ -1,7 +1,7 @@
 import SectionsModel from "./model.js";
 
 export default class SectionsRepository {
-    static async createSection(section: SectionsType): Promise<SectionsType> {
+    static async createSection(section: Partial<SectionsType>): Promise<SectionsType> {
         const newSection = await SectionsModel.create(section);
         return newSection;
     }

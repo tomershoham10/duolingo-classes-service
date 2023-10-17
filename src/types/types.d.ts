@@ -49,6 +49,14 @@ interface LessonsType {
 /////////////// SECTIONS ///////////////
 
 interface SectionsType {
-    name: string;
+    id: string;
     lessons: string[];
+}
+
+/////////////// UNITS //////////////////
+
+interface UnitsType {
+    id: string;
+    sections: string[];
+    guidebook: string;
 }
