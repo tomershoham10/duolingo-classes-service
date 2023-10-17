@@ -1,7 +1,7 @@
 import Express, { NextFunction } from "express";
-import unitsManager from "./manager.js";
+import UnitsManager from "./manager.js";
 
-export default class UintsController {
+export default class UnitsController {
     static async create(
         req: Express.Request,
         res: Express.Response,
@@ -25,7 +25,7 @@ export default class UintsController {
                 reqUnit.guidebook = guidebook;
             }
 
-            const newUnit = await unitsManager.createUnit(reqUnit);
+            const newUnit = await UnitsManager.createUnit(reqUnit);
             res.status(201)
                 .json({ message: "Unit created successfully", newUnit });
         } catch (error) {
@@ -41,7 +41,7 @@ export default class UintsController {
         try {
             const unitId: string = req.params.id;
             console.log("units controller", unitId);
-            const unit = await unitsManager.getUnitById(unitId);
+            const unit = await UnitsManager.getUnitById(unitId);
             if (!unit) {
                 return res.status(404).json({ message: "unit not found" });
             }
@@ -58,7 +58,7 @@ export default class UintsController {
         next: NextFunction
     ) {
         try {
-            const units = await unitsManager.getAllUnits();
+            const units = await UnitsManager.getAllUnits();
             console.log(units);
             res.status(200).json({ units });
         } catch (err) {
@@ -76,7 +76,7 @@ export default class UintsController {
             const unitId: string = req.params.id;
             const fieldsToUpdate: Partial<UnitsType> = req.body;
 
-            const updatedUnit = await unitsManager.updateUnit(
+            const updatedUnit = await UnitsManager.updateUnit(
                 unitId,
                 fieldsToUpdate
             );
@@ -98,7 +98,7 @@ export default class UintsController {
     ) {
         try {
             const unitId: string = req.params.id;
-            const status = await unitsManager.deleteUnit(unitId);
+            const status = await UnitsManager.deleteUnit(unitId);
 
             if (!status) {
                 return res.status(404).json({ message: "Section not found" });

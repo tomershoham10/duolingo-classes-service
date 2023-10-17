@@ -1,6 +1,6 @@
 import UnitsRepository from "./repository.js";
 
-export default class unitsManager {
+export default class UnitsManager {
     static async createUnit(
         unit: Partial<UnitsType>): Promise<UnitsType> {
         const response = await UnitsRepository.createUnit(unit);

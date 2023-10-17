@@ -1,14 +1,45 @@
-/////////////// OPTIONS ///////////////
+/////////////// COURSES //////////////////
 
-enum OTypes {
-    VESSEL = "vessel",
-    COUNTRY = "country",
-    SONAR = "sonar",
+enum TypesOfCourses {
+    searider = "SEARIDER",
+    crew = "CREW",
+    senior = "SENIOR"
 }
 
-interface OptionType {
+interface CoursesType {
+    id: string;
+    type: TypesOfCourses;
+    units: string[];
+}
+
+/////////////// UNITS //////////////////
+
+interface UnitsType {
+    id: string;
+    sections: string[];
+    guidebook: string;
+}
+
+/////////////// SECTIONS ///////////////
+
+interface SectionsType {
+    id: string;
+    lessons: string[];
+}
+
+/////////////// LESSONS ///////////////
+
+enum TypesOfLessons {
+    searider = "SEARIDER",
+    crew = "CREW",
+    senior = "SENIOR"
+}
+
+interface LessonsType {
+    id: string;
     name: string;
-    type: Types;
+    exercises: string[];
+    type: TypesOfLessons;
 }
 
 /////////////// FSA ///////////////////
@@ -20,6 +51,7 @@ enum DifficultyLevel {
 }
 
 interface FSAType {
+    id: string;
     filesKeys: string[];
     difficultyLevel: DifficultyLevel;
     options: string[];
@@ -31,32 +63,14 @@ interface FSAType {
 
 /////////////// OPTIONS ///////////////
 
-enum TypesOfLessons {
-    searider = "SEARIDER",
-    crew = "CREW",
-    senior = "SENIOR"
+enum TypesOfOptions {
+    VESSEL = "vessel",
+    COUNTRY = "country",
+    SONAR = "sonar",
 }
 
-
-/////////////// LESSONS ///////////////
-
-interface LessonsType {
+interface OptionType {
+    id: string;
     name: string;
-    exercises: string[];
-    type: TypesOfLessons;
-}
-
-/////////////// SECTIONS ///////////////
-
-interface SectionsType {
-    id: string;
-    lessons: string[];
-}
-
-/////////////// UNITS //////////////////
-
-interface UnitsType {
-    id: string;
-    sections: string[];
-    guidebook: string;
+    type: Types;
 }

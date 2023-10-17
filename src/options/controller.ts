@@ -8,11 +8,17 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
-      const { name, type } = req.body as { name: string; type: OTypes };
-      const option = await OptionManager.createOption(name, type);
+      const { name, type } = req.body as { name: string; type: TypesOfOptions };
+
+      const reqOption: {
+        name: string,
+        type: TypesOfOptions
+      } = { name: name, type: type };
+
+      const newOption = await OptionManager.createOption(reqOption);
       res
         .status(201)
-        .json({ message: "Option registered successfully", option });
+        .json({ message: "Option registered successfully", newOption });
     } catch (error) {
       next(error);
     }

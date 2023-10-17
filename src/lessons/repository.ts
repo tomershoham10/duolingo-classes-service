@@ -1,7 +1,7 @@
 import LessonsModel from "./model.js";
 
 export default class LessonsRepository {
-    static async createLesson(lesson: LessonsType): Promise<LessonsType> {
+    static async createLesson(lesson: Partial<LessonsType>): Promise<LessonsType> {
         const newLesson = await LessonsModel.create(lesson);
         return newLesson;
     }

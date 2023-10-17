@@ -1,7 +1,7 @@
 import OptionModel from "./model.js";
 
 export default class OptionRepository {
-  static async createOption(option: OptionType): Promise<OptionType> {
+  static async createOption(option: Partial<OptionType>): Promise<OptionType> {
     const existingOption = await OptionModel.findOne({ name: option.name });
     if (existingOption) {
       throw new Error("Option already exists");

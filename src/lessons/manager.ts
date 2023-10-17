@@ -2,7 +2,7 @@ import LessonsRepository from "./repository.js";
 
 export default class LessonsManager {
     static async createLesson(
-        lesson: LessonsType): Promise<LessonsType> {
+        lesson: Partial<LessonsType>): Promise<LessonsType> {
         const response = await LessonsRepository.createLesson(lesson);
         return response
     }

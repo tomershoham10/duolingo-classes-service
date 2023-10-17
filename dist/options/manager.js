@@ -1,11 +1,7 @@
 import OptionRepository from "./repository.js";
 export default class OptionManager {
-    static async createOption(name, type) {
-        const newOption = {
-            name,
-            type,
-        };
-        const response = await OptionRepository.createOption(newOption);
+    static async createOption(option) {
+        const response = await OptionRepository.createOption(option);
         return response;
     }
     static async getOptionById(optionId) {

@@ -1,16 +1,16 @@
 import express from "express";
-import UintsController from "./controller.js";
+import UnitsController from "./controller.js";
 
-const UintsRouter = express.Router();
+const UnitsRouter = express.Router();
 
-UintsRouter.get("/", UintsController.getMany);
+UnitsRouter.get("/", UnitsController.getMany);
 
-UintsRouter.get("/:id", UintsController.getById);
+UnitsRouter.get("/:id", UnitsController.getById);
 
-UintsRouter.post("/", UintsController.create);
+UnitsRouter.post("/", UnitsController.create);
 
-UintsRouter.put("/:id", UintsController.update);
+UnitsRouter.put("/:id", UnitsController.update);
 
-UintsRouter.delete("/:id", UintsController.delete);
+UnitsRouter.delete("/:id", UnitsController.delete);
 
-export default UintsRouter;
+export default UnitsRouter;

@@ -2,7 +2,7 @@ import FSARepository from "./repository.js";
 
 export default class FSAManager {
     static async createExercise(
-        exercise: FSAType): Promise<FSAType> {
+        exercise: Partial<FSAType>): Promise<FSAType> {
         const response = await FSARepository.createExercise(exercise);
         return response
     }

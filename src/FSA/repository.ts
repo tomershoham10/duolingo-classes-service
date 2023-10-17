@@ -1,7 +1,7 @@
 import FSAModel from "./model.js";
 
 export default class FSARepository {
-    static async createExercise(exercise: FSAType): Promise<FSAType> {
+    static async createExercise(exercise: Partial<FSAType>): Promise<FSAType> {
         const newExercise = await FSAModel.create(exercise);
         return newExercise;
     }

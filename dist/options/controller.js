@@ -3,10 +3,11 @@ export default class OptionController {
     static async create(req, res, next) {
         try {
             const { name, type } = req.body;
-            const option = await OptionManager.createOption(name, type);
+            const reqOption = { name: name, type: type };
+            const newOption = await OptionManager.createOption(reqOption);
             res
                 .status(201)
-                .json({ message: "Option registered successfully", option });
+                .json({ message: "Option registered successfully", newOption });
         }
         catch (error) {
             next(error);

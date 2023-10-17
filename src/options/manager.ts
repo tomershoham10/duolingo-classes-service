@@ -1,13 +1,8 @@
 import OptionRepository from "./repository.js";
 
 export default class OptionManager {
-  static async createOption(name: string, type: OTypes): Promise<OptionType> {
-    const newOption: OptionType = {
-      name,
-      type,
-    };
-
-    const response = await OptionRepository.createOption(newOption);
+  static async createOption(option: Partial<OptionType>): Promise<OptionType> {
+    const response = await OptionRepository.createOption(option);
     return response
   }
 
