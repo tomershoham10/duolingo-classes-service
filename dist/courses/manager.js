@@ -17,8 +17,8 @@ export default class CoursesManager {
         const updatedCourse = await CoursesRepository.updateCourse(courseId, filedsToUpdate);
         return updatedCourse;
     }
-    static async deleteCourse(courseId) {
-        const status = await CoursesRepository.deleteCourse(courseId);
+    static async deleteCourses(courseId) {
+        const status = await CoursesRepository.deleteCourses(courseId);
         return status;
     }
 }

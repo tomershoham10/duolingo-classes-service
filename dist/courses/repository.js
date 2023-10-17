@@ -17,7 +17,7 @@ export default class CoursesRepository {
         const updatedCourse = await CoursesModel.findByIdAndUpdate(courseId, fieldsToUpdate, { new: true });
         return updatedCourse;
     }
-    static async deleteCourse(courseId) {
+    static async deleteCourses(courseId) {
         const status = await CoursesModel.findOneAndDelete({ _id: courseId });
         return status;
     }

@@ -3,10 +3,10 @@ export default class CoursesController {
     static async create(req, res, next) {
         try {
             const { type, units } = req.body;
-            const reqCourse = { type: type, units: units };
-            const newCourse = await CoursesManager.createCourse(reqCourse);
+            const course = { type: type, units: units };
+            const newCourse = await CoursesManager.createCourse(course);
             res.status(201)
-                .json({ message: "Course created successfully", newCourse });
+                .json({ message: "course created successfully", newCourse });
         }
         catch (error) {
             next(error);
@@ -14,9 +14,9 @@ export default class CoursesController {
     }
     static async getById(req, res, next) {
         try {
-            const courseId = req.params.id;
-            console.log("courses controller", courseId);
-            const course = await CoursesManager.getCourseById(courseId);
+            const coursesId = req.params.id;
+            console.log("courses controller", coursesId);
+            const course = await CoursesManager.getCourseById(coursesId);
             if (!course) {
                 return res.status(404).json({ message: "course not found" });
             }
@@ -29,7 +29,7 @@ export default class CoursesController {
     static async getMany(_req, res, next) {
         try {
             const courses = await CoursesManager.getAllCourses();
-            console.log(courses);
+            console.log("get all courses", courses);
             res.status(200).json({ courses });
         }
         catch (err) {
@@ -39,9 +39,9 @@ export default class CoursesController {
     }
     static async update(req, res, next) {
         try {
-            const courseId = req.params.id;
+            const coursesId = req.params.id;
             const fieldsToUpdate = req.body;
-            const updatedCouse = await CoursesManager.updateCourse(courseId, fieldsToUpdate);
+            const updatedCouse = await CoursesManager.updateCourse(coursesId, fieldsToUpdate);
             if (!updatedCouse) {
                 return res.status(404).json({ message: "unit not found" });
             }
@@ -53,8 +53,8 @@ export default class CoursesController {
     }
     static async delete(req, res, next) {
         try {
-            const courseId = req.params.id;
-            const status = await CoursesManager.deleteCourse(courseId);
+            const coursesId = req.params.id;
+            const status = await CoursesManager.deleteCourses(coursesId);
             if (!status) {
                 return res.status(404).json({ message: "Course not found" });
             }

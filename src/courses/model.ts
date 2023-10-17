@@ -1,27 +1,27 @@
 import mongoose, { Schema } from 'mongoose';
 
-enum TypesOfClasses {
+enum TypesOfCourses {
     searider = "SEARIDER",
     crew = "CREW",
     senior = "SENIOR"
 }
 
-const ClassesSchema = new Schema<ClassesType>({
+const CoursesSchema = new Schema<CoursesType>({
     id: { type: String },
     type: {
         type: String,
-        enum: Object.values(TypesOfClasses),
+        enum: Object.values(TypesOfCourses),
         required: true,
         unique: true
     },
     units: [{
         type: String,
         ref: 'Units',
-        required: false
+        required: true
     }]
 });
 
-const ClassesModel = mongoose.model<ClassesType>('Classes', ClassesSchema);
+const CoursesModel = mongoose.model<CoursesType>('Courses', CoursesSchema);
 
-export default ClassesModel;
+export default CoursesModel;
 

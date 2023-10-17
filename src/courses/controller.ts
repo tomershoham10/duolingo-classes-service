@@ -1,7 +1,7 @@
 import Express, { NextFunction } from "express";
-import ClassesManager from "./manager.js";
+import CoursesManager from "./manager.js";
 
-export default class ClassesController {
+export default class CoursesController {
     static async create(
         req: Express.Request,
         res: Express.Response,
@@ -9,19 +9,19 @@ export default class ClassesController {
     ) {
         try {
             const { type, units } = req.body as {
-                type: TypesOfClasses,
+                type: TypesOfCourses,
                 units: string[]
             };
 
-            const reqClass: {
-                type: TypesOfClasses,
+            const course: {
+                type: TypesOfCourses,
                 units: string[]
             } = { type: type, units: units };
 
 
-            const newClass = await ClassesManager.createClass(reqClass);
+            const newCourse = await CoursesManager.createCourse(course);
             res.status(201)
-                .json({ message: "Class created successfully", newClass });
+                .json({ message: "course created successfully", newCourse });
         } catch (error) {
             next(error);
         }
@@ -33,14 +33,14 @@ export default class ClassesController {
         next: NextFunction
     ) {
         try {
-            const classId: string = req.params.id;
-            console.log("classes controller", classId);
-            const resClass = await ClassesManager.getClassById(classId);
-            if (!resClass) {
-                return res.status(404).json({ message: "Class not found" });
+            const coursesId: string = req.params.id;
+            console.log("courses controller", coursesId);
+            const course = await CoursesManager.getCourseById(coursesId);
+            if (!course) {
+                return res.status(404).json({ message: "course not found" });
             }
 
-            res.status(200).json({ resClass });
+            res.status(200).json({ course });
         } catch (error) {
             next(error);
         }
@@ -52,9 +52,9 @@ export default class ClassesController {
         next: NextFunction
     ) {
         try {
-            const classes = await ClassesManager.getAllClasses();
-            console.log("get all classes", classes);
-            res.status(200).json({ classes });
+            const courses = await CoursesManager.getAllCourses();
+            console.log("get all courses", courses);
+            res.status(200).json({ courses });
         } catch (err) {
             next(err);
             res.status(500).json({ err: "Internal Server Error" });
@@ -67,11 +67,11 @@ export default class ClassesController {
         next: NextFunction
     ) {
         try {
-            const classId: string = req.params.id;
-            const fieldsToUpdate: Partial<ClassesType> = req.body;
+            const coursesId: string = req.params.id;
+            const fieldsToUpdate: Partial<CoursesType> = req.body;
 
-            const updatedCouse = await ClassesManager.updateClass(
-                classId,
+            const updatedCouse = await CoursesManager.updateCourse(
+                coursesId,
                 fieldsToUpdate
             );
 
@@ -91,11 +91,11 @@ export default class ClassesController {
         next: NextFunction
     ) {
         try {
-            const classId: string = req.params.id;
-            const status = await ClassesManager.deleteClass(classId);
+            const coursesId: string = req.params.id;
+            const status = await CoursesManager.deleteCourses(coursesId);
 
             if (!status) {
-                return res.status(404).json({ message: "Class not found" });
+                return res.status(404).json({ message: "Course not found" });
             }
 
             res.status(200).json({ status });
