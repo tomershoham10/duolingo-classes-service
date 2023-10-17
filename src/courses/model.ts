@@ -16,7 +16,7 @@ const CoursesSchema = new Schema<CoursesType>({
     units: [{
         type: String,
         ref: 'Units',
-        required: true
+        required: false
     }]
 });
 
