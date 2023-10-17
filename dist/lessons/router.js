@@ -1,11 +1,12 @@
 import express from "express";
 import LessonsController from "./controller.js";
+import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 const LessonsRouter = express.Router();
-LessonsRouter.get("/", LessonsController.getMany);
-LessonsRouter.get("/:id", LessonsController.getById);
-LessonsRouter.get("/:type", LessonsController.getById);
-LessonsRouter.post("/", LessonsController.create);
-LessonsRouter.put("/:id", LessonsController.update);
-LessonsRouter.delete("/:id", LessonsController.delete);
+LessonsRouter.get("/", asyncHandler(LessonsController.getMany));
+LessonsRouter.get("/:id", asyncHandler(LessonsController.getById));
+LessonsRouter.get("/:type", asyncHandler(LessonsController.getById));
+LessonsRouter.post("/", asyncHandler(LessonsController.create));
+LessonsRouter.put("/:id", asyncHandler(LessonsController.update));
+LessonsRouter.delete("/:id", asyncHandler(LessonsController.delete));
 export default LessonsRouter;
 //# sourceMappingURL=router.js.map

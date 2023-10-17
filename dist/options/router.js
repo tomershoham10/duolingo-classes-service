@@ -1,23 +1,11 @@
 import express from "express";
 import OptionController from "./controller.js";
+import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 const optionRouter = express.Router();
-// Middleware to log incoming requests for the optionRouter
-// optionRouter.use((req: Request, res: Response, next: NextFunction) => {
-//   const now = new Date().toLocaleString();
-//   console.log(`[${now}] ${req.method} ${req.originalUrl}`);
-//   console.log("Headers:", req.headers);
-//   // Optionally, log request body (useful for POST and PUT requests)
-//   if (["POST", "PUT"].includes(req.method)) {
-//     console.log("Request Body:", req.body);
-//   } else {
-//     console.log("Request query ID:", req.query.id);
-//   }
-//   next();
-// });
-optionRouter.get("/", OptionController.getMany);
-optionRouter.get("/:id", OptionController.getById);
-optionRouter.post("/", OptionController.create);
-optionRouter.put("/:id", OptionController.update);
-optionRouter.delete("/:id", OptionController.delete);
+optionRouter.get("/", asyncHandler(OptionController.getMany));
+optionRouter.get("/:id", asyncHandler(OptionController.getById));
+optionRouter.post("/", asyncHandler(OptionController.create));
+optionRouter.put("/:id", asyncHandler(OptionController.update));
+optionRouter.delete("/:id", asyncHandler(OptionController.delete));
 export default optionRouter;
 //# sourceMappingURL=router.js.map

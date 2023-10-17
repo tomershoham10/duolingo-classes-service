@@ -7,6 +7,7 @@ enum TypesOfLessons {
 }
 
 const LessonsSchema = new Schema<LessonsType>({
+    id: { type: String },
     name: { type: String, required: false },
     exercises: [{
         type: String,

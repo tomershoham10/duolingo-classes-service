@@ -6,6 +6,7 @@ var TypesOfLessons;
     TypesOfLessons["senior"] = "SENIOR";
 })(TypesOfLessons || (TypesOfLessons = {}));
 const LessonsSchema = new Schema({
+    id: { type: String },
     name: { type: String, required: false },
     exercises: [{
             type: String,

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 const SectionSchema = new Schema({
-    id: String,
+    id: { type: String },
     lessons: [{
             type: String,
             ref: 'Lessons',

@@ -1,16 +1,18 @@
 import express from "express";
 import FSAController from "./controller.js";
+import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
+
 
 const FSARouter = express.Router();
 
-FSARouter.get("/", FSAController.getMany);
+FSARouter.get("/", asyncHandler(FSAController.getMany));
 
-FSARouter.get("/:id", FSAController.getById);
+FSARouter.get("/:id", asyncHandler(FSAController.getById));
 
-FSARouter.post("/", FSAController.create);
+FSARouter.post("/", asyncHandler(FSAController.create));
 
-FSARouter.put("/:id", FSAController.update);
+FSARouter.put("/:id", asyncHandler(FSAController.update));
 
-FSARouter.delete("/:id", FSAController.delete);
+FSARouter.delete("/:id", asyncHandler(FSAController.delete));
 
 export default FSARouter;

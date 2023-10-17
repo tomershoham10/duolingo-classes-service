@@ -1,16 +1,17 @@
 import express from "express";
 import SectionsController from "./controller.js";
+import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 const SectionsRouter = express.Router();
 
-SectionsRouter.get("/", SectionsController.getMany);
+SectionsRouter.get("/", asyncHandler(SectionsController.getMany));
 
-SectionsRouter.get("/:id", SectionsController.getById);
+SectionsRouter.get("/:id", asyncHandler(SectionsController.getById));
 
-SectionsRouter.post("/", SectionsController.create);
+SectionsRouter.post("/", asyncHandler(SectionsController.create));
 
-SectionsRouter.put("/:id", SectionsController.update);
+SectionsRouter.put("/:id", asyncHandler(SectionsController.update));
 
-SectionsRouter.delete("/:id", SectionsController.delete);
+SectionsRouter.delete("/:id", asyncHandler(SectionsController.delete));
 
 export default SectionsRouter;

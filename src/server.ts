@@ -18,23 +18,30 @@ const startServer = () => {
 };
 
 const configureMiddlewares = (app: Express) => {
-
-//   app.use((req: Request, res: Response, next: NextFunction) => {
-//     const now = new Date().toLocaleString();
-//     console.log(`[${now}] ${req.method} ${req.originalUrl}`);
-//     console.log("Headers:", req.headers);
-//     if (["POST", "PUT"].includes(req.method)) {
-//       console.log("Request Body:", req.body);
-//     } else {
-//       console.log("Request query ID:", req.query.id);
-//     }
-
-//     next();
-//   });
-
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+      exposedHeaders: ["Authorization"],
+    })
+  );
   app.use(bodyParser.json());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  //   app.use((req: Request, res: Response, next: NextFunction) => {
+  //     const now = new Date().toLocaleString();
+  //     console.log(`[${now}] ${req.method} ${req.originalUrl}`);
+  //     console.log("Headers:", req.headers);
+  //     if (["POST", "PUT"].includes(req.method)) {
+  //       console.log("Request Body:", req.body);
+  //     } else {
+  //       console.log("Request query ID:", req.query.id);
+  //     }
+
+  //     next();
+  //   });
+
 };
 
 export default startServer;

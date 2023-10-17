@@ -6,6 +6,7 @@ var Types;
     Types["SONAR"] = "sonar";
 })(Types || (Types = {}));
 const optionSchema = new Schema({
+    id: { type: String },
     name: { type: String, required: true },
     type: { type: String, enum: Object.values(Types), required: true },
 });

@@ -14,6 +14,14 @@ const startServer = () => {
     });
 };
 const configureMiddlewares = (app) => {
+    app.use(cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+        exposedHeaders: ["Authorization"],
+    }));
+    app.use(bodyParser.json());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
     //   app.use((req: Request, res: Response, next: NextFunction) => {
     //     const now = new Date().toLocaleString();
     //     console.log(`[${now}] ${req.method} ${req.originalUrl}`);
@@ -25,9 +33,6 @@ const configureMiddlewares = (app) => {
     //     }
     //     next();
     //   });
-    app.use(bodyParser.json());
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
 };
 export default startServer;
 //# sourceMappingURL=server.js.map

@@ -6,7 +6,7 @@ var TypesOfCourses;
     TypesOfCourses["senior"] = "SENIOR";
 })(TypesOfCourses || (TypesOfCourses = {}));
 const CoursesSchema = new Schema({
-    id: String,
+    id: { type: String },
     type: {
         type: String,
         enum: Object.values(TypesOfCourses),
