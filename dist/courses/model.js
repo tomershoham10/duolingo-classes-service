@@ -10,7 +10,8 @@ const CoursesSchema = new Schema({
     type: {
         type: String,
         enum: Object.values(TypesOfCourses),
-        required: true
+        required: true,
+        unique: true
     },
     units: [{
             type: String,

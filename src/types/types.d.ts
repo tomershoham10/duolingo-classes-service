@@ -1,14 +1,14 @@
-/////////////// COURSES //////////////////
+/////////////// CLASSES //////////////////
 
-enum TypesOfCourses {
+enum TypesOfClasses {
     searider = "SEARIDER",
     crew = "CREW",
     senior = "SENIOR"
 }
 
-interface CoursesType {
+interface ClassesType {
     id: string;
-    type: TypesOfCourses;
+    type: TypesOfClasses;
     units: string[];
 }
 

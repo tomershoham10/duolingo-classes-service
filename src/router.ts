@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import Express from "express";
-import CoursesRouter from "./courses/router.js";
+import ClassesRouter from "./classes/router.js";
 import UnitsRouter from "./units/router.js";
 import SectionsRouter from "./sections/router.js";
 import LessonsRouter from "./lessons/router.js";
@@ -14,7 +14,7 @@ router.get("/health", (_req: Express.Request, res: Express.Response) => {
   res.status(200).send("Alive");
 });
 
-router.use("/api/courses/", CoursesRouter);
+router.use("/api/classes/", ClassesRouter);
 
 router.use("/api/units/", UnitsRouter);
 
