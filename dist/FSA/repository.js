@@ -4,6 +4,11 @@ export default class FSARepository {
         const newExercise = await FSAModel.create(exercise);
         return newExercise;
     }
+    static async getExerciseByAnswerId(answerId) {
+        const exercises = await FSAModel.find({ answers: answerId });
+        console.log("FSA repo getExerciseByAnswerId", exercises);
+        return exercises;
+    }
     static async getExerciseById(exerciseId) {
         const exercise = await FSAModel.findById(exerciseId);
         console.log("FSA repo", exerciseId);

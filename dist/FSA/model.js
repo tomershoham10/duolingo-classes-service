@@ -38,6 +38,10 @@ const FSASchema = new Schema({
     description: {
         type: String,
         required: true
+    },
+    dateCreated: {
+        type: Date,
+        default: Date.now
     }
 });
 const FSAModel = mongoose.model('Exercise', FSASchema);

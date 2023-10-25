@@ -1,4 +1,7 @@
 import UnitsManager from "./manager.js";
+import mongoose from "mongoose";
+import UnitsModel from "./model.js";
+import CoursesModel from "../courses/model.js";
 export default class UnitsController {
     static async create(req, res, next) {
         try {
@@ -14,6 +17,31 @@ export default class UnitsController {
                 .json({ message: "Unit created successfully", newUnit });
         }
         catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
+    static async createByCourse(req, res, next) {
+        const { unitData, courseId } = req.body;
+        try {
+            const session = await mongoose.startSession();
+            session.startTransaction();
+            const course = await CoursesModel.findById(courseId);
+            if (!course) {
+                await session.abortTransaction();
+                session.endSession();
+                return res.status(404).json({ message: 'Course not found' });
+            }
+            const newUnit = new UnitsModel(unitData);
+            course.units.push(newUnit._id.toString());
+            await newUnit.save({ session: session });
+            await course.save({ session: session });
+            await session.commitTransaction();
+            session.endSession();
+            res.status(200).json({ message: 'New unit created and course updated successfully' });
+        }
+        catch (error) {
+            console.error(error);
             next(error);
         }
     }

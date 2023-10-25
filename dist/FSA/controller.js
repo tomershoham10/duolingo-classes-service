@@ -20,6 +20,20 @@ export default class FSAController {
             next(error);
         }
     }
+    static async getByAnswerId(req, res, next) {
+        try {
+            const answerId = req.params.answerId;
+            console.log("FSA controller getByAnswerId", answerId);
+            const exercises = await FSAManager.getExerciseByAnswerId(answerId);
+            if (!exercises) {
+                return res.status(404).json({ message: "Exercise not found" });
+            }
+            res.status(200).json({ exercises });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     static async getById(req, res, next) {
         try {
             const exerciseId = req.params.id;

@@ -4,6 +4,11 @@ export default class FSAManager {
         const response = await FSARepository.createExercise(exercise);
         return response;
     }
+    static async getExerciseByAnswerId(answerId) {
+        const exercises = await FSARepository.getExerciseByAnswerId(answerId);
+        console.log("FSA manager getExerciseByAnswerId", exercises);
+        return exercises;
+    }
     static async getExerciseById(exerciseId) {
         const exercise = await FSARepository.getExerciseById(exerciseId);
         console.log("FSA manager", exercise);
