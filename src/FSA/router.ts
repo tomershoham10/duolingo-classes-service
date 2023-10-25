@@ -11,7 +11,8 @@ FSARouter
     .get("/", asyncHandler(FSAController.getMany));
 
 
-FSARouter.post("/", asyncHandler(FSAController.create));
+FSARouter
+    .post("/", asyncHandler(FSAController.create));
 
 FSARouter.put("/:id", asyncHandler(FSAController.update));
 
