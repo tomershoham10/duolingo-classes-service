@@ -7,6 +7,12 @@ export default class FSAManager {
         return response
     }
 
+    static async getExerciseByAnswerId(answerId: string): Promise<FSAType[] | null> {
+        const exercises = await FSARepository.getExerciseByAnswerId(answerId);
+        console.log("FSA manager getExerciseByAnswerId", exercises);
+        return exercises;
+    }
+
     static async getExerciseById(exerciseId: string): Promise<FSAType | null> {
         const exercise = await FSARepository.getExerciseById(exerciseId);
         console.log("FSA manager", exercise);

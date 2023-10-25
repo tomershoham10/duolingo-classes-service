@@ -5,9 +5,11 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 const FSARouter = express.Router();
 
-FSARouter.get("/", asyncHandler(FSAController.getMany));
+FSARouter
+    .get("/answers/:answerId", asyncHandler(FSAController.getByAnswerId))
+    .get("/:id", asyncHandler(FSAController.getById))
+    .get("/", asyncHandler(FSAController.getMany));
 
-FSARouter.get("/:id", asyncHandler(FSAController.getById));
 
 FSARouter.post("/", asyncHandler(FSAController.create));
 
