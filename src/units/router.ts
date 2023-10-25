@@ -4,9 +4,9 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 const UnitsRouter = express.Router();
 
-UnitsRouter.get("/", asyncHandler(UnitsController.getMany));
-
-UnitsRouter.get("/:id", asyncHandler(UnitsController.getById));
+UnitsRouter
+    .get("/:id", asyncHandler(UnitsController.getById))
+    .get("/", asyncHandler(UnitsController.getMany));
 
 UnitsRouter.post("/", asyncHandler(UnitsController.create));
 

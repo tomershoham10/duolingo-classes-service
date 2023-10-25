@@ -1,9 +1,9 @@
 /////////////// COURSES //////////////////
 
 enum TypesOfCourses {
-    searider = "SEARIDER",
-    crew = "CREW",
-    senior = "SENIOR"
+    searider = "searider",
+    crew = "crew",
+    senior = "senior"
 }
 
 interface CoursesType {
@@ -59,6 +59,7 @@ interface FSAType {
     firstTimeBuffer: number; //in minutes
     secondTimeBuffer: number; //in minutes
     description: string;
+    dateCreated: Date;
 }
 
 /////////////// OPTIONS ///////////////

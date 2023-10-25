@@ -29,7 +29,7 @@ const configureMiddlewares = (app) => {
     //     if (["POST", "PUT"].includes(req.method)) {
     //       console.log("Request Body:", req.body);
     //     } else {
-    //       console.log("Request query ID:", req.query.id);
+    //       console.log("Request params ID:", req.params.id);
     //     }
     //     next();
     //   });

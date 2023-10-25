@@ -5,9 +5,9 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 const CoursesRouter = express.Router();
 
-CoursesRouter.get("/", asyncHandler(CoursesController.getMany));
-
-CoursesRouter.get("/:id", asyncHandler(CoursesController.getById));
+CoursesRouter
+    .get("/:id", asyncHandler(CoursesController.getById))
+    .get("/", asyncHandler(CoursesController.getMany));
 
 CoursesRouter.post("/", asyncHandler(CoursesController.create));
 

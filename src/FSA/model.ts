@@ -39,6 +39,10 @@ const FSASchema = new Schema<FSAType>({
   description: {
     type: String,
     required: true
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now 
   }
 });
 
