@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 
 enum TypesOfCourses {
-    searider = "SEARIDER",
-    crew = "CREW",
-    senior = "SENIOR"
+    searider = "searider",
+    crew = "crew",
+    senior = "senior"
 }
 
 const CoursesSchema = new Schema<CoursesType>({
@@ -17,7 +17,7 @@ const CoursesSchema = new Schema<CoursesType>({
     units: [{
         type: String,
         ref: 'Units',
-        required: true
+        required: false
     }]
 });
 

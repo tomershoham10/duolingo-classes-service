@@ -11,21 +11,27 @@ export default class UnitsController {
         next: NextFunction
     ) {
         try {
-            const { sections, guidebook } = req.body as {
+            const { sections, guidebook, description } = req.body as {
                 sections: string[],
-                guidebook?: string
+                guidebook?: string,
+                description?: string
             };
 
 
             const reqUnit: {
                 sections: string[],
-                guidebook?: string
+                guidebook?: string,
+                description?: string
             } = {
                 sections,
             };
 
             if (guidebook) {
                 reqUnit.guidebook = guidebook;
+            }
+
+            if (description) {
+                reqUnit.description = description;
             }
 
             const newUnit = await UnitsManager.createUnit(reqUnit);
@@ -47,8 +53,9 @@ export default class UnitsController {
             const session = await mongoose.startSession();
             session.startTransaction();
 
-
+            console.log("controller - createByCourse", courseId, unitData);
             const course = await CoursesModel.findById(courseId);
+            console.log(course);
             if (!course) {
                 await session.abortTransaction();
                 session.endSession();

@@ -1,3 +1,4 @@
+import UnitsModel from "../units/model.js";
 import CoursesModel from "./model.js";
 
 export default class CoursesRepository {
@@ -11,6 +12,26 @@ export default class CoursesRepository {
         console.log("courses repo", courseId);
         return course;
     }
+
+    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
+        try {
+            const course = await CoursesModel.findById(courseId);
+            if (course) {
+                const unitsIds = course.units;
+
+                const unitsDetails = await UnitsModel.find({ _id: { $in: unitsIds } });
+
+                const unitsInOrder = unitsIds.map(id => unitsDetails.find(unit => unit._id.equals(id)));
+
+                console.log("courses repo getUnitsById", courseId);
+                return unitsInOrder as UnitsType[];
+            }
+            else return null
+        } catch (err) {
+            throw new Error(`Error fetching units for the course: ${err}`);
+        }
+    }
+
 
     static async getAllCourses(): Promise<CoursesType[] | null> {
         const courses = await CoursesModel.find({});

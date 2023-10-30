@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 var TypesOfCourses;
 (function (TypesOfCourses) {
-    TypesOfCourses["searider"] = "SEARIDER";
-    TypesOfCourses["crew"] = "CREW";
-    TypesOfCourses["senior"] = "SENIOR";
+    TypesOfCourses["searider"] = "searider";
+    TypesOfCourses["crew"] = "crew";
+    TypesOfCourses["senior"] = "senior";
 })(TypesOfCourses || (TypesOfCourses = {}));
 const CoursesSchema = new Schema({
     id: { type: String },
@@ -16,7 +16,7 @@ const CoursesSchema = new Schema({
     units: [{
             type: String,
             ref: 'Units',
-            required: true
+            required: false
         }]
 });
 const CoursesModel = mongoose.model('Courses', CoursesSchema);

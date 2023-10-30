@@ -13,6 +13,12 @@ export default class CoursesManager {
         return course;
     }
 
+    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
+        const units = await CoursesRepository.getUnitsByCourseId(courseId) ;
+        console.log("courses manager getUnitsByCourseId", units);
+        return units;
+    }
+
     static async getAllCourses(): Promise<CoursesType[] | null> {
         const courses = await CoursesRepository.getAllCourses();
         return courses;

@@ -5,12 +5,15 @@ import CoursesModel from "../courses/model.js";
 export default class UnitsController {
     static async create(req, res, next) {
         try {
-            const { sections, guidebook } = req.body;
+            const { sections, guidebook, description } = req.body;
             const reqUnit = {
                 sections,
             };
             if (guidebook) {
                 reqUnit.guidebook = guidebook;
+            }
+            if (description) {
+                reqUnit.description = description;
             }
             const newUnit = await UnitsManager.createUnit(reqUnit);
             res.status(201)
@@ -26,7 +29,9 @@ export default class UnitsController {
         try {
             const session = await mongoose.startSession();
             session.startTransaction();
+            console.log("controller - createByCourse", courseId, unitData);
             const course = await CoursesModel.findById(courseId);
+            console.log(course);
             if (!course) {
                 await session.abortTransaction();
                 session.endSession();

@@ -9,6 +9,11 @@ export default class CoursesManager {
         console.log("courses manager", course);
         return course;
     }
+    static async getUnitsByCourseId(courseId) {
+        const units = await CoursesRepository.getUnitsByCourseId(courseId);
+        console.log("courses manager getUnitsByCourseId", units);
+        return units;
+    }
     static async getAllCourses() {
         const courses = await CoursesRepository.getAllCourses();
         return courses;

@@ -46,6 +46,24 @@ export default class CoursesController {
         }
     }
 
+    static async getUnitsById(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const coursesId: string = req.params.id;
+            const units = await CoursesManager.getUnitsByCourseId(coursesId);
+            if (!units) {
+                return res.status(404).json({ message: "units not found" });
+            }
+
+            res.status(200).json({ units });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static async getMany(
         _req: Express.Request,
         res: Express.Response,

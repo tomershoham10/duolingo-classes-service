@@ -7,9 +7,8 @@ const UnitsSchema = new Schema<UnitsType>({
         ref: 'Sections',
         required: true
     }],
-    guidebook: { type: String, ref: 'Guidebook', required: false }
-
-
+    guidebook: { type: String, ref: 'Guidebook', required: false },
+    description: { type: String, required: false },
 });
 
 const UnitsModel = mongoose.model<UnitsType>('Units', UnitsSchema);

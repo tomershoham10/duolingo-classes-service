@@ -18,6 +18,7 @@ interface UnitsType {
     id: string;
     sections: string[];
     guidebook: string;
+    description:string;
 }
 
 /////////////// SECTIONS ///////////////
