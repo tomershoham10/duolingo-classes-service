@@ -40,6 +40,7 @@ export default class UnitsController {
         } catch (error) {
             console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 
@@ -76,6 +77,8 @@ export default class UnitsController {
         } catch (error) {
             console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
+
         }
     }
 
@@ -94,7 +97,9 @@ export default class UnitsController {
 
             res.status(200).json({ unit });
         } catch (error) {
+            console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 
@@ -113,7 +118,9 @@ export default class UnitsController {
 
             res.status(200).json({ sections });
         } catch (error) {
+            console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 
@@ -152,7 +159,9 @@ export default class UnitsController {
 
             res.status(200).json({ updatedUnit });
         } catch (error) {
+            console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 
@@ -171,7 +180,9 @@ export default class UnitsController {
 
             res.status(200).json({ status });
         } catch (error) {
+            console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 }

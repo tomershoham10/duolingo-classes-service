@@ -4,9 +4,11 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 const SectionsRouter = express.Router();
 
-SectionsRouter.get("/", asyncHandler(SectionsController.getMany));
+SectionsRouter
+    .get("/getLessonsById/:id", asyncHandler(SectionsController.getLessonsById))
+    .get("/:id", asyncHandler(SectionsController.getById))
+    .get("/", asyncHandler(SectionsController.getMany));
 
-SectionsRouter.get("/:id", asyncHandler(SectionsController.getById));
 
 SectionsRouter.post("/", asyncHandler(SectionsController.create));
 

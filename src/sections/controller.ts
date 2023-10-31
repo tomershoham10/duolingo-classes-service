@@ -8,7 +8,7 @@ export default class SectionsController {
         next: NextFunction
     ) {
         try {
-            const {  lessons } = req.body as {
+            const { lessons } = req.body as {
                 lessons: string[],
 
             };
@@ -20,7 +20,9 @@ export default class SectionsController {
             res.status(201)
                 .json({ message: "Section created successfully", newSection });
         } catch (error) {
+            console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 
@@ -43,6 +45,27 @@ export default class SectionsController {
         }
     }
 
+    static async getLessonsById(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const sectionId: string = req.params.id;
+            console.log("controller: getLessonsById", sectionId);
+            const lessons = await SectionsManager.getsLessonsByUnitId(sectionId);
+            if (!lessons) {
+                return res.status(404).json({ message: "lessons not found" });
+            }
+
+            res.status(200).json({ lessons });
+        } catch (error) {
+            console.error(error);
+            next(error);
+            res.status(500).json({ err: "Internal Server Error" });
+        }
+    }
+
     static async getMany(
         _req: Express.Request,
         res: Express.Response,
@@ -52,8 +75,9 @@ export default class SectionsController {
             const sections = await SectionsManager.getAllSections();
             console.log(sections);
             res.status(200).json({ sections });
-        } catch (err) {
-            next(err);
+        } catch (error) {
+            console.error(error);
+            next(error);
             res.status(500).json({ err: "Internal Server Error" });
         }
     }
@@ -78,7 +102,9 @@ export default class SectionsController {
 
             res.status(200).json({ updatedSection });
         } catch (error) {
+            console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 
@@ -97,7 +123,9 @@ export default class SectionsController {
 
             res.status(200).json({ status });
         } catch (error) {
+            console.error(error);
             next(error);
+            res.status(500).json({ err: "Internal Server Error" });
         }
     }
 }
