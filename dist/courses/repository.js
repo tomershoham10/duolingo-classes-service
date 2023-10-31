@@ -2,13 +2,23 @@ import UnitsModel from "../units/model.js";
 import CoursesModel from "./model.js";
 export default class CoursesRepository {
     static async createCourse(course) {
-        const newCourse = await CoursesModel.create(course);
-        return newCourse;
+        try {
+            const newCourse = await CoursesModel.create(course);
+            return newCourse;
+        }
+        catch (err) {
+            throw new Error(`Error repo createCourse: ${err}`);
+        }
     }
     static async getCourseById(courseId) {
-        const course = await CoursesModel.findById(courseId);
-        console.log("courses repo", courseId);
-        return course;
+        try {
+            const course = await CoursesModel.findById(courseId);
+            console.log("courses repo", courseId);
+            return course;
+        }
+        catch (err) {
+            throw new Error(`Error repo getCourseById: ${err}`);
+        }
     }
     static async getUnitsByCourseId(courseId) {
         try {
@@ -28,16 +38,31 @@ export default class CoursesRepository {
         }
     }
     static async getAllCourses() {
-        const courses = await CoursesModel.find({});
-        return courses;
+        try {
+            const courses = await CoursesModel.find({});
+            return courses;
+        }
+        catch (err) {
+            throw new Error(`Error repo getAllCourses: ${err}`);
+        }
     }
     static async updateCourse(courseId, fieldsToUpdate) {
-        const updatedCourse = await CoursesModel.findByIdAndUpdate(courseId, fieldsToUpdate, { new: true });
-        return updatedCourse;
+        try {
+            const updatedCourse = await CoursesModel.findByIdAndUpdate(courseId, fieldsToUpdate, { new: true });
+            return updatedCourse;
+        }
+        catch (err) {
+            throw new Error(`Error repo updateCourse: ${err}`);
+        }
     }
     static async deleteCourses(courseId) {
-        const status = await CoursesModel.findOneAndDelete({ _id: courseId });
-        return status;
+        try {
+            const status = await CoursesModel.findOneAndDelete({ _id: courseId });
+            return status;
+        }
+        catch (err) {
+            throw new Error(`Error repo deleteCourses: ${err}`);
+        }
     }
 }
 //# sourceMappingURL=repository.js.map

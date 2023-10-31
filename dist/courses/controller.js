@@ -14,9 +14,9 @@ export default class CoursesController {
     }
     static async getById(req, res, next) {
         try {
-            const coursesId = req.params.id;
-            console.log("courses controller", coursesId);
-            const course = await CoursesManager.getCourseById(coursesId);
+            const courseId = req.params.id;
+            console.log("courses controller", courseId);
+            const course = await CoursesManager.getCourseById(courseId);
             if (!course) {
                 return res.status(404).json({ message: "course not found" });
             }
@@ -28,8 +28,9 @@ export default class CoursesController {
     }
     static async getUnitsById(req, res, next) {
         try {
-            const coursesId = req.params.id;
-            const units = await CoursesManager.getUnitsByCourseId(coursesId);
+            const courseId = req.params.id;
+            console.log("controller: getUnitsById", courseId);
+            const units = await CoursesManager.getUnitsByCourseId(courseId);
             if (!units) {
                 return res.status(404).json({ message: "units not found" });
             }
@@ -52,9 +53,9 @@ export default class CoursesController {
     }
     static async update(req, res, next) {
         try {
-            const coursesId = req.params.id;
+            const courseId = req.params.id;
             const fieldsToUpdate = req.body;
-            const updatedCouse = await CoursesManager.updateCourse(coursesId, fieldsToUpdate);
+            const updatedCouse = await CoursesManager.updateCourse(courseId, fieldsToUpdate);
             if (!updatedCouse) {
                 return res.status(404).json({ message: "unit not found" });
             }
@@ -66,8 +67,8 @@ export default class CoursesController {
     }
     static async delete(req, res, next) {
         try {
-            const coursesId = req.params.id;
-            const status = await CoursesManager.deleteCourses(coursesId);
+            const courseId = req.params.id;
+            const status = await CoursesManager.deleteCourses(courseId);
             if (!status) {
                 return res.status(404).json({ message: "Course not found" });
             }

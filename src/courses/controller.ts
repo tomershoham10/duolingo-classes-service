@@ -33,9 +33,9 @@ export default class CoursesController {
         next: NextFunction
     ) {
         try {
-            const coursesId: string = req.params.id;
-            console.log("courses controller", coursesId);
-            const course = await CoursesManager.getCourseById(coursesId);
+            const courseId: string = req.params.id;
+            console.log("courses controller", courseId);
+            const course = await CoursesManager.getCourseById(courseId);
             if (!course) {
                 return res.status(404).json({ message: "course not found" });
             }
@@ -52,8 +52,9 @@ export default class CoursesController {
         next: NextFunction
     ) {
         try {
-            const coursesId: string = req.params.id;
-            const units = await CoursesManager.getUnitsByCourseId(coursesId);
+            const courseId: string = req.params.id;
+            console.log("controller: getUnitsById", courseId);
+            const units = await CoursesManager.getUnitsByCourseId(courseId);
             if (!units) {
                 return res.status(404).json({ message: "units not found" });
             }
@@ -85,11 +86,11 @@ export default class CoursesController {
         next: NextFunction
     ) {
         try {
-            const coursesId: string = req.params.id;
+            const courseId: string = req.params.id;
             const fieldsToUpdate: Partial<CoursesType> = req.body;
 
             const updatedCouse = await CoursesManager.updateCourse(
-                coursesId,
+                courseId,
                 fieldsToUpdate
             );
 
@@ -109,8 +110,8 @@ export default class CoursesController {
         next: NextFunction
     ) {
         try {
-            const coursesId: string = req.params.id;
-            const status = await CoursesManager.deleteCourses(coursesId);
+            const courseId: string = req.params.id;
+            const status = await CoursesManager.deleteCourses(courseId);
 
             if (!status) {
                 return res.status(404).json({ message: "Course not found" });

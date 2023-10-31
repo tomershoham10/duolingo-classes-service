@@ -16,9 +16,9 @@ interface CoursesType {
 
 interface UnitsType {
     id: string;
-    sections: string[];
-    guidebook: string;
-    description:string;
+    sections?: string[];
+    guidebook?: string;
+    description?: string;
 }
 
 /////////////// SECTIONS ///////////////
@@ -31,9 +31,9 @@ interface SectionsType {
 /////////////// LESSONS ///////////////
 
 enum TypesOfLessons {
-    searider = "SEARIDER",
-    crew = "CREW",
-    senior = "SENIOR"
+    searider = "searider",
+    crew = "crew",
+    senior = "senior"
 }
 
 interface LessonsType {

@@ -4,11 +4,10 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 const LessonsRouter = express.Router();
 
-LessonsRouter.get("/", asyncHandler(LessonsController.getMany));
-
-LessonsRouter.get("/:id", asyncHandler(LessonsController.getById));
-
-LessonsRouter.get("/:type", asyncHandler(LessonsController.getById));
+LessonsRouter
+    .get("/type/:type", asyncHandler(LessonsController.getById))
+    .get("/:id", asyncHandler(LessonsController.getById))
+    .get("/", asyncHandler(LessonsController.getMany));
 
 LessonsRouter.post("/", asyncHandler(LessonsController.create));
 

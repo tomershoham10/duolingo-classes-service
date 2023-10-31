@@ -3,14 +3,26 @@ import CoursesModel from "./model.js";
 
 export default class CoursesRepository {
     static async createCourse(course: Partial<CoursesType>): Promise<CoursesType> {
-        const newCourse = await CoursesModel.create(course);
-        return newCourse;
+        try {
+
+            const newCourse = await CoursesModel.create(course);
+            return newCourse;
+        }
+        catch (err) {
+            throw new Error(`Error repo createCourse: ${err}`);
+        }
     }
 
     static async getCourseById(courseId: string): Promise<CoursesType | null> {
-        const course = await CoursesModel.findById(courseId);
-        console.log("courses repo", courseId);
-        return course;
+        try {
+
+            const course = await CoursesModel.findById(courseId);
+            console.log("courses repo", courseId);
+            return course;
+        }
+        catch (err) {
+            throw new Error(`Error repo getCourseById: ${err}`);
+        }
     }
 
     static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
@@ -34,24 +46,40 @@ export default class CoursesRepository {
 
 
     static async getAllCourses(): Promise<CoursesType[] | null> {
-        const courses = await CoursesModel.find({});
-        return courses;
+        try {
+            const courses = await CoursesModel.find({});
+            return courses;
+        }
+        catch (err) {
+            throw new Error(`Error repo getAllCourses: ${err}`);
+        }
     }
 
     static async updateCourse(
         courseId: string,
         fieldsToUpdate: Partial<CoursesType>
     ): Promise<CoursesType | null> {
-        const updatedCourse = await CoursesModel.findByIdAndUpdate(
-            courseId,
-            fieldsToUpdate,
-            { new: true }
-        );
-        return updatedCourse;
+        try {
+
+            const updatedCourse = await CoursesModel.findByIdAndUpdate(
+                courseId,
+                fieldsToUpdate,
+                { new: true }
+            );
+            return updatedCourse;
+        }
+        catch (err) {
+            throw new Error(`Error repo updateCourse: ${err}`);
+        }
     }
 
     static async deleteCourses(courseId: string): Promise<CoursesType | null> {
-        const status = await CoursesModel.findOneAndDelete({ _id: courseId });
-        return status;
+        try {
+
+            const status = await CoursesModel.findOneAndDelete({ _id: courseId });
+            return status;
+        } catch (err) {
+            throw new Error(`Error repo deleteCourses: ${err}`);
+        }
     }
 }

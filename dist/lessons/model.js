@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 var TypesOfLessons;
 (function (TypesOfLessons) {
-    TypesOfLessons["searider"] = "SEARIDER";
-    TypesOfLessons["crew"] = "CREW";
-    TypesOfLessons["senior"] = "SENIOR";
+    TypesOfLessons["searider"] = "searider";
+    TypesOfLessons["crew"] = "crew";
+    TypesOfLessons["senior"] = "senior";
 })(TypesOfLessons || (TypesOfLessons = {}));
 const LessonsSchema = new Schema({
     id: { type: String },

@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 
 enum TypesOfLessons {
-    searider = "SEARIDER",
-    crew = "CREW",
-    senior = "SENIOR"
+    searider = "searider",
+    crew = "crew",
+    senior = "senior"
 }
 
 const LessonsSchema = new Schema<LessonsType>({

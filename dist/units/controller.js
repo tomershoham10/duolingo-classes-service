@@ -64,6 +64,20 @@ export default class UnitsController {
             next(error);
         }
     }
+    static async getSectionsById(req, res, next) {
+        try {
+            const unitId = req.params.id;
+            console.log("controller: getSectionsById", unitId);
+            const sections = await UnitsManager.getsSectionsByUnitId(unitId);
+            if (!sections) {
+                return res.status(404).json({ message: "units not found" });
+            }
+            res.status(200).json({ sections });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     static async getMany(_req, res, next) {
         try {
             const units = await UnitsManager.getAllUnits();
