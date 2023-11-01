@@ -9,6 +9,16 @@ export default class LessonsManager {
         console.log("Lessons manager", lesson);
         return lesson;
     }
+    static async getsExercisesByUnitId(lessonId) {
+        try {
+            const exercises = await LessonsRepository.getsExercisesByUnitId(lessonId);
+            console.log("lesson manager getsSectionsByUnitId", exercises);
+            return exercises;
+        }
+        catch (err) {
+            throw new Error(`Error manager getsExercisesByUnitId: ${err}`);
+        }
+    }
     static async getAllLessons() {
         const lessons = await LessonsRepository.getAllLessons();
         return lessons;

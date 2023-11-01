@@ -28,7 +28,7 @@ export default class SectionsRepository {
                 const lessonsDetails = await LessonsModel.find({ _id: { $in: lessonsIds } });
                 if (lessonsIds) {
                     const lessonsInOrder = lessonsIds.map((id) => lessonsDetails.find(lesson => lesson._id.equals(id)));
-                    console.log("courses repo getsLessonsByUnitId", sectionId);
+                    console.log("sections repo getsLessonsByUnitId", sectionId);
                     return lessonsInOrder;
                 }
             }

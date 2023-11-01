@@ -30,6 +30,22 @@ export default class LessonsController {
             next(error);
         }
     }
+    static async getExercisesById(req, res, next) {
+        try {
+            const lessonId = req.params.id;
+            console.log("lessons controller: getExercisesById", lessonId);
+            const exercises = await LessonsManager.getsExercisesByUnitId(lessonId);
+            if (!exercises) {
+                return res.status(404).json({ message: "Exercises not found" });
+            }
+            res.status(200).json({ exercises });
+        }
+        catch (error) {
+            console.error(error);
+            next(error);
+            res.status(500).json({ err: "Internal Server Error" });
+        }
+    }
     static async getMany(_req, res, next) {
         try {
             const lessons = await LessonsManager.getAllLessons();
