@@ -13,6 +13,17 @@ export default class LessonsManager {
         return lesson;
     }
 
+    static async getsExercisesByUnitId(lessonId: string): Promise<FSAType[] | null | undefined> {
+        try {
+            const exercises = await LessonsRepository.getsExercisesByUnitId(lessonId);
+            console.log("lesson manager getsSectionsByUnitId", exercises);
+            return exercises;
+        }
+        catch (err) {
+            throw new Error(`Error manager getsExercisesByUnitId: ${err}`);
+        }
+    }
+
     static async getAllLessons(): Promise<LessonsType[] | null> {
         const lessons = await LessonsRepository.getAllLessons();
         return lessons;

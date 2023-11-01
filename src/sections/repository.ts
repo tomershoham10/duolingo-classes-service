@@ -32,7 +32,7 @@ export default class SectionsRepository {
                 if (lessonsIds) {
                     const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id.equals(id)));
 
-                    console.log("courses repo getsLessonsByUnitId", sectionId);
+                    console.log("sections repo getsLessonsByUnitId", sectionId);
                     return lessonsInOrder as LessonsType[];
                 }
             }
