@@ -15,8 +15,17 @@ export default class CoursesManager {
             console.log("courses manager", course);
             return course;
         } catch (err) { console.error(err); }
-
     }
+
+    static async getCourseByType(courseType: TypesOfCourses): Promise<CoursesType | null | undefined> {
+        try {
+            const course = await CoursesRepository.getCourseByType(courseType);
+            console.log("courses manager - getCourseByType :", course);
+            return course;
+        } catch (err) { console.error(err); }
+    }
+
+
 
     static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null | undefined> {
         try {

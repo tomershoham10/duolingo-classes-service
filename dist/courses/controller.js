@@ -40,6 +40,20 @@ export default class CoursesController {
             next(error);
         }
     }
+    static async getByType(req, res, next) {
+        try {
+            const courseType = req.params.type;
+            console.log("controller: getByType", courseType);
+            const course = await CoursesManager.getCourseByType(courseType);
+            if (!course) {
+                return res.status(404).json({ message: "course not found" });
+            }
+            res.status(200).json({ course });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     static async getMany(_req, res, next) {
         try {
             const courses = await CoursesManager.getAllCourses();

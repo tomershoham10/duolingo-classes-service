@@ -20,6 +20,16 @@ export default class CoursesRepository {
             throw new Error(`Error repo getCourseById: ${err}`);
         }
     }
+    static async getCourseByType(courseType) {
+        try {
+            const course = await CoursesModel.findOne({ type: courseType });
+            console.log("courses repo - getCourseByType :", course);
+            return course;
+        }
+        catch (err) {
+            throw new Error(`Error repo getCourseByType: ${err}`);
+        }
+    }
     static async getUnitsByCourseId(courseId) {
         try {
             const course = await CoursesModel.findById(courseId);

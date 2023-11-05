@@ -65,6 +65,25 @@ export default class CoursesController {
         }
     }
 
+    static async getByType(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const courseType: TypesOfCourses = req.params.type as TypesOfCourses;
+            console.log("controller: getByType", courseType);
+            const course = await CoursesManager.getCourseByType(courseType);
+            if (!course) {
+                return res.status(404).json({ message: "course not found" });
+            }
+
+            res.status(200).json({ course });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static async getMany(
         _req: Express.Request,
         res: Express.Response,

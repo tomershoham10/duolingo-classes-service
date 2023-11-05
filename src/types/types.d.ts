@@ -1,9 +1,9 @@
 /////////////// COURSES //////////////////
 
 enum TypesOfCourses {
-    searider = "searider",
-    crew = "crew",
-    senior = "senior"
+    SEARIDER = "searider",
+    CREW = "crew",
+    SENIOR = "senior"
 }
 
 interface CoursesType {

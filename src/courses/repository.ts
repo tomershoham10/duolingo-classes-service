@@ -25,6 +25,19 @@ export default class CoursesRepository {
         }
     }
 
+    static async getCourseByType(courseType: string): Promise<CoursesType | null> {
+        try {
+
+            const course = await CoursesModel.findOne({ type: courseType });
+            console.log("courses repo - getCourseByType :", course);
+            return course;
+        }
+        catch (err) {
+            throw new Error(`Error repo getCourseByType: ${err}`);
+        }
+    }
+
+
     static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
         try {
             const course = await CoursesModel.findById(courseId);

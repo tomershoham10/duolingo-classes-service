@@ -7,6 +7,7 @@ const CoursesRouter = express.Router();
 
 CoursesRouter
     .get("/getUnitsById/:id", asyncHandler(CoursesController.getUnitsById))
+    .get("/getByType/:type", asyncHandler(CoursesController.getByType))
     .get("/:id", asyncHandler(CoursesController.getById))
     .get("/", asyncHandler(CoursesController.getMany));
 
