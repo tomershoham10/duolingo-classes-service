@@ -7,7 +7,7 @@ enum DifficultyLevel {
 }
 
 const FSASchema = new Schema<FSAType>({
-  id: { type: String },
+  _id: { type: String },
   filesKeys: [{
     type: String,
     ref: 'File',

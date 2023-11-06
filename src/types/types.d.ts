@@ -52,7 +52,7 @@ enum DifficultyLevel {
 }
 
 interface FSAType {
-    id: string;
+    _id: string;
     filesKeys: string[];
     difficultyLevel: DifficultyLevel;
     options: string[];
@@ -80,7 +80,7 @@ interface OptionType {
 /////////////// RESULTS ///////////////
 
 interface ResultType {
-    id: string;
+    _id: string;
     userId: string;
     date: Date;
     exerciseId: string;

@@ -13,14 +13,25 @@ export default class LessonsManager {
         return lesson;
     }
 
-    static async getsExercisesByUnitId(lessonId: string): Promise<FSAType[] | null | undefined> {
+    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[] | null | undefined> {
         try {
-            const exercises = await LessonsRepository.getsExercisesByUnitId(lessonId);
+            const exercises = await LessonsRepository.getsExercisesByLessonId(lessonId);
             console.log("lesson manager getsSectionsByUnitId", exercises);
             return exercises;
         }
         catch (err) {
             throw new Error(`Error manager getsExercisesByUnitId: ${err}`);
+        }
+    }
+
+    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<ResultType[] | null | undefined> {
+        try {
+            const results = await LessonsRepository.getResultsByLessonIdAndUserId(lessonId, userId);
+            console.log("lesson manager getsResultsByLessonId", results);
+            return results;
+        }
+        catch (err) {
+            throw new Error(`Error manager getsResultsByLessonId: ${err}`);
         }
     }
 

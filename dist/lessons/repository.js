@@ -1,4 +1,5 @@
 import FSAModel from "../FSA/model.js";
+import ResultsModel from "../results/model.js";
 import LessonsModel from "./model.js";
 export default class LessonsRepository {
     static async createLesson(lesson) {
@@ -10,16 +11,39 @@ export default class LessonsRepository {
         console.log("lessons repo", lessonId);
         return lesson;
     }
-    static async getsExercisesByUnitId(lessonId) {
+    static async getsExercisesByLessonId(lessonId) {
         try {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
                 const FSAIds = lesson.exercises;
                 const FSADetails = await FSAModel.find({ _id: { $in: FSAIds } });
                 if (FSAIds) {
-                    const FSAsInOrder = FSAIds.map((id) => FSADetails.find(fsa => fsa._id.equals(id)));
+                    const FSAsInOrder = FSAIds.map((id) => FSADetails.find(fsa => fsa._id === id));
                     console.log("lessons repo getsExercisesByUnitId", lessonId);
                     return FSAsInOrder;
+                }
+            }
+            else
+                return null;
+        }
+        catch (err) {
+            throw new Error(`Error repo getsLessonsByUnitId: ${err}`);
+        }
+    }
+    static async getResultsByLessonIdAndUserId(lessonId, userId) {
+        try {
+            const lesson = await LessonsModel.findById(lessonId);
+            if (lesson) {
+                const FSAIds = lesson.exercises;
+                const FSADetails = await FSAModel.find({ _id: { $in: FSAIds } });
+                if (FSAIds) {
+                    const FSAsInOrder = FSAIds.map((id) => FSADetails.find(fsa => fsa._id === id));
+                    const FSAsIdInOrder = FSAsInOrder.map((FSA) => { if (FSA !== undefined) {
+                        FSA._id;
+                    } });
+                    const results = await ResultsModel.find({ _id: { $in: FSAsIdInOrder }, userId: userId });
+                    console.log("lessons repo getsExercisesByUnitId", lessonId);
+                    return results;
                 }
             }
             else

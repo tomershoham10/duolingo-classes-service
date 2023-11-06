@@ -94,7 +94,7 @@ export default class ResultsController {
     ) {
         try {
             const resultId: string = req.params.id;
-            const fieldsToUpdate: Partial<CoursesType> = req.body;
+            const fieldsToUpdate: Partial<ResultsManager> = req.body;
 
             const updatedResult = await ResultsManager.updateResult(
                 resultId,

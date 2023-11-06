@@ -9,14 +9,24 @@ export default class LessonsManager {
         console.log("Lessons manager", lesson);
         return lesson;
     }
-    static async getsExercisesByUnitId(lessonId) {
+    static async getsExercisesByLessonId(lessonId) {
         try {
-            const exercises = await LessonsRepository.getsExercisesByUnitId(lessonId);
+            const exercises = await LessonsRepository.getsExercisesByLessonId(lessonId);
             console.log("lesson manager getsSectionsByUnitId", exercises);
             return exercises;
         }
         catch (err) {
             throw new Error(`Error manager getsExercisesByUnitId: ${err}`);
+        }
+    }
+    static async getResultsByLessonIdAndUserId(lessonId, userId) {
+        try {
+            const results = await LessonsRepository.getResultsByLessonIdAndUserId(lessonId, userId);
+            console.log("lesson manager getsResultsByLessonId", results);
+            return results;
+        }
+        catch (err) {
+            throw new Error(`Error manager getsResultsByLessonId: ${err}`);
         }
     }
     static async getAllLessons() {

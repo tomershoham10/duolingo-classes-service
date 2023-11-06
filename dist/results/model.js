@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 const ResultsSchema = new Schema({
-    id: { type: String },
+    _id: { type: String },
     userId: [{
             type: String,
             ref: 'User',

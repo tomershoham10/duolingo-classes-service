@@ -1,4 +1,5 @@
 import FSAModel from "../FSA/model.js";
+import ResultsModel from "../results/model.js";
 import LessonsModel from "./model.js";
 
 export default class LessonsRepository {
@@ -13,8 +14,7 @@ export default class LessonsRepository {
         return lesson;
     }
 
-
-    static async getsExercisesByUnitId(lessonId: string): Promise<FSAType[] | undefined | null> {
+    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[] | undefined | null> {
         try {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
@@ -23,7 +23,7 @@ export default class LessonsRepository {
                 const FSADetails = await FSAModel.find({ _id: { $in: FSAIds } });
 
                 if (FSAIds) {
-                    const FSAsInOrder = FSAIds.map((id: any) => FSADetails.find(fsa => fsa._id.equals(id)));
+                    const FSAsInOrder = FSAIds.map((id: any) => FSADetails.find(fsa => fsa._id === id));
 
                     console.log("lessons repo getsExercisesByUnitId", lessonId);
                     return FSAsInOrder as FSAType[];
@@ -35,6 +35,30 @@ export default class LessonsRepository {
         }
     }
 
+    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<ResultType[] | undefined | null> {
+        try {
+            const lesson = await LessonsModel.findById(lessonId);
+            if (lesson) {
+                const FSAIds = lesson.exercises;
+
+                const FSADetails: FSAType[] = await FSAModel.find({ _id: { $in: FSAIds } });
+
+                if (FSAIds) {
+                    const FSAsInOrder = FSAIds.map((id: string) => FSADetails.find(fsa => fsa._id === id));
+
+                    const FSAsIdInOrder = FSAsInOrder.map((FSA) => { if (FSA !== undefined) { FSA._id } });
+
+                    const results: ResultType[] = await ResultsModel.find({ _id: { $in: FSAsIdInOrder }, userId: userId });
+
+                    console.log("lessons repo getsExercisesByUnitId", lessonId);
+                    return results as ResultType[];
+                }
+            }
+            else return null
+        } catch (err) {
+            throw new Error(`Error repo getsLessonsByUnitId: ${err}`);
+        }
+    }
 
     static async getAllLessons(): Promise<LessonsType[] | null> {
         const lessons = await LessonsModel.find({});
