@@ -1,11 +1,11 @@
 import express from "express";
 import OptionController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
-const optionRouter = express.Router();
-optionRouter.get("/", asyncHandler(OptionController.getMany));
-optionRouter.get("/:id", asyncHandler(OptionController.getById));
-optionRouter.post("/", asyncHandler(OptionController.create));
-optionRouter.put("/:id", asyncHandler(OptionController.update));
-optionRouter.delete("/:id", asyncHandler(OptionController.delete));
-export default optionRouter;
+const OptionRouter = express.Router();
+OptionRouter.get("/", asyncHandler(OptionController.getMany));
+OptionRouter.get("/:id", asyncHandler(OptionController.getById));
+OptionRouter.post("/", asyncHandler(OptionController.create));
+OptionRouter.put("/:id", asyncHandler(OptionController.update));
+OptionRouter.delete("/:id", asyncHandler(OptionController.delete));
+export default OptionRouter;
 //# sourceMappingURL=router.js.map

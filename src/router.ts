@@ -5,7 +5,8 @@ import UnitsRouter from "./units/router.js";
 import SectionsRouter from "./sections/router.js";
 import LessonsRouter from "./lessons/router.js";
 import FSARouter from "./FSA/router.js";
-import optionRouter from "./options/router.js";
+import OptionRouter from "./options/router.js";
+import ResultsRouter from "./results/router.js";
 
 const router: Router = express.Router();
 
@@ -24,6 +25,8 @@ router.use("/api/lessons/", LessonsRouter);
 
 router.use("/api/FSA/", FSARouter);
 
-router.use("/api/options/", optionRouter);
+router.use("/api/options/", OptionRouter);
+
+router.use("/api/results/", ResultsRouter);
 
 export default router;
