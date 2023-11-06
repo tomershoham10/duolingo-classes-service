@@ -46,6 +46,6 @@ const FSASchema = new Schema<FSAType>({
   }
 });
 
-const FSAModel = mongoose.model<FSAType>('Exercise', FSASchema);
+const FSAModel = mongoose.model<FSAType>('FSA', FSASchema);
 
 export default FSAModel;

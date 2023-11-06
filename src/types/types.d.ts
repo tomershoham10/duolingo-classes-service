@@ -76,3 +76,14 @@ interface OptionType {
     name: string;
     type: Types;
 }
+
+/////////////// RESULTS ///////////////
+
+interface ResultType {
+    id: string;
+    userId: string;
+    date: Date;
+    exerciseId: string;
+    answers: string[];
+    score: number;
+}

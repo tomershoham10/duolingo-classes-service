@@ -44,6 +44,6 @@ const FSASchema = new Schema({
         default: Date.now
     }
 });
-const FSAModel = mongoose.model('Exercise', FSASchema);
+const FSAModel = mongoose.model('FSA', FSASchema);
 export default FSAModel;
 //# sourceMappingURL=model.js.map
