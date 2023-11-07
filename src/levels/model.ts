@@ -1,7 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
 const LevelSchema = new Schema<LevelsType>({
-    id: { type: String },
     lessons: [{
         type: String,
         ref: 'Lessons',

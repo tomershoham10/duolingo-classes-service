@@ -6,7 +6,6 @@ enum Types {
 }
 
 const optionSchema: Schema = new Schema({
-  id: { type: String },
   name: { type: String, required: true },
   type: { type: String, enum: Object.values(Types), required: true },
 });

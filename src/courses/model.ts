@@ -7,7 +7,6 @@ enum TypesOfCourses {
 }
 
 const CoursesSchema = new Schema<CoursesType>({
-    id: { type: String },
     type: {
         type: String,
         enum: Object.values(TypesOfCourses),

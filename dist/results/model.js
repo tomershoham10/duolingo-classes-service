@@ -1,13 +1,13 @@
 import mongoose, { Schema } from 'mongoose';
 const ResultsSchema = new Schema({
-    _id: { type: String },
-    userId: [{
-            type: String,
-            ref: 'User',
-            required: true
-        }],
+    userId: {
+        type: String,
+        ref: 'User',
+        required: true
+    },
     date: {
         type: Date,
+        default: Date.now,
         required: true
     },
     exerciseId: {
