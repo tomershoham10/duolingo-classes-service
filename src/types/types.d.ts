@@ -16,14 +16,14 @@ interface CoursesType {
 
 interface UnitsType {
     id: string;
-    sections?: string[];
+    levels?: string[];
     guidebook?: string;
     description?: string;
 }
 
-/////////////// SECTIONS ///////////////
+/////////////// LEVELS ///////////////
 
-interface SectionsType {
+interface LevelsType {
     id: string;
     lessons: string[];
 }
@@ -52,7 +52,7 @@ enum DifficultyLevel {
 }
 
 interface FSAType {
-    _id: string;
+    id: string;
     filesKeys: string[];
     difficultyLevel: DifficultyLevel;
     options: string[];

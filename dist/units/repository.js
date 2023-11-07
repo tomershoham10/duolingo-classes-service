@@ -1,4 +1,4 @@
-import SectionsModel from "../sections/model.js";
+import LevelsModel from "../levels/model.js";
 import UnitsModel from "./model.js";
 export default class UnitsRepository {
     static async createUnit(unit) {
@@ -20,23 +20,23 @@ export default class UnitsRepository {
             throw new Error(`Error repo getUnitById: ${err}`);
         }
     }
-    static async getsSectionsByUnitId(unitId) {
+    static async getsLevelsByUnitId(unitId) {
         try {
             const unit = await UnitsModel.findById(unitId);
             if (unit) {
-                const sectionsIds = unit.sections;
-                const sectionsDetails = await SectionsModel.find({ _id: { $in: sectionsIds } });
-                if (sectionsIds) {
-                    const sectionsInOrder = sectionsIds.map((id) => sectionsDetails.find(section => section._id.equals(id)));
+                const levelsIds = unit.levels;
+                const levelsDetails = await LevelsModel.find({ _id: { $in: levelsIds } });
+                if (levelsIds) {
+                    const levelsInOrder = levelsIds.map((id) => levelsDetails.find(level => level._id.equals(id)));
                     console.log("courses repo getUnitsById", unitId);
-                    return sectionsInOrder;
+                    return levelsInOrder;
                 }
             }
             else
                 return null;
         }
         catch (err) {
-            throw new Error(`Error repo getsSectionsByUnitId: ${err}`);
+            throw new Error(`Error repo getsLevelsByUnitId: ${err}`);
         }
     }
     static async getAllUnits() {

@@ -1,7 +1,7 @@
 import Express, { NextFunction } from "express";
-import SectionsManager from "./manager.js";
+import LevelsManager from "./manager.js";
 
-export default class SectionsController {
+export default class LevelsController {
     static async create(
         req: Express.Request,
         res: Express.Response,
@@ -12,13 +12,13 @@ export default class SectionsController {
                 lessons: string[],
 
             };
-            const reqSection = {
+            const reqLevel = {
                 lessons: lessons,
             }
 
-            const newSection = await SectionsManager.createSection(reqSection);
+            const newLevel = await LevelsManager.createLevel(reqLevel);
             res.status(201)
-                .json({ message: "Section created successfully", newSection });
+                .json({ message: "Level created successfully", newLevel });
         } catch (error) {
             console.error(error);
             next(error);
@@ -32,14 +32,14 @@ export default class SectionsController {
         next: NextFunction
     ) {
         try {
-            const sectionId: string = req.params.id;
-            console.log("sections controller", sectionId);
-            const section = await SectionsManager.getSectionById(sectionId);
-            if (!section) {
-                return res.status(404).json({ message: "section not found" });
+            const levelId: string = req.params.id;
+            console.log("levels controller", levelId);
+            const level = await LevelsManager.getLevelById(levelId);
+            if (!level) {
+                return res.status(404).json({ message: "level not found" });
             }
 
-            res.status(200).json({ section });
+            res.status(200).json({ level });
         } catch (error) {
             next(error);
         }
@@ -51,9 +51,9 @@ export default class SectionsController {
         next: NextFunction
     ) {
         try {
-            const sectionId: string = req.params.id;
-            console.log("controller: getLessonsById", sectionId);
-            const lessons = await SectionsManager.getsLessonsByUnitId(sectionId);
+            const levelId: string = req.params.id;
+            console.log("controller: getLessonsById", levelId);
+            const lessons = await LevelsManager.getsLessonsByLevelId(levelId);
             if (!lessons) {
                 return res.status(404).json({ message: "lessons not found" });
             }
@@ -72,9 +72,9 @@ export default class SectionsController {
         next: NextFunction
     ) {
         try {
-            const sections = await SectionsManager.getAllSections();
-            console.log(sections);
-            res.status(200).json({ sections });
+            const levels = await LevelsManager.getAllLevels();
+            console.log(levels);
+            res.status(200).json({ levels });
         } catch (error) {
             console.error(error);
             next(error);
@@ -88,19 +88,19 @@ export default class SectionsController {
         next: NextFunction
     ) {
         try {
-            const sectionId: string = req.params.id;
-            const fieldsToUpdate: Partial<SectionsType> = req.body;
+            const levelId: string = req.params.id;
+            const fieldsToUpdate: Partial<LevelsType> = req.body;
 
-            const updatedSection = await SectionsManager.updateSection(
-                sectionId,
+            const updatedLevel = await LevelsManager.updateLevel(
+                levelId,
                 fieldsToUpdate
             );
 
-            if (!updatedSection) {
-                return res.status(404).json({ message: "Section not found" });
+            if (!updatedLevel) {
+                return res.status(404).json({ message: "Level not found" });
             }
 
-            res.status(200).json({ updatedSection });
+            res.status(200).json({ updatedLevel });
         } catch (error) {
             console.error(error);
             next(error);
@@ -114,11 +114,11 @@ export default class SectionsController {
         next: NextFunction
     ) {
         try {
-            const sectionId: string = req.params.id;
-            const status = await SectionsManager.deleteSection(sectionId);
+            const levelId: string = req.params.id;
+            const status = await LevelsManager.deleteLevel(levelId);
 
             if (!status) {
-                return res.status(404).json({ message: "Section not found" });
+                return res.status(404).json({ message: "Level not found" });
             }
 
             res.status(200).json({ status });

@@ -23,14 +23,14 @@ export default class UnitsManager {
         }
     }
 
-    static async getsSectionsByUnitId(unitId: string): Promise<SectionsType[] | null | undefined> {
+    static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[] | null | undefined> {
         try {
-            const units = await UnitsRepository.getsSectionsByUnitId(unitId);
-            console.log("units manager getsSectionsByUnitId", units);
+            const units = await UnitsRepository.getsLevelsByUnitId(unitId);
+            console.log("units manager getsLevelsByUnitId", units);
             return units;
         }
         catch (err) {
-            throw new Error(`Error manager getsSectionsByUnitId: ${err}`);
+            throw new Error(`Error manager getsLevelsByUnitId: ${err}`);
         }
     }
 

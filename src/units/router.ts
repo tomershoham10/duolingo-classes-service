@@ -5,7 +5,7 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 const UnitsRouter = express.Router();
 
 UnitsRouter
-    .get("/getSectionsById/:id", asyncHandler(UnitsController.getSectionsById))
+    .get("/getLevelsById/:id", asyncHandler(UnitsController.getLevelsById))
     .get("/:id", asyncHandler(UnitsController.getById))
     .get("/", asyncHandler(UnitsController.getMany));
 

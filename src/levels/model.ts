@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-const SectionSchema = new Schema<SectionsType>({
+const LevelSchema = new Schema<LevelsType>({
     id: { type: String },
     lessons: [{
         type: String,
@@ -9,6 +9,6 @@ const SectionSchema = new Schema<SectionsType>({
     }],
 });
 
-const SectionsModel = mongoose.model<SectionsType>('Sections', SectionSchema);
+const LevelsModel = mongoose.model<LevelsType>('Levels', LevelSchema);
 
-export default SectionsModel;
+export default LevelsModel;

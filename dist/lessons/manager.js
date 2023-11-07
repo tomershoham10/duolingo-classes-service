@@ -12,7 +12,7 @@ export default class LessonsManager {
     static async getsExercisesByLessonId(lessonId) {
         try {
             const exercises = await LessonsRepository.getsExercisesByLessonId(lessonId);
-            console.log("lesson manager getsSectionsByUnitId", exercises);
+            console.log("lesson manager getsExercisesByLessonId", exercises);
             return exercises;
         }
         catch (err) {

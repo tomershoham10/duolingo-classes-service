@@ -11,19 +11,19 @@ export default class UnitsController {
         next: NextFunction
     ) {
         try {
-            const { sections, guidebook, description } = req.body as {
-                sections: string[],
+            const { levels, guidebook, description } = req.body as {
+                levels: string[],
                 guidebook?: string,
                 description?: string
             };
 
 
             const reqUnit: {
-                sections: string[],
+                levels: string[],
                 guidebook?: string,
                 description?: string
             } = {
-                sections,
+                levels,
             };
 
             if (guidebook) {
@@ -103,20 +103,20 @@ export default class UnitsController {
         }
     }
 
-    static async getSectionsById(
+    static async getLevelsById(
         req: Express.Request,
         res: Express.Response,
         next: NextFunction
     ) {
         try {
             const unitId: string = req.params.id;
-            console.log("controller: getSectionsById", unitId);
-            const sections = await UnitsManager.getsSectionsByUnitId(unitId);
-            if (!sections) {
+            console.log("units controller: getLevelsById", unitId);
+            const levels = await UnitsManager.getsLevelsByUnitId(unitId);
+            if (!levels) {
                 return res.status(404).json({ message: "units not found" });
             }
 
-            res.status(200).json({ sections });
+            res.status(200).json({ levels });
         } catch (error) {
             console.error(error);
             next(error);
@@ -175,7 +175,7 @@ export default class UnitsController {
             const status = await UnitsManager.deleteUnit(unitId);
 
             if (!status) {
-                return res.status(404).json({ message: "Section not found" });
+                return res.status(404).json({ message: "Unit not found" });
             }
 
             res.status(200).json({ status });

@@ -6,7 +6,7 @@ var DifficultyLevel;
     DifficultyLevel["Hard"] = "Hard";
 })(DifficultyLevel || (DifficultyLevel = {}));
 const FSASchema = new Schema({
-    _id: { type: String },
+    id: { type: String },
     filesKeys: [{
             type: String,
             ref: 'File',

@@ -1,4 +1,4 @@
-import SectionsModel from "../sections/model.js";
+import LevelsModel from "../levels/model.js";
 import UnitsModel from "./model.js";
 
 export default class UnitsRepository {
@@ -23,24 +23,24 @@ export default class UnitsRepository {
         }
     }
 
-    static async getsSectionsByUnitId(unitId: string): Promise<SectionsType[] | undefined | null> {
+    static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[] | undefined | null> {
         try {
             const unit = await UnitsModel.findById(unitId);
             if (unit) {
-                const sectionsIds = unit.sections;
+                const levelsIds = unit.levels;
 
-                const sectionsDetails = await SectionsModel.find({ _id: { $in: sectionsIds } });
+                const levelsDetails = await LevelsModel.find({ _id: { $in: levelsIds } });
 
-                if (sectionsIds) {
-                    const sectionsInOrder = sectionsIds.map((id: any) => sectionsDetails.find(section => section._id.equals(id)));
+                if (levelsIds) {
+                    const levelsInOrder = levelsIds.map((id: any) => levelsDetails.find(level => level._id.equals(id)));
 
                     console.log("courses repo getUnitsById", unitId);
-                    return sectionsInOrder as SectionsType[];
+                    return levelsInOrder as LevelsType[];
                 }
             }
             else return null
         } catch (err) {
-            throw new Error(`Error repo getsSectionsByUnitId: ${err}`);
+            throw new Error(`Error repo getsLevelsByUnitId: ${err}`);
         }
     }
 

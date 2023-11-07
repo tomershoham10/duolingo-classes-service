@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import FSAModel from "../FSA/model.js";
 import ResultsModel from "../results/model.js";
 import LessonsModel from "./model.js";
@@ -17,9 +18,10 @@ export default class LessonsRepository {
             if (lesson) {
                 const FSAIds = lesson.exercises;
                 const FSADetails = await FSAModel.find({ _id: { $in: FSAIds } });
+                const FSADetails2 = await FSAModel.find({ _id: { $in: FSAIds.map(id => new mongoose.Types.ObjectId(id)) } });
                 if (FSAIds) {
                     const FSAsInOrder = FSAIds.map((id) => FSADetails.find(fsa => fsa._id === id));
-                    console.log("lessons repo getsExercisesByUnitId", lessonId);
+                    console.log("lessons repo getsExercisesByLessonId", FSAIds, FSADetails, FSADetails2, new mongoose.Types.ObjectId(FSAIds[0]), FSAsInOrder);
                     return FSAsInOrder;
                 }
             }
@@ -37,9 +39,9 @@ export default class LessonsRepository {
                 const FSAIds = lesson.exercises;
                 const FSADetails = await FSAModel.find({ _id: { $in: FSAIds } });
                 if (FSAIds) {
-                    const FSAsInOrder = FSAIds.map((id) => FSADetails.find(fsa => fsa._id === id));
+                    const FSAsInOrder = FSAIds.map((id) => FSADetails.find(fsa => fsa.id === id));
                     const FSAsIdInOrder = FSAsInOrder.map((FSA) => { if (FSA !== undefined) {
-                        FSA._id;
+                        FSA.id;
                     } });
                     const results = await ResultsModel.find({ _id: { $in: FSAsIdInOrder }, userId: userId });
                     console.log("lessons repo getsExercisesByUnitId", lessonId);

@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 const UnitsSchema = new Schema({
     id: { type: String },
-    sections: [{
+    levels: [{
             type: String,
-            ref: 'Sections',
+            ref: 'Levels',
             required: true
         }],
     guidebook: { type: String, ref: 'Guidebook', required: false },
