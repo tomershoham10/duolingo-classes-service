@@ -9,6 +9,17 @@ export default class FSAManager {
             throw new Error(`FSA repo createExercise: ${error}`);
         }
     }
+    static async getOptionsByFSAId(exerciseId) {
+        try {
+            console.log("FSA manager getExerciseByAnswerId - ", exerciseId);
+            const options = await FSARepository.getOptionsByFSAId(exerciseId);
+            console.log("FSA manager getExerciseByAnswerId - options", options);
+            return options;
+        }
+        catch (error) {
+            throw new Error(`FSA repo getExerciseByAnswerId: ${error}`);
+        }
+    }
     static async getExerciseByAnswerId(answerId) {
         try {
             const exercises = await FSARepository.getExerciseByAnswerId(answerId);

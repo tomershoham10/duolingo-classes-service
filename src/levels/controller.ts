@@ -21,8 +21,8 @@ export default class LevelsController {
                 .json({ message: "Level created successfully", newLevel });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -41,6 +41,8 @@ export default class LevelsController {
 
             res.status(200).json({ level });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -61,8 +63,8 @@ export default class LevelsController {
             res.status(200).json({ lessons });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -77,8 +79,8 @@ export default class LevelsController {
             res.status(200).json({ levels });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -103,8 +105,8 @@ export default class LevelsController {
             res.status(200).json({ updatedLevel });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -124,8 +126,8 @@ export default class LevelsController {
             res.status(200).json({ status });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 }

@@ -20,6 +20,8 @@ export default class OptionController {
         .status(201)
         .json({ message: "Option registered successfully", newOption });
     } catch (error) {
+      console.error(error);
+      res.status(500).json({ err: "Internal Server Error" });
       next(error);
     }
   }
@@ -39,6 +41,8 @@ export default class OptionController {
 
       res.status(200).json({ option });
     } catch (error) {
+      console.error(error);
+      res.status(500).json({ err: "Internal Server Error" });
       next(error);
     }
   }
@@ -53,9 +57,10 @@ export default class OptionController {
       const options = await OptionManager.getAllOption();
       console.log(options);
       res.status(200).json({ options });
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      console.error(error);
       res.status(500).json({ err: "Internal Server Error" });
+      next(error);
     }
   }
 
@@ -79,6 +84,8 @@ export default class OptionController {
 
       res.status(200).json({ updatedOption });
     } catch (error) {
+      console.error(error);
+      res.status(500).json({ err: "Internal Server Error" });
       next(error);
     }
   }
@@ -98,6 +105,8 @@ export default class OptionController {
 
       res.status(200).json({ deletedOption });
     } catch (error) {
+      console.error(error);
+      res.status(500).json({ err: "Internal Server Error" });
       next(error);
     }
   }

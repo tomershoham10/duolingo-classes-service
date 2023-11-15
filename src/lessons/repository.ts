@@ -41,7 +41,7 @@ export default class LessonsRepository {
         }
     }
 
-    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<ResultType[] | undefined | null> {
+    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<{ numOfExercises: number, results: ResultType[] } | undefined | null> {
         try {
             console.log("lessons repo getsExercisesByUnitId", "lessonId", lessonId, "userId", userId);
 
@@ -57,10 +57,10 @@ export default class LessonsRepository {
 
                     // const FSAsIdInOrder = FSADetails.map((FSA) => { if (FSA !== undefined) { FSA.id } });
 
-                    const results: ResultType[] = await ResultsModel.find({ exerciseId: { $in: FSAIds }, userId: userId });
-                    console.log(" lessons repo - results", results)
-
-                    return results as ResultType[];
+                    const resResults: ResultType[] = await ResultsModel.find({ exerciseId: { $in: FSAIds }, userId: userId });
+                    console.log(" lessons repo - results", { numOfExercises: FSAIds.length, results: resResults })
+                    const results = { numOfExercises: FSAIds.length, results: resResults }
+                    return results as { numOfExercises: number, results: ResultType[] };
                 }
             }
             else return null

@@ -43,8 +43,9 @@ export default class LessonsRepository {
                     console.log(" lessons repo - FSAIds", FSAIds);
                     // const FSAsInOrder = FSAIds.map((id: string) => FSADetails.find(fsa => fsa.id === id));
                     // const FSAsIdInOrder = FSADetails.map((FSA) => { if (FSA !== undefined) { FSA.id } });
-                    const results = await ResultsModel.find({ exerciseId: { $in: FSAIds }, userId: userId });
-                    console.log(" lessons repo - results", results);
+                    const resResults = await ResultsModel.find({ exerciseId: { $in: FSAIds }, userId: userId });
+                    console.log(" lessons repo - results", { numOfExercises: FSAIds.length, results: resResults });
+                    const results = { numOfExercises: FSAIds.length, results: resResults };
                     return results;
                 }
             }

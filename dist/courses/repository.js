@@ -33,12 +33,14 @@ export default class CoursesRepository {
     static async getUnitsByCourseId(courseId) {
         try {
             const course = await CoursesModel.findById(courseId);
+            console.log("courses repo - getUnitsByCourseId - course", course);
             if (course) {
                 const unitsIds = course.units;
+                console.log("courses repo - getUnitsByCourseId - unitsIds", unitsIds);
                 const unitsDetails = await UnitsModel.find({ _id: { $in: unitsIds } });
-                const unitsInOrder = unitsIds.map(id => unitsDetails.find(unit => unit._id.equals(id)));
-                console.log("courses repo getUnitsById", courseId);
-                return unitsInOrder;
+                // const unitsInOrder = unitsIds.map(id => unitsDetails.find(unit => unit._id === id));
+                console.log("courses repo getUnitsById - unitsDetails", unitsDetails);
+                return unitsDetails;
             }
             else
                 return null;

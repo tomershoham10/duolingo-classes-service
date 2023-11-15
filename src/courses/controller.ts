@@ -23,6 +23,8 @@ export default class CoursesController {
             res.status(201)
                 .json({ message: "course created successfully", newCourse });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -42,6 +44,8 @@ export default class CoursesController {
 
             res.status(200).json({ course });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -61,6 +65,8 @@ export default class CoursesController {
 
             res.status(200).json({ units });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -80,6 +86,8 @@ export default class CoursesController {
 
             res.status(200).json({ course });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -94,8 +102,9 @@ export default class CoursesController {
             console.log("get all courses", courses);
             res.status(200).json({ courses });
         } catch (err) {
-            next(err);
+            console.error(err);
             res.status(500).json({ err: "Internal Server Error" });
+            next(err);
         }
     }
 
@@ -119,6 +128,8 @@ export default class CoursesController {
 
             res.status(200).json({ updatedCouse });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -138,6 +149,8 @@ export default class CoursesController {
 
             res.status(200).json({ status });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }

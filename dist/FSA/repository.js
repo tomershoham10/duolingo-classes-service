@@ -1,3 +1,4 @@
+import OptionModel from "../options/model.js";
 import FSAModel from "./model.js";
 export default class FSARepository {
     static async createExercise(exercise) {
@@ -8,6 +9,24 @@ export default class FSARepository {
         }
         catch (error) {
             throw new Error(`fsa repo create: ${error}`);
+        }
+    }
+    static async getOptionsByFSAId(exerciseId) {
+        try {
+            const exercise = await FSAModel.findById(exerciseId);
+            console.log("FSA repo getOptionsByFSAId - exercise", exercise);
+            if (exercise) {
+                const optionsIds = exercise.options;
+                if (optionsIds) {
+                    const optionsDetails = await OptionModel.find({ _id: { $in: optionsIds } });
+                    return optionsDetails;
+                }
+            }
+            else
+                return null;
+        }
+        catch (error) {
+            throw new Error(`fsa repo getExerciseByAnswerId: ${error}`);
         }
     }
     static async getExerciseByAnswerId(answerId) {

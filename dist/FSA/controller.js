@@ -17,6 +17,24 @@ export default class FSAController {
                 .json({ message: "Exercise created successfully", newExercise });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
+    static async getOptionsByFSAId(req, res, next) {
+        try {
+            const exerciseId = req.params.exerciseId;
+            console.log("FSA controller getOptionsByFSAId", exerciseId);
+            const options = await FSAManager.getOptionsByFSAId(exerciseId);
+            if (!options) {
+                return res.status(404).json({ message: "options not found" });
+            }
+            res.status(200).json({ options });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -31,6 +49,8 @@ export default class FSAController {
             res.status(200).json({ exercises });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -45,6 +65,8 @@ export default class FSAController {
             res.status(200).json({ exercise });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -55,8 +77,9 @@ export default class FSAController {
             res.status(200).json({ exercises });
         }
         catch (err) {
-            next(err);
+            console.error(err);
             res.status(500).json({ err: "Internal Server Error" });
+            next(err);
         }
     }
     static async update(req, res, next) {
@@ -70,6 +93,8 @@ export default class FSAController {
             res.status(200).json({ updatedExercise });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -83,6 +108,8 @@ export default class FSAController {
             res.status(200).json({ status });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }

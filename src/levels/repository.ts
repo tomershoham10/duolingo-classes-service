@@ -27,13 +27,13 @@ export default class LevelsRepository {
             if (level) {
                 const lessonsIds = level.lessons;
 
-                const lessonsDetails = await LessonsModel.find({ _id: { $in: lessonsIds } });
 
                 if (lessonsIds) {
-                    const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id.equals(id)));
+                    // const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id === id));
+                    const lessonsDetails = await LessonsModel.find({ _id: { $in: lessonsIds } });
 
-                    console.log("levels repo getsLessonsByLevelId", levelId);
-                    return lessonsInOrder as LessonsType[];
+                    // console.log("levels repo getsLessonsByLevelId", levelId);
+                    return lessonsDetails as LessonsType[];
                 }
             }
             else return null

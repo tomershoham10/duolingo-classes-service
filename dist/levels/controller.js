@@ -12,8 +12,8 @@ export default class LevelsController {
         }
         catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
     static async getById(req, res, next) {
@@ -27,6 +27,8 @@ export default class LevelsController {
             res.status(200).json({ level });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -42,8 +44,8 @@ export default class LevelsController {
         }
         catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
     static async getMany(_req, res, next) {
@@ -54,8 +56,8 @@ export default class LevelsController {
         }
         catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
     static async update(req, res, next) {
@@ -70,8 +72,8 @@ export default class LevelsController {
         }
         catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
     static async delete(req, res, next) {
@@ -85,8 +87,8 @@ export default class LevelsController {
         }
         catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 }

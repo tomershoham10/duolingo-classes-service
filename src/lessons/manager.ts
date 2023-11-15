@@ -24,7 +24,7 @@ export default class LessonsManager {
         }
     }
 
-    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<ResultType[] | null | undefined> {
+    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<{ numOfExercises: number, results: ResultType[] } | null | undefined> {
         try {
             const results = await LessonsRepository.getResultsByLessonIdAndUserId(lessonId, userId);
             console.log("lesson manager getsResultsByLessonId", results);

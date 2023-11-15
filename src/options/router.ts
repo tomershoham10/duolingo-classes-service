@@ -4,9 +4,9 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 const OptionRouter = express.Router();
 
-OptionRouter.get("/", asyncHandler(OptionController.getMany));
-
-OptionRouter.get("/:id", asyncHandler(OptionController.getById));
+OptionRouter
+    .get("/:id", asyncHandler(OptionController.getById))
+    .get("/", asyncHandler(OptionController.getMany));
 
 OptionRouter.post("/", asyncHandler(OptionController.create));
 

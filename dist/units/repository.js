@@ -25,11 +25,12 @@ export default class UnitsRepository {
             const unit = await UnitsModel.findById(unitId);
             if (unit) {
                 const levelsIds = unit.levels;
-                const levelsDetails = await LevelsModel.find({ _id: { $in: levelsIds } });
                 if (levelsIds) {
-                    const levelsInOrder = levelsIds.map((id) => levelsDetails.find(level => level._id.equals(id)));
-                    console.log("courses repo getUnitsById", unitId);
-                    return levelsInOrder;
+                    const levelsDetails = await LevelsModel.find({ _id: { $in: levelsIds } });
+                    console.log("units repo - getsLevelsByUnitId unit, levelsId, levelsDetails", unit, levelsIds, levelsDetails);
+                    // const levelsInOrder = levelsIds.map((id: any) => levelsDetails.find(level => level._id === id));
+                    // console.log("courses repo getUnitsById", unitId);
+                    return levelsDetails;
                 }
             }
             else

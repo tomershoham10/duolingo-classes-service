@@ -29,6 +29,8 @@ export default class ResultsController {
             res.status(201)
                 .json({ message: "result created successfully", newResult });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -48,6 +50,8 @@ export default class ResultsController {
 
             res.status(200).json({ result });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -67,6 +71,8 @@ export default class ResultsController {
 
             res.status(200).json({ results });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -81,9 +87,10 @@ export default class ResultsController {
             const results = await ResultsManager.getAllResults();
             console.log("get all results controller", results);
             res.status(200).json({ results });
-        } catch (err) {
-            next(err);
+        } catch (error) {
+            console.error(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -107,6 +114,8 @@ export default class ResultsController {
 
             res.status(200).json({ updatedResult });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -126,6 +135,8 @@ export default class ResultsController {
 
             res.status(200).json({ status });
         } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }

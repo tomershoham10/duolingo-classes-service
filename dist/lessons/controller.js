@@ -13,6 +13,8 @@ export default class LessonsController {
                 .json({ message: "Lesson created successfully", newLesson });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -27,6 +29,8 @@ export default class LessonsController {
             res.status(200).json({ lesson });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -42,8 +46,8 @@ export default class LessonsController {
         }
         catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
     static async getResultsByLessonAndUser(req, res, next) {
@@ -58,8 +62,8 @@ export default class LessonsController {
         }
         catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
     static async getMany(_req, res, next) {
@@ -69,8 +73,9 @@ export default class LessonsController {
             res.status(200).json({ lessons });
         }
         catch (err) {
-            next(err);
+            console.error(err);
             res.status(500).json({ err: "Internal Server Error" });
+            next(err);
         }
     }
     static async getByType(req, res, next) {
@@ -84,6 +89,8 @@ export default class LessonsController {
             res.status(200).json({ lesson });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -98,6 +105,8 @@ export default class LessonsController {
             res.status(200).json({ updatedLesson });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }
@@ -111,6 +120,8 @@ export default class LessonsController {
             res.status(200).json({ status });
         }
         catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
     }

@@ -39,8 +39,8 @@ export default class UnitsController {
                 .json({ message: "Unit created successfully", newUnit });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -76,9 +76,8 @@ export default class UnitsController {
 
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
-
+            next(error);
         }
     }
 
@@ -98,8 +97,8 @@ export default class UnitsController {
             res.status(200).json({ unit });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -119,8 +118,8 @@ export default class UnitsController {
             res.status(200).json({ levels });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -133,9 +132,10 @@ export default class UnitsController {
             const units = await UnitsManager.getAllUnits();
             console.log(units);
             res.status(200).json({ units });
-        } catch (err) {
-            next(err);
+        } catch (error) {
+            console.error(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -160,8 +160,8 @@ export default class UnitsController {
             res.status(200).json({ updatedUnit });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 
@@ -181,8 +181,8 @@ export default class UnitsController {
             res.status(200).json({ status });
         } catch (error) {
             console.error(error);
-            next(error);
             res.status(500).json({ err: "Internal Server Error" });
+            next(error);
         }
     }
 }

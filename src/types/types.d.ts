@@ -7,7 +7,7 @@ enum TypesOfCourses {
 }
 
 interface CoursesType {
-    id: string;
+    _id: string;
     type: TypesOfCourses;
     units: string[];
 }
@@ -15,7 +15,7 @@ interface CoursesType {
 /////////////// UNITS //////////////////
 
 interface UnitsType {
-    id: string;
+    _id: string;
     levels?: string[];
     guidebook?: string;
     description?: string;
@@ -24,7 +24,7 @@ interface UnitsType {
 /////////////// LEVELS ///////////////
 
 interface LevelsType {
-    id: string;
+    _id: string;
     lessons: string[];
 }
 
@@ -37,7 +37,7 @@ enum TypesOfLessons {
 }
 
 interface LessonsType {
-    id: string;
+    _id: string;
     name: string;
     exercises: string[];
     type: TypesOfLessons;
@@ -52,7 +52,7 @@ enum DifficultyLevel {
 }
 
 interface FSAType {
-    id: string;
+    _id: string;
     filesKeys: string[];
     difficultyLevel: DifficultyLevel;
     options: string[];
