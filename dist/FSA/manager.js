@@ -11,13 +11,24 @@ export default class FSAManager {
     }
     static async getOptionsByFSAId(exerciseId) {
         try {
-            console.log("FSA manager getExerciseByAnswerId - ", exerciseId);
+            console.log("FSA manager getOptionsByFSAId - exerciseId", exerciseId);
             const options = await FSARepository.getOptionsByFSAId(exerciseId);
-            console.log("FSA manager getExerciseByAnswerId - options", options);
+            console.log("FSA manager getOptionsByFSAId - options", options);
             return options;
         }
         catch (error) {
-            throw new Error(`FSA repo getExerciseByAnswerId: ${error}`);
+            throw new Error(`FSA repo getOptionsByFSAId: ${error}`);
+        }
+    }
+    static async getAnswersByFSAId(exerciseId) {
+        try {
+            console.log("FSA manager getAnswersByFSAId - exerciseId", exerciseId);
+            const options = await FSARepository.getAnswersByFSAId(exerciseId);
+            console.log("FSA manager getAnswersByFSAId - options", options);
+            return options;
+        }
+        catch (error) {
+            throw new Error(`FSA repo getAnswersByFSAId: ${error}`);
         }
     }
     static async getExerciseByAnswerId(answerId) {

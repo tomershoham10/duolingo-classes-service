@@ -49,7 +49,6 @@ export default class FSARepository {
         }
     }
 
-
     static async getExerciseByAnswerId(answerId: string): Promise<FSAType[] | null> {
         try {
             const exercises = await FSAModel.find({ answers: answerId });

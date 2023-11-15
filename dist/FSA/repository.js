@@ -26,7 +26,25 @@ export default class FSARepository {
                 return null;
         }
         catch (error) {
-            throw new Error(`fsa repo getExerciseByAnswerId: ${error}`);
+            throw new Error(`fsa repo getOptionsByFSAId: ${error}`);
+        }
+    }
+    static async getAnswersByFSAId(exerciseId) {
+        try {
+            const exercise = await FSAModel.findById(exerciseId);
+            console.log("FSA repo getAnswersByFSAId - exercise", exercise);
+            if (exercise) {
+                const answersIds = exercise.answers;
+                if (answersIds) {
+                    const answersDetails = await OptionModel.find({ _id: { $in: answersIds } });
+                    return answersDetails;
+                }
+            }
+            else
+                return null;
+        }
+        catch (error) {
+            throw new Error(`fsa repo getAnswersByFSAId: ${error}`);
         }
     }
     static async getExerciseByAnswerId(answerId) {
