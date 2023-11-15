@@ -74,7 +74,7 @@ enum TypesOfOptions {
 interface OptionType {
     id: string;
     name: string;
-    type: Types;
+    type: TypesOfOptions;
 }
 
 /////////////// RESULTS ///////////////
