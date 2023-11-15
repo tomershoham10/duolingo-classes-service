@@ -7,6 +7,7 @@ const FSARouter = express.Router();
 
 FSARouter
     .get("/getOptionsByFSAId/:exerciseId", asyncHandler(FSAController.getOptionsByFSAId))
+    .get("/getAnswersByFSAId/:exerciseId", asyncHandler(FSAController.getAnswersByFSAId))
     .get("/answers/:answerId", asyncHandler(FSAController.getByAnswerId))
     .get("/:id", asyncHandler(FSAController.getById))
     .get("/", asyncHandler(FSAController.getMany));

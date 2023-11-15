@@ -58,6 +58,27 @@ export default class FSAController {
         }
     }
 
+    static async getAnswersByFSAId(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const exerciseId: string = req.params.exerciseId;
+            console.log("FSA controller getAnswersByFSAId", exerciseId);
+            const options = await FSAManager.getAnswersByFSAId(exerciseId);
+            if (!options) {
+                return res.status(404).json({ message: "options not found" });
+            }
+
+            res.status(200).json({ options });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
+
     static async getByAnswerId(
         req: Express.Request,
         res: Express.Response,
