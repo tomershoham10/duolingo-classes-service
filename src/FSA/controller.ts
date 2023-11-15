@@ -66,12 +66,12 @@ export default class FSAController {
         try {
             const exerciseId: string = req.params.exerciseId;
             console.log("FSA controller getAnswersByFSAId", exerciseId);
-            const options = await FSAManager.getAnswersByFSAId(exerciseId);
-            if (!options) {
+            const answers = await FSAManager.getAnswersByFSAId(exerciseId);
+            if (!answers) {
                 return res.status(404).json({ message: "options not found" });
             }
 
-            res.status(200).json({ options });
+            res.status(200).json({ answers });
         } catch (error) {
             console.error(error);
             res.status(500).json({ err: "Internal Server Error" });
