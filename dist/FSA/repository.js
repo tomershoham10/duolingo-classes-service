@@ -11,14 +11,14 @@ export default class FSARepository {
             throw new Error(`fsa repo create: ${error}`);
         }
     }
-    static async getOptionsByFSAId(exerciseId) {
+    static async getRelevantByFSAId(exerciseId) {
         try {
             const exercise = await FSAModel.findById(exerciseId);
             console.log("FSA repo getOptionsByFSAId - exercise", exercise);
             if (exercise) {
-                const optionsIds = exercise.options;
-                if (optionsIds) {
-                    const optionsDetails = await OptionModel.find({ _id: { $in: optionsIds } });
+                const relevantIds = exercise.relevant;
+                if (relevantIds) {
+                    const optionsDetails = await OptionModel.find({ _id: { $in: relevantIds }, type: { $eq: TypesOfTargets.VESSEL } });
                     return optionsDetails;
                 }
             }

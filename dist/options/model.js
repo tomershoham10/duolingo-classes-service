@@ -1,13 +1,32 @@
 import mongoose, { Schema } from "mongoose";
-var Types;
-(function (Types) {
-    Types["VESSEL"] = "vessel";
-    Types["COUNTRY"] = "country";
-    Types["SONAR"] = "sonar";
-})(Types || (Types = {}));
+var TypesOfTargets;
+(function (TypesOfTargets) {
+    TypesOfTargets["VESSEL"] = "Vessel";
+    TypesOfTargets["SONAR"] = "Sonar";
+    TypesOfTargets["TORPEDO"] = "Torpedo";
+})(TypesOfTargets || (TypesOfTargets = {}));
+var TypesOfVessels;
+(function (TypesOfVessels) {
+    TypesOfVessels["FRIGATE"] = "frigate";
+    TypesOfVessels["SUBMARINE"] = "submarine";
+    TypesOfVessels["TUGBOAT"] = "tugboat";
+})(TypesOfVessels || (TypesOfVessels = {}));
+var TypesOfTorpedos;
+(function (TypesOfTorpedos) {
+    TypesOfTorpedos["ELECTRIC"] = "electric";
+})(TypesOfTorpedos || (TypesOfTorpedos = {}));
+var TypesOfSonars;
+(function (TypesOfSonars) {
+    TypesOfSonars["REGULAR"] = "regular";
+})(TypesOfSonars || (TypesOfSonars = {}));
 const optionSchema = new Schema({
-    name: { type: String, required: true },
-    type: { type: String, enum: Object.values(Types), required: true },
+    name: { type: String, required: true, unique: true },
+    type: { type: TypesOfTargets, enum: Object.values(TypesOfTargets), required: true },
+    subType: {
+        type: String,
+        enum: [...Object.values(TypesOfVessels), ...Object.values(TypesOfTorpedos), ...Object.values(TypesOfSonars)],
+        required: true
+    },
 });
 const OptionModel = mongoose.model("Option", optionSchema);
 export default OptionModel;

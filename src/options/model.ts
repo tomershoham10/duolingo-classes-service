@@ -1,14 +1,34 @@
 import mongoose, { Schema } from "mongoose";
-enum Types {
-  VESSEL = "vessel",
-  COUNTRY = "country",
-  SONAR = "sonar",
+enum TypesOfTargets {
+  VESSEL = "Vessel",
+  SONAR = "Sonar",
+  TORPEDO = "Torpedo"
+}
+
+enum TypesOfVessels {
+  FRIGATE = "frigate",
+  SUBMARINE = "submarine",
+  TUGBOAT = "tugboat",
+}
+
+enum TypesOfTorpedos {
+  ELECTRIC = "electric"
+}
+
+enum TypesOfSonars {
+  REGULAR = "regular"
 }
 
 const optionSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  type: { type: String, enum: Object.values(Types), required: true },
+  name: { type: String, required: true, unique: true },
+  type: { type: TypesOfTargets, enum: Object.values(TypesOfTargets), required: true },
+  subType: {
+    type: String,
+    enum: [...Object.values(TypesOfVessels), ...Object.values(TypesOfTorpedos), ...Object.values(TypesOfSonars)],
+    required: true
+  },
 });
+
 
 const OptionModel = mongoose.model<OptionType>("Option", optionSchema);
 

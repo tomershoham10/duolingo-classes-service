@@ -8,10 +8,10 @@ export default class FSAController {
         next: NextFunction
     ) {
         try {
-            const { filesKeys, difficultyLevel, options, answers, firstTimeBuffer, secondTimeBuffer, description } = req.body as {
+            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description } = req.body as {
                 filesKeys: string[],
                 difficultyLevel: DifficultyLevel,
-                options: string[],
+                relevant: string[],
                 answers: string[],
                 firstTimeBuffer: number,
                 secondTimeBuffer: number,
@@ -20,7 +20,7 @@ export default class FSAController {
             const reqExercise = {
                 filesKeys: filesKeys,
                 difficultyLevel: difficultyLevel,
-                options: options,
+                relevant: relevant,
                 answers: answers,
                 firstTimeBuffer: firstTimeBuffer,
                 secondTimeBuffer: secondTimeBuffer,
@@ -37,20 +37,20 @@ export default class FSAController {
         }
     }
 
-    static async getOptionsByFSAId(
+    static async getRelevantByFSAId(
         req: Express.Request,
         res: Express.Response,
         next: NextFunction
     ) {
         try {
             const exerciseId: string = req.params.exerciseId;
-            console.log("FSA controller getOptionsByFSAId", exerciseId);
-            const options = await FSAManager.getOptionsByFSAId(exerciseId);
-            if (!options) {
-                return res.status(404).json({ message: "options not found" });
+            console.log("FSA controller getRelevantByFSAId", exerciseId);
+            const relevantOptions = await FSAManager.getRelevantByFSAId(exerciseId);
+            if (!relevantOptions) {
+                return res.status(404).json({ message: "relevant not found" });
             }
 
-            res.status(200).json({ options });
+            res.status(200).json({ relevantOptions });
         } catch (error) {
             console.error(error);
             res.status(500).json({ err: "Internal Server Error" });

@@ -16,7 +16,7 @@ const FSASchema = new Schema({
         enum: Object.values(DifficultyLevel),
         required: true
     },
-    options: [{
+    relevant: [{
             type: String,
             ref: 'Option',
             required: true

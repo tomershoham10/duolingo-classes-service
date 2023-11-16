@@ -2,11 +2,11 @@ import FSAManager from "./manager.js";
 export default class FSAController {
     static async create(req, res, next) {
         try {
-            const { filesKeys, difficultyLevel, options, answers, firstTimeBuffer, secondTimeBuffer, description } = req.body;
+            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description } = req.body;
             const reqExercise = {
                 filesKeys: filesKeys,
                 difficultyLevel: difficultyLevel,
-                options: options,
+                relevant: relevant,
                 answers: answers,
                 firstTimeBuffer: firstTimeBuffer,
                 secondTimeBuffer: secondTimeBuffer,
@@ -22,15 +22,15 @@ export default class FSAController {
             next(error);
         }
     }
-    static async getOptionsByFSAId(req, res, next) {
+    static async getRelevantByFSAId(req, res, next) {
         try {
             const exerciseId = req.params.exerciseId;
-            console.log("FSA controller getOptionsByFSAId", exerciseId);
-            const options = await FSAManager.getOptionsByFSAId(exerciseId);
-            if (!options) {
-                return res.status(404).json({ message: "options not found" });
+            console.log("FSA controller getRelevantByFSAId", exerciseId);
+            const relevantOptions = await FSAManager.getRelevantByFSAId(exerciseId);
+            if (!relevantOptions) {
+                return res.status(404).json({ message: "relevant not found" });
             }
-            res.status(200).json({ options });
+            res.status(200).json({ relevantOptions });
         }
         catch (error) {
             console.error(error);

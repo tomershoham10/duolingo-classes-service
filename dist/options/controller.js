@@ -2,8 +2,9 @@ import OptionManager from "./manager.js";
 export default class OptionController {
     static async create(req, res, next) {
         try {
-            const { name, type } = req.body;
-            const reqOption = { name: name, type: type };
+            const { name, type, subType } = req.body;
+            const reqOption = { name: name, type: type, subType: subType };
+            console.log("OptionController create - reqOption", reqOption);
             const newOption = await OptionManager.createOption(reqOption);
             res
                 .status(201)

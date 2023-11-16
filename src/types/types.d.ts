@@ -55,7 +55,7 @@ interface FSAType {
     _id: string;
     filesKeys: string[];
     difficultyLevel: DifficultyLevel;
-    options: string[];
+    relevant: string[];
     answers: string[]; //my be 2 correct answers
     firstTimeBuffer: number; //in minutes
     secondTimeBuffer: number; //in minutes
@@ -65,16 +65,32 @@ interface FSAType {
 
 /////////////// OPTIONS ///////////////
 
-enum TypesOfOptions {
+enum TypesOfTargets {
     VESSEL = "vessel",
-    COUNTRY = "country",
     SONAR = "sonar",
+    TORPEDO = "Torpedo"
+}
+
+
+enum TypesOfVessels {
+    FRIGATE = "frigate",
+    SUBMARINE = "submarine",
+    TUGBOAT = "tugboat",
+}
+
+enum TypesOfTorpedos {
+    ELECTRIC = "electric"
+}
+
+enum TypesOfSonars {
+    REGULAR = "regular"
 }
 
 interface OptionType {
-    _id: string;
+    id: string;
     name: string;
-    type: TypesOfOptions;
+    type: TypesOfTargets;
+    subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars;
 }
 
 /////////////// RESULTS ///////////////

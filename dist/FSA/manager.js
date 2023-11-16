@@ -9,12 +9,12 @@ export default class FSAManager {
             throw new Error(`FSA repo createExercise: ${error}`);
         }
     }
-    static async getOptionsByFSAId(exerciseId) {
+    static async getRelevantByFSAId(exerciseId) {
         try {
-            console.log("FSA manager getOptionsByFSAId - exerciseId", exerciseId);
-            const options = await FSARepository.getOptionsByFSAId(exerciseId);
-            console.log("FSA manager getOptionsByFSAId - options", options);
-            return options;
+            console.log("FSA manager getRelevantByFSAId - exerciseId", exerciseId);
+            const relevant = await FSARepository.getRelevantByFSAId(exerciseId);
+            console.log("FSA manager getRelevantByFSAId - relevant options", relevant);
+            return relevant;
         }
         catch (error) {
             throw new Error(`FSA repo getOptionsByFSAId: ${error}`);
