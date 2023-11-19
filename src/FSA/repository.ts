@@ -1,4 +1,5 @@
 import OptionModel from "../options/model.js";
+import ResultsModel from "../results/model.js";
 import FSAModel from "./model.js";
 
 export default class FSARepository {
@@ -13,6 +14,23 @@ export default class FSARepository {
         }
     }
 
+    static async getResultByUserAndFSAId(exerciseId: string, userId: string): Promise<ResultType | undefined | null> {
+        try {
+            const exercise = await FSAModel.findById(exerciseId);
+            console.log("FSA repo getResultByUserAndFSAId - exercise", exercise);
+            if (exercise && userId) {
+                const result = await ResultsModel.findOne({ exerciseId: { $eq: exerciseId }, userId: { $eq: userId } });
+                console.log("FSA repo getResultByUserAndFSAId - result", result);
+                return result;
+
+            }
+            else return null;
+        }
+        catch (error) {
+            throw new Error(`fsa repo getResultByUserAndFSAId: ${error}`);
+        }
+    }
+
     static async getRelevantByFSAId(exerciseId: string): Promise<OptionType[] | undefined | null> {
         try {
             const exercise = await FSAModel.findById(exerciseId);
@@ -20,7 +38,8 @@ export default class FSARepository {
             if (exercise) {
                 const relevantIds = exercise.relevant;
                 if (relevantIds) {
-                    const optionsDetails = await OptionModel.find({ _id: { $in: relevantIds }, type: { $eq: TypesOfTargets.VESSEL } });
+                    const optionsDetails = await OptionModel.find({ _id: { $in: relevantIds }, type: { $eq: "vessel" } });
+                    console.log("FSA repo getOptionsByFSAId - optionsDetails", relevantIds, optionsDetails);
                     return optionsDetails;
                 }
             }

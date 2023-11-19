@@ -12,6 +12,17 @@ export default class FSAManager {
         }
     }
 
+    static async getResultByUserAndFSAId(exerciseId: string, useId: string): Promise<ResultType | undefined | null> {
+        try {
+            console.log("FSA manager getResultByUserAndFSAId - exerciseId", exerciseId);
+            const result = await FSARepository.getResultByUserAndFSAId(exerciseId, useId);
+            console.log("FSA manager getResultByUserAndFSAId - result", result);
+            return result;
+        } catch (error) {
+            throw new Error(`FSA repo getResultByUserAndFSAId: ${error}`);
+        }
+    }
+
     static async getRelevantByFSAId(exerciseId: string): Promise<OptionType[] | undefined | null> {
         try {
             console.log("FSA manager getRelevantByFSAId - exerciseId", exerciseId);

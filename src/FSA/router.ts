@@ -6,6 +6,7 @@ import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 const FSARouter = express.Router();
 
 FSARouter
+    .get("/getResultByUserAndFSAId/:exerciseId/:userId", asyncHandler(FSAController.getResultByUserAndFSAId))
     .get("/getRelevantByFSAId/:exerciseId", asyncHandler(FSAController.getRelevantByFSAId))
     .get("/getAnswersByFSAId/:exerciseId", asyncHandler(FSAController.getAnswersByFSAId))
     .get("/answers/:answerId", asyncHandler(FSAController.getByAnswerId))

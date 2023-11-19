@@ -21,7 +21,11 @@ var TypesOfSonars;
 })(TypesOfSonars || (TypesOfSonars = {}));
 const optionSchema = new Schema({
     name: { type: String, required: true, unique: true },
-    type: { type: TypesOfTargets, enum: Object.values(TypesOfTargets), required: true },
+    type: {
+        type: String,
+        enum: Object.values(TypesOfTargets),
+        required: true
+    },
     subType: {
         type: String,
         enum: [...Object.values(TypesOfVessels), ...Object.values(TypesOfTorpedos), ...Object.values(TypesOfSonars)],

@@ -68,13 +68,15 @@ interface FSAType {
 enum TypesOfTargets {
     VESSEL = "vessel",
     SONAR = "sonar",
-    TORPEDO = "Torpedo"
+    TORPEDO = "torpedo"
 }
 
 
 enum TypesOfVessels {
     FRIGATE = "frigate",
     SUBMARINE = "submarine",
+    COASTPATROL = "coastPatrol",
+    CARGO = "cargo",
     TUGBOAT = "tugboat",
 }
 

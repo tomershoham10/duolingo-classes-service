@@ -22,6 +22,23 @@ export default class FSAController {
             next(error);
         }
     }
+    static async getResultByUserAndFSAId(req, res, next) {
+        try {
+            const exerciseId = req.params.exerciseId;
+            const userId = req.params.userId;
+            console.log("FSA controller getResultByUserAndFSAId", exerciseId, userId);
+            const result = await FSAManager.getResultByUserAndFSAId(exerciseId, userId);
+            if (!result) {
+                return res.status(404).json({ message: "result not found" });
+            }
+            res.status(200).json({ result });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
     static async getRelevantByFSAId(req, res, next) {
         try {
             const exerciseId = req.params.exerciseId;

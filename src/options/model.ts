@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+
 enum TypesOfTargets {
   VESSEL = "Vessel",
   SONAR = "Sonar",
@@ -21,14 +22,17 @@ enum TypesOfSonars {
 
 const optionSchema: Schema = new Schema({
   name: { type: String, required: true, unique: true },
-  type: { type: TypesOfTargets, enum: Object.values(TypesOfTargets), required: true },
+  type: {
+    type: String,
+    enum: Object.values(TypesOfTargets),
+    required: true
+  },
   subType: {
     type: String,
     enum: [...Object.values(TypesOfVessels), ...Object.values(TypesOfTorpedos), ...Object.values(TypesOfSonars)],
     required: true
   },
 });
-
 
 const OptionModel = mongoose.model<OptionType>("Option", optionSchema);
 
