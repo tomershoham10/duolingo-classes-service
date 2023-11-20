@@ -21,12 +21,22 @@ export default class ResultsManager {
     }
     static async getResultsByUserId(userId) {
         try {
-            const result = await ResultsRepository.getResultsByUserId(userId);
-            console.log("results manager getResultsByUserId", result);
-            return result;
+            const results = await ResultsRepository.getResultsByUserId(userId);
+            console.log("results manager getResultsByUserId", results);
+            return results;
         }
         catch (error) {
             throw new Error(`Results repo getResultsByUserId: ${error}`);
+        }
+    }
+    static async getResultsByLessonAndUser(lessonId, userId) {
+        try {
+            const results = await ResultsRepository.getResultsByLessonAndUser(lessonId, userId);
+            console.log("results manager getResultsByLessonAndUser", results);
+            return results;
+        }
+        catch (error) {
+            throw new Error(`Results repo getResultsByLessonAndUser: ${error}`);
         }
     }
     static async getAllResults() {

@@ -46,6 +46,23 @@ export default class ResultsController {
             next(error);
         }
     }
+    static async getResultsByLessonAndUser(req, res, next) {
+        try {
+            const lessonId = req.params.lessonId;
+            const userId = req.params.userId;
+            console.log("controller: getResultsByLessonAndUser", lessonId, userId);
+            const results = await ResultsManager.getResultsByLessonAndUser(lessonId, userId);
+            if (!results) {
+                return res.status(404).json({ message: "results not found" });
+            }
+            res.status(200).json({ results });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
     static async getMany(_req, res, next) {
         try {
             const results = await ResultsManager.getAllResults();

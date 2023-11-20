@@ -56,7 +56,7 @@ interface FSAType {
     filesKeys: string[];
     difficultyLevel: DifficultyLevel;
     relevant: string[];
-    answers: string[]; //my be 2 correct answers
+    answers: string[]; //may be 2 correct answers
     firstTimeBuffer: number; //in minutes
     secondTimeBuffer: number; //in minutes
     description: string;
@@ -77,7 +77,6 @@ enum TypesOfTargets {
     SONAR = "sonar",
     TORPEDO = "torpedo"
 }
-
 
 enum TypesOfVessels {
     FRIGATE = "frigate",

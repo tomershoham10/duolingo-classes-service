@@ -10,6 +10,16 @@ export default class ResultsRepository {
             throw new Error(`Results repo create: ${error}`);
         }
     }
+    static async getResultById(resultsId) {
+        try {
+            const result = await ResultsModel.findById(resultsId);
+            console.log("results repo", resultsId);
+            return result;
+        }
+        catch (error) {
+            throw new Error(`fsa repo getExerciseById: ${error}`);
+        }
+    }
     static async getResultsByUserId(userId) {
         try {
             const results = await ResultsModel.find({ userId: userId });
@@ -20,14 +30,14 @@ export default class ResultsRepository {
             throw new Error(`results repo getResultsUserId: ${error}`);
         }
     }
-    static async getResultById(resultsId) {
+    static async getResultsByLessonAndUser(lessonId, userId) {
         try {
-            const result = await ResultsModel.findById(resultsId);
-            console.log("results repo", resultsId);
-            return result;
+            const results = await ResultsModel.find({ lessonId: lessonId, userId: userId });
+            console.log("results repo getResultsByLessonAndUser", results);
+            return results;
         }
         catch (error) {
-            throw new Error(`fsa repo getExerciseById: ${error}`);
+            throw new Error(`results repo getResultsByLessonAndUser: ${error}`);
         }
     }
     static async getAllResults() {
