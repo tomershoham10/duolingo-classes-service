@@ -63,6 +63,13 @@ interface FSAType {
     dateCreated: Date;
 }
 
+/////////////// COUNTRIES ///////////////
+
+interface CountryType {
+    id: string;
+    name: string;
+}
+
 /////////////// OPTIONS ///////////////
 
 enum TypesOfTargets {
@@ -91,6 +98,7 @@ enum TypesOfSonars {
 interface OptionType {
     id: string;
     name: string;
+    countryId: string;
     type: TypesOfTargets;
     subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars;
 }
@@ -101,6 +109,7 @@ interface ResultType {
     _id: string;
     userId: string;
     date: Date;
+    lessonId: string;
     exerciseId: string;
     answers: string[];
     score: number;

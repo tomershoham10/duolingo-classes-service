@@ -1,29 +1,54 @@
 import OptionModel from "./model.js";
 export default class OptionRepository {
     static async createOption(option) {
-        const existingOption = await OptionModel.findOne({ name: option.name });
-        if (existingOption) {
-            throw new Error("Option already exists");
+        try {
+            const existingOption = await OptionModel.findOne({ name: option.name });
+            if (existingOption) {
+                throw new Error("Option already exists");
+            }
+            const newOption = await OptionModel.create(option);
+            return newOption;
         }
-        const newOption = await OptionModel.create(option);
-        return newOption;
+        catch (error) {
+            throw new Error(`options repo createOption: ${error}`);
+        }
     }
     static async getOptionById(optionId) {
-        const option = await OptionModel.findById(optionId);
-        console.log("repo", option);
-        return option;
+        try {
+            const option = await OptionModel.findById(optionId);
+            console.log("repo", option);
+            return option;
+        }
+        catch (error) {
+            throw new Error(`options repo getOptionById: ${error}`);
+        }
     }
     static async getAllOption() {
-        const options = await OptionModel.find({});
-        return options;
+        try {
+            const options = await OptionModel.find({});
+            return options;
+        }
+        catch (error) {
+            throw new Error(`options repo getAllOption: ${error}`);
+        }
     }
     static async updateOption(optionId, fieldsToUpdate) {
-        const updatedOption = await OptionModel.findByIdAndUpdate(optionId, fieldsToUpdate, { new: true });
-        return updatedOption;
+        try {
+            const updatedOption = await OptionModel.findByIdAndUpdate(optionId, fieldsToUpdate, { new: true });
+            return updatedOption;
+        }
+        catch (error) {
+            throw new Error(`options repo updateOption: ${error}`);
+        }
     }
     static async deleteOption(optionId) {
-        const status = await OptionModel.findOneAndDelete({ _id: optionId });
-        return status;
+        try {
+            const status = await OptionModel.findOneAndDelete({ _id: optionId });
+            return status;
+        }
+        catch (error) {
+            throw new Error(`options repo deleteOption: ${error}`);
+        }
     }
 }
 //# sourceMappingURL=repository.js.map

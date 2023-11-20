@@ -8,7 +8,7 @@ export default class FSAManager {
             const response = await FSARepository.createExercise(exercise);
             return response
         } catch (error) {
-            throw new Error(`FSA repo createExercise: ${error}`);
+            throw new Error(`FSA manager createExercise: ${error}`);
         }
     }
 
@@ -19,7 +19,7 @@ export default class FSAManager {
             console.log("FSA manager getResultByUserAndFSAId - result", result);
             return result;
         } catch (error) {
-            throw new Error(`FSA repo getResultByUserAndFSAId: ${error}`);
+            throw new Error(`FSA manager getResultByUserAndFSAId: ${error}`);
         }
     }
 
@@ -30,7 +30,7 @@ export default class FSAManager {
             console.log("FSA manager getRelevantByFSAId - relevant options", relevant);
             return relevant;
         } catch (error) {
-            throw new Error(`FSA repo getOptionsByFSAId: ${error}`);
+            throw new Error(`FSA manager getRelevantByFSAId: ${error}`);
         }
     }
 
@@ -41,7 +41,7 @@ export default class FSAManager {
             console.log("FSA manager getAnswersByFSAId - options", options);
             return options;
         } catch (error) {
-            throw new Error(`FSA repo getAnswersByFSAId: ${error}`);
+            throw new Error(`FSA manager getAnswersByFSAId: ${error}`);
         }
     }
 
@@ -52,7 +52,7 @@ export default class FSAManager {
             console.log("FSA manager getExerciseByAnswerId", exercises);
             return exercises;
         } catch (error) {
-            throw new Error(`FSA repo getExerciseByAnswerId: ${error}`);
+            throw new Error(`FSA manager getExerciseByAnswerId: ${error}`);
         }
     }
 
@@ -63,7 +63,7 @@ export default class FSAManager {
             console.log("FSA manager", exercise);
             return exercise;
         } catch (error) {
-            throw new Error(`FSA repo getExerciseById: ${error}`);
+            throw new Error(`FSA manager getExerciseById: ${error}`);
         }
     }
 
@@ -73,7 +73,7 @@ export default class FSAManager {
             const exercises = await FSARepository.getAllExercises();
             return exercises;
         } catch (error) {
-            throw new Error(`FSA repo getAllExercise: ${error}`);
+            throw new Error(`FSA manager getAllExercise: ${error}`);
         }
     }
 
@@ -89,7 +89,7 @@ export default class FSAManager {
             );
             return updatedExercise;
         } catch (error) {
-            throw new Error(`FSA repo updateExercise: ${error}`);
+            throw new Error(`FSA manager updateExercise: ${error}`);
         }
     }
 
@@ -99,7 +99,7 @@ export default class FSAManager {
             const status = await FSARepository.deleteExercise(exerciseId);
             return status;
         } catch (error) {
-            throw new Error(`FSA repo deleteExercise: ${error}`);
+            throw new Error(`FSA manager deleteExercise: ${error}`);
         }
     }
 }

@@ -8,13 +8,14 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
-      const { name, type, subType } = req.body as { name: string; type: TypesOfTargets, subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars };
+      const { name, countryId, type, subType } = req.body as { name: string; countryId: string; type: TypesOfTargets, subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars };
 
       const reqOption: {
         name: string,
+        countryId: string,
         type: TypesOfTargets,
         subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars
-      } = { name: name, type: type, subType: subType };
+      } = { name: name, countryId: countryId, type: type, subType: subType };
       console.log("OptionController create - reqOption", reqOption);
       const newOption = await OptionManager.createOption(reqOption);
       res

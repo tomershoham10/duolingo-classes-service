@@ -21,6 +21,7 @@ var TypesOfSonars;
 })(TypesOfSonars || (TypesOfSonars = {}));
 const optionSchema = new Schema({
     name: { type: String, required: true, unique: true },
+    countryId: { type: String, ref: 'Country', required: true },
     type: {
         type: String,
         enum: Object.values(TypesOfTargets),

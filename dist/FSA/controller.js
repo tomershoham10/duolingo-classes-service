@@ -13,7 +13,7 @@ export default class FSAController {
                 description: description
             };
             const newExercise = await FSAManager.createExercise(reqExercise);
-            res.status(201)
+            return res.status(201)
                 .json({ message: "Exercise created successfully", newExercise });
         }
         catch (error) {
@@ -28,10 +28,16 @@ export default class FSAController {
             const userId = req.params.userId;
             console.log("FSA controller getResultByUserAndFSAId", exerciseId, userId);
             const result = await FSAManager.getResultByUserAndFSAId(exerciseId, userId);
+            console.log("FSA controller getResultByUserAndFSAId - result", result, result === null);
+            // if (result === null) {
+            //     console.log("result is null", result);
+            //     return res.status(204).json({ message: "no result" });
+            // }
+            // console.log("try1", result);
             if (!result) {
                 return res.status(404).json({ message: "result not found" });
             }
-            res.status(200).json({ result });
+            return res.status(200).json({ result });
         }
         catch (error) {
             console.error(error);
@@ -47,7 +53,7 @@ export default class FSAController {
             if (!relevantOptions) {
                 return res.status(404).json({ message: "relevant not found" });
             }
-            res.status(200).json({ relevantOptions });
+            return res.status(200).json({ relevantOptions });
         }
         catch (error) {
             console.error(error);
@@ -63,7 +69,7 @@ export default class FSAController {
             if (!answers) {
                 return res.status(404).json({ message: "options not found" });
             }
-            res.status(200).json({ answers });
+            return res.status(200).json({ answers });
         }
         catch (error) {
             console.error(error);
@@ -79,7 +85,7 @@ export default class FSAController {
             if (!exercises) {
                 return res.status(404).json({ message: "Exercise not found" });
             }
-            res.status(200).json({ exercises });
+            return res.status(200).json({ exercises });
         }
         catch (error) {
             console.error(error);
@@ -95,7 +101,7 @@ export default class FSAController {
             if (!exercise) {
                 return res.status(404).json({ message: "Exercise not found" });
             }
-            res.status(200).json({ exercise });
+            return res.status(200).json({ exercise });
         }
         catch (error) {
             console.error(error);
@@ -107,7 +113,7 @@ export default class FSAController {
         try {
             const exercises = await FSAManager.getAllExercise();
             console.log(exercises);
-            res.status(200).json({ exercises });
+            return res.status(200).json({ exercises });
         }
         catch (err) {
             console.error(err);
@@ -123,7 +129,7 @@ export default class FSAController {
             if (!updatedExercise) {
                 return res.status(404).json({ message: "Exercise not found" });
             }
-            res.status(200).json({ updatedExercise });
+            return res.status(200).json({ updatedExercise });
         }
         catch (error) {
             console.error(error);
@@ -138,7 +144,7 @@ export default class FSAController {
             if (!status) {
                 return res.status(404).json({ message: "Exercise not found" });
             }
-            res.status(200).json({ status });
+            return res.status(200).json({ status });
         }
         catch (error) {
             console.error(error);
