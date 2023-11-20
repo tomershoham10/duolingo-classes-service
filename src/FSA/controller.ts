@@ -74,12 +74,12 @@ export default class FSAController {
         try {
             const exerciseId: string = req.params.exerciseId;
             console.log("FSA controller getRelevantByFSAId", exerciseId);
-            const relevantOptions = await FSAManager.getRelevantByFSAId(exerciseId);
-            if (!relevantOptions) {
+            const relevantTargets = await FSAManager.getRelevantByFSAId(exerciseId);
+            if (!relevantTargets) {
                 return res.status(404).json({ message: "relevant not found" });
             }
 
-            return res.status(200).json({ relevantOptions });
+            return res.status(200).json({ relevantTargets });
         } catch (error) {
             console.error(error);
             res.status(500).json({ err: "Internal Server Error" });
@@ -97,7 +97,7 @@ export default class FSAController {
             console.log("FSA controller getAnswersByFSAId", exerciseId);
             const answers = await FSAManager.getAnswersByFSAId(exerciseId);
             if (!answers) {
-                return res.status(404).json({ message: "options not found" });
+                return res.status(404).json({ message: "targets not found" });
             }
 
             return res.status(200).json({ answers });

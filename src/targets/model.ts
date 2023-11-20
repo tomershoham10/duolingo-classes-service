@@ -20,7 +20,7 @@ enum TypesOfSonars {
   REGULAR = "regular"
 }
 
-const optionSchema: Schema = new Schema({
+const TargetSchema: Schema = new Schema({
   name: { type: String, required: true, unique: true },
   countryId: { type: String, ref: 'Country', required: true },
   type: {
@@ -35,6 +35,6 @@ const optionSchema: Schema = new Schema({
   },
 });
 
-const OptionModel = mongoose.model<OptionType>("Option", optionSchema);
+const TargetModel = mongoose.model<TargetType>("Target", TargetSchema);
 
-export default OptionModel;
+export default TargetModel;

@@ -70,7 +70,7 @@ interface CountryType {
     name: string;
 }
 
-/////////////// OPTIONS ///////////////
+/////////////// TARGETS ///////////////
 
 enum TypesOfTargets {
     VESSEL = "vessel",
@@ -95,7 +95,7 @@ enum TypesOfSonars {
     REGULAR = "regular"
 }
 
-interface OptionType {
+interface TargetType {
     id: string;
     name: string;
     countryId: string;

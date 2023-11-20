@@ -1,7 +1,7 @@
 import Express, { NextFunction } from "express";
-import OptionManager from "./manager.js";
+import TargetManager from "./manager.js";
 
-export default class OptionController {
+export default class TargetController {
   static async create(
     req: Express.Request,
     res: Express.Response,
@@ -10,17 +10,17 @@ export default class OptionController {
     try {
       const { name, countryId, type, subType } = req.body as { name: string; countryId: string; type: TypesOfTargets, subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars };
 
-      const reqOption: {
+      const reqTarget: {
         name: string,
         countryId: string,
         type: TypesOfTargets,
         subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars
       } = { name: name, countryId: countryId, type: type, subType: subType };
-      console.log("OptionController create - reqOption", reqOption);
-      const newOption = await OptionManager.createOption(reqOption);
+      console.log("TargetController create - reqTarget", reqTarget);
+      const newTarget = await TargetManager.createTarget(reqTarget);
       res
         .status(201)
-        .json({ message: "Option registered successfully", newOption });
+        .json({ message: "Target registered successfully", newTarget });
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: "Internal Server Error" });
@@ -34,14 +34,14 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
-      const optionId: string = req.params.id;
-      console.log("controller", optionId);
-      const option = await OptionManager.getOptionById(optionId);
-      if (!option) {
-        return res.status(404).json({ message: "Option not found" });
+      const targetId: string = req.params.id;
+      console.log("controller", targetId);
+      const target = await TargetManager.getTargetById(targetId);
+      if (!target) {
+        return res.status(404).json({ message: "Target not found" });
       }
 
-      res.status(200).json({ option });
+      res.status(200).json({ target });
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: "Internal Server Error" });
@@ -55,10 +55,10 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
-      console.log("option controller getAll");
-      const options = await OptionManager.getAllOption();
-      console.log(options);
-      res.status(200).json({ options });
+      console.log("target controller getAll");
+      const targets = await TargetManager.getAllTarget();
+      console.log(targets);
+      res.status(200).json({ targets });
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: "Internal Server Error" });
@@ -72,19 +72,19 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
-      const optionId: string = req.params.id;
-      const fieldsToUpdate: Partial<OptionType> = req.body;
+      const targetId: string = req.params.id;
+      const fieldsToUpdate: Partial<TargetType> = req.body;
 
-      const updatedOption = await OptionManager.updateOption(
-        optionId,
+      const updatedTarget = await TargetManager.updateTarget(
+        targetId,
         fieldsToUpdate
       );
 
-      if (!updatedOption) {
-        return res.status(404).json({ message: "Option not found" });
+      if (!updatedTarget) {
+        return res.status(404).json({ message: "Target not found" });
       }
 
-      res.status(200).json({ updatedOption });
+      res.status(200).json({ updatedTarget });
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: "Internal Server Error" });
@@ -98,14 +98,14 @@ export default class OptionController {
     next: NextFunction
   ) {
     try {
-      const optionId: string = req.params.id;
-      const deletedOption = await OptionManager.deleteOption(optionId);
+      const targetId: string = req.params.id;
+      const deletedTarget = await TargetManager.deleteTarget(targetId);
 
-      if (!deletedOption) {
-        return res.status(404).json({ message: "Option not found" });
+      if (!deletedTarget) {
+        return res.status(404).json({ message: "Target not found" });
       }
 
-      res.status(200).json({ deletedOption });
+      res.status(200).json({ deletedTarget });
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: "Internal Server Error" });

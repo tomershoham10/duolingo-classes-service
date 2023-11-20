@@ -24,7 +24,7 @@ export default class FSAManager {
         try {
             console.log("FSA manager getRelevantByFSAId - exerciseId", exerciseId);
             const relevant = await FSARepository.getRelevantByFSAId(exerciseId);
-            console.log("FSA manager getRelevantByFSAId - relevant options", relevant);
+            console.log("FSA manager getRelevantByFSAId - relevant targets", relevant);
             return relevant;
         }
         catch (error) {
@@ -34,9 +34,9 @@ export default class FSAManager {
     static async getAnswersByFSAId(exerciseId) {
         try {
             console.log("FSA manager getAnswersByFSAId - exerciseId", exerciseId);
-            const options = await FSARepository.getAnswersByFSAId(exerciseId);
-            console.log("FSA manager getAnswersByFSAId - options", options);
-            return options;
+            const targets = await FSARepository.getAnswersByFSAId(exerciseId);
+            console.log("FSA manager getAnswersByFSAId - targets", targets);
+            return targets;
         }
         catch (error) {
             throw new Error(`FSA manager getAnswersByFSAId: ${error}`);

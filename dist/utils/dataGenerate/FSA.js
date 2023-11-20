@@ -4,7 +4,7 @@ async function generateAndSaveData() {
         const newFSA = ({
             filesKeys: [],
             difficultyLevel: faker.helpers.arrayElement(['Easy', 'Medium', 'Hard']),
-            options: [],
+            relevant: [],
             answers: [],
             firstTimeBuffer: faker.number.int(10),
             secondTimeBuffer: faker.number.int(10),

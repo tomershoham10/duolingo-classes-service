@@ -18,12 +18,12 @@ const FSASchema = new Schema({
     },
     relevant: [{
             type: String,
-            ref: 'Option',
+            ref: 'Target',
             required: true
         }],
     answers: [{
             type: String,
-            ref: 'Option',
+            ref: 'Target',
             required: true
         }],
     firstTimeBuffer: {

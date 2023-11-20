@@ -23,23 +23,23 @@ export default class FSAManager {
         }
     }
 
-    static async getRelevantByFSAId(exerciseId: string): Promise<OptionType[] | undefined | null> {
+    static async getRelevantByFSAId(exerciseId: string): Promise<TargetType[] | undefined | null> {
         try {
             console.log("FSA manager getRelevantByFSAId - exerciseId", exerciseId);
             const relevant = await FSARepository.getRelevantByFSAId(exerciseId);
-            console.log("FSA manager getRelevantByFSAId - relevant options", relevant);
+            console.log("FSA manager getRelevantByFSAId - relevant targets", relevant);
             return relevant;
         } catch (error) {
             throw new Error(`FSA manager getRelevantByFSAId: ${error}`);
         }
     }
 
-    static async getAnswersByFSAId(exerciseId: string): Promise<OptionType[] | undefined | null> {
+    static async getAnswersByFSAId(exerciseId: string): Promise<TargetType[] | undefined | null> {
         try {
             console.log("FSA manager getAnswersByFSAId - exerciseId", exerciseId);
-            const options = await FSARepository.getAnswersByFSAId(exerciseId);
-            console.log("FSA manager getAnswersByFSAId - options", options);
-            return options;
+            const targets = await FSARepository.getAnswersByFSAId(exerciseId);
+            console.log("FSA manager getAnswersByFSAId - targets", targets);
+            return targets;
         } catch (error) {
             throw new Error(`FSA manager getAnswersByFSAId: ${error}`);
         }

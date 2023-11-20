@@ -1,17 +1,17 @@
 import express from "express";
-import OptionController from "./controller.js";
+import CountryController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
-const OptionRouter = express.Router();
+const CountryRouter = express.Router();
 
-OptionRouter
-    .get("/:id", asyncHandler(OptionController.getById))
-    .get("/", asyncHandler(OptionController.getMany));
+CountryRouter
+    .get("/:id", asyncHandler(CountryController.getById))
+    .get("/", asyncHandler(CountryController.getMany));
 
-OptionRouter.post("/", asyncHandler(OptionController.create));
+CountryRouter.post("/", asyncHandler(CountryController.create));
 
-OptionRouter.put("/:id", asyncHandler(OptionController.update));
+CountryRouter.put("/:id", asyncHandler(CountryController.update));
 
-OptionRouter.delete("/:id", asyncHandler(OptionController.delete));
+CountryRouter.delete("/:id", asyncHandler(CountryController.delete));
 
-export default OptionRouter;
+export default CountryRouter;

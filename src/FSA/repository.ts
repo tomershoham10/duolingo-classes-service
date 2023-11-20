@@ -1,4 +1,4 @@
-import OptionModel from "../options/model.js";
+import TargetModel from "../targets/model.js";
 import ResultsModel from "../results/model.js";
 import FSAModel from "./model.js";
 
@@ -31,33 +31,33 @@ export default class FSARepository {
         }
     }
 
-    static async getRelevantByFSAId(exerciseId: string): Promise<OptionType[] | undefined | null> {
+    static async getRelevantByFSAId(exerciseId: string): Promise<TargetType[] | undefined | null> {
         try {
             const exercise = await FSAModel.findById(exerciseId);
-            console.log("FSA repo getOptionsByFSAId - exercise", exercise);
+            console.log("FSA repo getRelevantByFSAId - exercise", exercise);
             if (exercise) {
                 const relevantIds = exercise.relevant;
                 if (relevantIds) {
-                    const optionsDetails = await OptionModel.find({ _id: { $in: relevantIds }, type: { $eq: "vessel" } });
-                    console.log("FSA repo getOptionsByFSAId - optionsDetails", relevantIds, optionsDetails);
-                    return optionsDetails;
+                    const targetsDetails = await TargetModel.find({ _id: { $in: relevantIds }, type: { $eq: "vessel" } });
+                    console.log("FSA repo getRelevantByFSAId - targetsDetails", relevantIds, targetsDetails);
+                    return targetsDetails;
                 }
             }
             else return null;
         }
         catch (error) {
-            throw new Error(`fsa repo getOptionsByFSAId: ${error}`);
+            throw new Error(`fsa repo getRelevantByFSAId: ${error}`);
         }
     }
 
-    static async getAnswersByFSAId(exerciseId: string): Promise<OptionType[] | undefined | null> {
+    static async getAnswersByFSAId(exerciseId: string): Promise<TargetType[] | undefined | null> {
         try {
             const exercise = await FSAModel.findById(exerciseId);
             console.log("FSA repo getAnswersByFSAId - exercise", exercise);
             if (exercise) {
                 const answersIds = exercise.answers;
                 if (answersIds) {
-                    const answersDetails = await OptionModel.find({ _id: { $in: answersIds } });
+                    const answersDetails = await TargetModel.find({ _id: { $in: answersIds } });
                     return answersDetails;
                 }
             }

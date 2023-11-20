@@ -19,7 +19,7 @@ const ResultsSchema = new Schema<ResultType>({
     },
     answers: [{
         type: String,
-        ref: 'Option',
+        ref: 'Target',
         required: true
     }],
     score: { type: Number, required: true },
