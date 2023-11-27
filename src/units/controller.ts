@@ -123,6 +123,27 @@ export default class UnitsController {
         }
     }
 
+    static async getNextLevelId(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const pervLevelId: string = req.params.pervLevelId;
+            console.log("units controller: getNextLevelId", pervLevelId);
+            const nextLevelId = await UnitsManager.getNextLevelId(pervLevelId);
+            if (!nextLevelId) {
+                return res.status(404).json({ message: "nextLevelId not found" });
+            }
+
+            res.status(200).json({ nextLevelId });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
+
     static async getMany(
         _req: Express.Request,
         res: Express.Response,

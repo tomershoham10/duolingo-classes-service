@@ -8,7 +8,9 @@ ResultsRouter
     .get("/:id", asyncHandler(ResultsController.getById))
     .get("/", asyncHandler(ResultsController.getMany));
 ResultsRouter.post("/", asyncHandler(ResultsController.create));
-ResultsRouter.put("/:id", asyncHandler(ResultsController.update));
+ResultsRouter
+    .put("/submitExercise/:id", asyncHandler(ResultsController.submitExercise))
+    .put("/:id", asyncHandler(ResultsController.update));
 ResultsRouter.delete("/:id", asyncHandler(ResultsController.delete));
 export default ResultsRouter;
 //# sourceMappingURL=router.js.map

@@ -3,6 +3,7 @@ import LevelsController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 const LevelsRouter = express.Router();
 LevelsRouter
+    .get("/getNextLessonId/:prevLessonId", asyncHandler(LevelsController.getNextLessonId))
     .get("/getLessonsById/:id", asyncHandler(LevelsController.getLessonsById))
     .get("/:id", asyncHandler(LevelsController.getById))
     .get("/", asyncHandler(LevelsController.getMany));

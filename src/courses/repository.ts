@@ -37,6 +37,28 @@ export default class CoursesRepository {
         }
     }
 
+    static async getNextUnitId(pervUnitId: string): Promise<string | null> {
+        try {
+            const course = await CoursesModel.findOne({ units: { $in: [pervUnitId] } });
+            console.log("courses repo - getNextUnitId :", course);
+            if (course) {
+                const unitsIds = course.units;
+                if (unitsIds.length !== unitsIds.indexOf(pervUnitId) + 1) {
+                    const nextUnitId = unitsIds[unitsIds.indexOf(pervUnitId) + 1];
+                    if (nextUnitId) {
+                        return nextUnitId;
+                    } else {
+                        return null;
+                    }
+                } else return "finished";
+            } else {
+                return null;
+            }
+        }
+        catch (err) {
+            throw new Error(`Error repo getCourseByType: ${err}`);
+        }
+    }
 
     static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
         try {
@@ -58,7 +80,6 @@ export default class CoursesRepository {
             throw new Error(`Error fetching units for the course: ${err}`);
         }
     }
-
 
     static async getAllCourses(): Promise<CoursesType[] | null> {
         try {

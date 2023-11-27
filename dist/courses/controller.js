@@ -62,6 +62,22 @@ export default class CoursesController {
             next(error);
         }
     }
+    static async getNextUnitId(req, res, next) {
+        try {
+            const pervUnitId = req.params.pervUnitId;
+            console.log("course controller: pervUnitId", pervUnitId);
+            const nextUnitId = await CoursesManager.getNextUnitId(pervUnitId);
+            if (!nextUnitId) {
+                return res.status(404).json({ message: "nextUnitId not found" });
+            }
+            res.status(200).json({ nextUnitId });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
     static async getMany(_req, res, next) {
         try {
             const courses = await CoursesManager.getAllCourses();

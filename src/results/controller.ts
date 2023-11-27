@@ -1,5 +1,6 @@
 import Express, { NextFunction } from "express";
 import ResultsManager from "./manager.js";
+import mongoose from "mongoose";
 
 export default class ResultsController {
     static async create(
@@ -8,9 +9,10 @@ export default class ResultsController {
         next: NextFunction
     ) {
         try {
-            const { userId, date, exerciseId, answers, score } = req.body as {
+            const { userId, date, lessonId, exerciseId, answers, score } = req.body as {
                 userId: string;
                 date: Date;
+                lessonId: string;
                 exerciseId: string;
                 answers: string[];
                 score: number;
@@ -19,10 +21,11 @@ export default class ResultsController {
             const result: {
                 userId: string;
                 date: Date;
+                lessonId: string;
                 exerciseId: string;
                 answers: string[];
                 score: number;
-            } = { userId: userId, date: date, exerciseId: exerciseId, answers: answers, score: score };
+            } = { userId: userId, date: date, lessonId: lessonId, exerciseId: exerciseId, answers: answers, score: score };
 
 
             const newResult = await ResultsManager.createResult(result);
@@ -123,6 +126,7 @@ export default class ResultsController {
         try {
             const resultId: string = req.params.id;
             const fieldsToUpdate: Partial<ResultsManager> = req.body;
+            console.log("result controller - update - ", fieldsToUpdate);
 
             const updatedResult = await ResultsManager.updateResult(
                 resultId,
@@ -140,6 +144,42 @@ export default class ResultsController {
             next(error);
         }
     }
+
+    static async submitExercise(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const session = await mongoose.startSession();
+            session.startTransaction();
+
+            const resultId: string = req.params.id;
+            const fieldsToUpdate: Partial<ResultsManager> = req.body;
+            console.log("result submitExercise - update - ", fieldsToUpdate);
+
+            const updatedResult = await ResultsManager.updateResult(
+                resultId,
+                fieldsToUpdate
+            );
+
+            if (!updatedResult) {
+                await session.abortTransaction();
+                session.endSession();
+                return res.status(404).json({ message: "result not found" });
+            }
+
+            //if result was updated successfully and the user finished the lesson,
+            //update the user's next lessson id field
+
+            res.status(200).json({ updatedResult });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
+
 
     static async delete(
         req: Express.Request,

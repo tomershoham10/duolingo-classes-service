@@ -48,6 +48,22 @@ export default class LevelsController {
             next(error);
         }
     }
+    static async getNextLessonId(req, res, next) {
+        try {
+            const prevLessonId = req.params.prevLessonId;
+            console.log("controller: getNextLessonId", prevLessonId);
+            const nextLessonId = await LevelsManager.getNextLessonId(prevLessonId);
+            if (!nextLessonId) {
+                return res.status(404).json({ message: "next lessonId not found" });
+            }
+            res.status(200).json({ nextLessonId });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
     static async getMany(_req, res, next) {
         try {
             const levels = await LevelsManager.getAllLevels();

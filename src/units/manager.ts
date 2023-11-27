@@ -34,6 +34,17 @@ export default class UnitsManager {
         }
     }
 
+    static async getNextLevelId(pervLevelId: string): Promise<string | null> {
+        try {
+            const nextLevelId = await UnitsRepository.getNextLevelId(pervLevelId);
+            console.log("units manager getNextLevelId", nextLevelId);
+            return nextLevelId;
+        }
+        catch (err) {
+            throw new Error(`Error manager getNextLevelId: ${err}`);
+        }
+    }
+
     static async getAllUnits(): Promise<UnitsType[] | null | undefined> {
         try {
             const units = await UnitsRepository.getAllUnits();

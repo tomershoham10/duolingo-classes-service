@@ -1,14 +1,16 @@
 import mongoose, { Schema } from "mongoose";
 var TypesOfTargets;
 (function (TypesOfTargets) {
-    TypesOfTargets["VESSEL"] = "Vessel";
-    TypesOfTargets["SONAR"] = "Sonar";
-    TypesOfTargets["TORPEDO"] = "Torpedo";
+    TypesOfTargets["VESSEL"] = "vessel";
+    TypesOfTargets["SONAR"] = "sonar";
+    TypesOfTargets["TORPEDO"] = "torpedo";
 })(TypesOfTargets || (TypesOfTargets = {}));
 var TypesOfVessels;
 (function (TypesOfVessels) {
     TypesOfVessels["FRIGATE"] = "frigate";
     TypesOfVessels["SUBMARINE"] = "submarine";
+    TypesOfVessels["COASTPATROL"] = "coastPatrol";
+    TypesOfVessels["CARGO"] = "cargo";
     TypesOfVessels["TUGBOAT"] = "tugboat";
 })(TypesOfVessels || (TypesOfVessels = {}));
 var TypesOfTorpedos;

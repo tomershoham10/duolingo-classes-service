@@ -36,6 +36,17 @@ export default class LevelsManager {
         }
     }
 
+    static async getNextLessonId(prevLessonId: string): Promise<string | null> {
+        try {
+            const nextLessonId = await LevelsRepository.getNextLessonId(prevLessonId);
+            console.log("levels manager getNextLessonId", nextLessonId, prevLessonId);
+            return nextLessonId;
+        }
+        catch (err) {
+            throw new Error(`Error manager getNextLessonId: ${err}`);
+        }
+    }
+
     static async getAllLevels(): Promise<LevelsType[] | null> {
         try {
 

@@ -1,9 +1,6 @@
-import mongoose from "mongoose";
 import FSAModel from "../FSA/model.js";
 import ResultsModel from "../results/model.js";
 import LessonsModel from "./model.js";
-
-import { ObjectId } from 'mongodb'
 
 export default class LessonsRepository {
     static async createLesson(lesson: Partial<LessonsType>): Promise<LessonsType> {
@@ -78,7 +75,6 @@ export default class LessonsRepository {
         const lessons = await LessonsModel.find({ type: lessonType });
         return lessons;
     }
-
 
     static async updateLesson(
         lessonId: string,

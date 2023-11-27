@@ -1,4 +1,6 @@
 import LessonsModel from "../lessons/model.js";
+import UnitsController from "../units/controller.js";
+import UnitsManager from "../units/manager.js";
 import LevelsModel from "./model.js";
 
 export default class LevelsRepository {
@@ -42,6 +44,39 @@ export default class LevelsRepository {
         }
     }
 
+    static async getNextLessonId(prevLessonId: string): Promise<string | null> {
+        try {
+            const level = await LevelsModel.findOne({ lessons: { $in: [prevLessonId] } });
+            console.log("getNextLessonId repo - level", level);
+            if (level) {
+                const lessonsIds = level.lessons;
+
+                if (lessonsIds) {
+                    const indexOfPervLessonId = lessonsIds.indexOf(prevLessonId);
+                    if (indexOfPervLessonId + 1 !== lessonsIds.length) {
+                        return lessonsIds[indexOfPervLessonId + 1];
+                    } else {
+                        const response = await UnitsManager.getNextLevelId(level._id);
+                        //returns the next level's id
+
+                        if (response) {
+                            if (response === "finished") {
+                                return response;
+                            }
+                            const nextLevel = await LevelsModel.findById(response);
+                            if (nextLevel) {
+                                const nextLessonId = nextLevel.lessons[0];
+                                return nextLessonId;
+                            } else return null;
+                        } else return null;
+                    };
+                } else return null;
+            }
+            else return null;
+        } catch (err) {
+            throw new Error(`Error repo getsLessonsByLevelId: ${err}`);
+        }
+    }
 
     static async getAllLevels(): Promise<LevelsType[] | null> {
         try {

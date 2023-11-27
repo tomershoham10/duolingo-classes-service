@@ -10,6 +10,11 @@ const ResultsSchema = new Schema({
         default: Date.now,
         required: true
     },
+    lessonId: {
+        type: String,
+        ref: 'Lessons',
+        required: true
+    },
     exerciseId: {
         type: String,
         ref: 'FSA',

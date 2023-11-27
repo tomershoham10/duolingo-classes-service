@@ -1,15 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
 enum TypesOfTargets {
-  VESSEL = "Vessel",
-  SONAR = "Sonar",
-  TORPEDO = "Torpedo"
+  VESSEL = "vessel",
+  SONAR = "sonar",
+  TORPEDO = "torpedo"
 }
 
 enum TypesOfVessels {
   FRIGATE = "frigate",
   SUBMARINE = "submarine",
-  TUGBOAT = "tugboat",
+  COASTPATROL = "coastPatrol",
+  CARGO = "cargo",
+  TUGBOAT = "tugboat"
 }
 
 enum TypesOfTorpedos {

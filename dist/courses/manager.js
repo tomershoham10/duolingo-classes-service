@@ -7,6 +7,7 @@ export default class CoursesManager {
         }
         catch (err) {
             console.error(err);
+            throw new Error(`course manager - createCourse ${err}`);
         }
     }
     static async getCourseById(courseId) {
@@ -17,6 +18,7 @@ export default class CoursesManager {
         }
         catch (err) {
             console.error(err);
+            throw new Error(`course manager - getCourseById ${err}`);
         }
     }
     static async getCourseByType(courseType) {
@@ -27,6 +29,7 @@ export default class CoursesManager {
         }
         catch (err) {
             console.error(err);
+            throw new Error(`course manager - getCourseByType ${err}`);
         }
     }
     static async getUnitsByCourseId(courseId) {
@@ -37,6 +40,22 @@ export default class CoursesManager {
         }
         catch (err) {
             console.error(err);
+            throw new Error(`course manager - getUnitsByCourseId ${err}`);
+        }
+    }
+    static async getNextUnitId(pervUnitId) {
+        try {
+            const nextUnitId = await CoursesRepository.getNextUnitId(pervUnitId);
+            console.log("courses manager getNextUnitId", nextUnitId);
+            if (nextUnitId) {
+                return nextUnitId;
+            }
+            else
+                return null;
+        }
+        catch (err) {
+            console.error(err);
+            throw new Error(`course manager - getNextUnitId ${err}`);
         }
     }
     static async getAllCourses() {
@@ -46,6 +65,7 @@ export default class CoursesManager {
         }
         catch (err) {
             console.error(err);
+            throw new Error(`course manager - getAllCourses ${err}`);
         }
     }
     static async updateCourse(courseId, filedsToUpdate) {
@@ -55,6 +75,7 @@ export default class CoursesManager {
         }
         catch (err) {
             console.error(err);
+            throw new Error(`course manager - updateCourse ${err}`);
         }
     }
     static async deleteCourses(courseId) {
@@ -64,6 +85,7 @@ export default class CoursesManager {
         }
         catch (err) {
             console.error(err);
+            throw new Error(`course manager - deleteCourses ${err}`);
         }
     }
 }
