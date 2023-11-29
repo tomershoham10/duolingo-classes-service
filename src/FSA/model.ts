@@ -41,8 +41,13 @@ const FSASchema = new Schema<FSAType>({
   },
   dateCreated: {
     type: Date,
-    default: Date.now 
-  }
+    default: Date.now
+  },
+  sonolistKeys: [{
+    type: String,
+    ref: 'File',
+    required: true
+  }],
 });
 
 const FSAModel = mongoose.model<FSAType>('FSA', FSASchema);

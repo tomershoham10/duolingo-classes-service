@@ -8,7 +8,7 @@ export default class FSAController {
         next: NextFunction
     ) {
         try {
-            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description } = req.body as {
+            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description, sonolistKeys } = req.body as {
                 filesKeys: string[],
                 difficultyLevel: DifficultyLevel,
                 relevant: string[],
@@ -16,6 +16,7 @@ export default class FSAController {
                 firstTimeBuffer: number,
                 secondTimeBuffer: number,
                 description: string,
+                sonolistKeys: string[],
             };
             const reqExercise = {
                 filesKeys: filesKeys,
@@ -24,7 +25,8 @@ export default class FSAController {
                 answers: answers,
                 firstTimeBuffer: firstTimeBuffer,
                 secondTimeBuffer: secondTimeBuffer,
-                description: description
+                description: description,
+                sonolistKeys: sonolistKeys,
             }
 
             const newExercise = await FSAManager.createExercise(reqExercise);
@@ -48,12 +50,6 @@ export default class FSAController {
             console.log("FSA controller getResultByUserAndFSAId", exerciseId, userId);
             const result = await FSAManager.getResultByUserAndFSAId(exerciseId, userId);
             console.log("FSA controller getResultByUserAndFSAId - result", result, result === null);
-            // if (result === null) {
-            //     console.log("result is null", result);
-            //     return res.status(204).json({ message: "no result" });
-            // }
-
-            // console.log("try1", result);
             if (!result) {
                 return res.status(404).json({ message: "result not found" });
             }

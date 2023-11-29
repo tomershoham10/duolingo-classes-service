@@ -41,7 +41,12 @@ const FSASchema = new Schema({
     dateCreated: {
         type: Date,
         default: Date.now
-    }
+    },
+    sonolistKeys: [{
+            type: String,
+            ref: 'File',
+            required: true
+        }],
 });
 const FSAModel = mongoose.model('FSA', FSASchema);
 export default FSAModel;

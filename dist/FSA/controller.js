@@ -2,7 +2,7 @@ import FSAManager from "./manager.js";
 export default class FSAController {
     static async create(req, res, next) {
         try {
-            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description } = req.body;
+            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description, sonolistKeys } = req.body;
             const reqExercise = {
                 filesKeys: filesKeys,
                 difficultyLevel: difficultyLevel,
@@ -10,7 +10,8 @@ export default class FSAController {
                 answers: answers,
                 firstTimeBuffer: firstTimeBuffer,
                 secondTimeBuffer: secondTimeBuffer,
-                description: description
+                description: description,
+                sonolistKeys: sonolistKeys,
             };
             const newExercise = await FSAManager.createExercise(reqExercise);
             return res.status(201)
@@ -29,11 +30,6 @@ export default class FSAController {
             console.log("FSA controller getResultByUserAndFSAId", exerciseId, userId);
             const result = await FSAManager.getResultByUserAndFSAId(exerciseId, userId);
             console.log("FSA controller getResultByUserAndFSAId - result", result, result === null);
-            // if (result === null) {
-            //     console.log("result is null", result);
-            //     return res.status(204).json({ message: "no result" });
-            // }
-            // console.log("try1", result);
             if (!result) {
                 return res.status(404).json({ message: "result not found" });
             }

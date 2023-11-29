@@ -61,6 +61,7 @@ interface FSAType {
     secondTimeBuffer: number; //in minutes
     description: string;
     dateCreated: Date;
+    sonolistKeys: string[];
 }
 
 /////////////// COUNTRIES ///////////////
