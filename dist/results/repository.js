@@ -2,10 +2,13 @@ import ResultsModel from "./model.js";
 export default class ResultsRepository {
     static async createResult(result) {
         try {
-            console.log("Results repo create: ", result, result);
-            const isExerciseStarted = await ResultsRepository.getResultsByLessonAndUser(result.lessonId, result.userId);
-            if (isExerciseStarted && isExerciseStarted.length > 0) {
-                throw new Error(`exercise has already been started.`);
+            console.log("Results repo create: ", result);
+            const startedResults = await ResultsRepository.getResultsByLessonAndUser(result.lessonId, result.userId);
+            if (startedResults) {
+                const exercisesIds = startedResults.map(result => result.exerciseId);
+                if (result.exerciseId && exercisesIds.includes(result.exerciseId)) {
+                    throw new Error(`exercise has already been started.`);
+                }
             }
             const newResult = await ResultsModel.create(result);
             return newResult;

@@ -1,10 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-var DifficultyLevel;
-(function (DifficultyLevel) {
-    DifficultyLevel["Easy"] = "Easy";
-    DifficultyLevel["Medium"] = "Medium";
-    DifficultyLevel["Hard"] = "Hard";
-})(DifficultyLevel || (DifficultyLevel = {}));
 const FSASchema = new Schema({
     filesKeys: [{
             type: String,
@@ -12,8 +6,9 @@ const FSASchema = new Schema({
             required: true
         }],
     difficultyLevel: {
-        type: String,
-        enum: Object.values(DifficultyLevel),
+        type: Number,
+        min: 0,
+        max: 10,
         required: true
     },
     relevant: [{
@@ -26,13 +21,22 @@ const FSASchema = new Schema({
             ref: 'Target',
             required: true
         }],
-    firstTimeBuffer: {
-        type: Number,
-        required: true
-    },
-    secondTimeBuffer: {
-        type: Number,
-        required: true
+    timeBuffers: {
+        type: [{
+                timeBuffer: {
+                    type: Number,
+                    required: true,
+                },
+                grade: {
+                    type: Number,
+                    required: true,
+                },
+            }],
+        validate: {
+            validator: (arr) => arr.length >= 2,
+            message: 'timeBuffers must have at least 2 values',
+        },
+        required: true,
     },
     description: {
         type: String,

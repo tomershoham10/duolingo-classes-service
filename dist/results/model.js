@@ -27,6 +27,7 @@ const ResultsSchema = new Schema({
         }],
     score: { type: Number, required: true },
 });
+ResultsSchema.index({ userId: 1, lessonId: 1, exerciseId: 1 }, { unique: true });
 const ResultsModel = mongoose.model('Result', ResultsSchema);
 export default ResultsModel;
 //# sourceMappingURL=model.js.map

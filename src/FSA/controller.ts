@@ -8,13 +8,12 @@ export default class FSAController {
         next: NextFunction
     ) {
         try {
-            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description, sonolistKeys } = req.body as {
+            const { filesKeys, difficultyLevel, relevant, answers, timeBuffers, description, sonolistKeys } = req.body as {
                 filesKeys: string[],
-                difficultyLevel: DifficultyLevel,
+                difficultyLevel: number,
                 relevant: string[],
                 answers: string[],
-                firstTimeBuffer: number,
-                secondTimeBuffer: number,
+                timeBuffers: [TimeBuffersType],
                 description: string,
                 sonolistKeys: string[],
             };
@@ -23,8 +22,7 @@ export default class FSAController {
                 difficultyLevel: difficultyLevel,
                 relevant: relevant,
                 answers: answers,
-                firstTimeBuffer: firstTimeBuffer,
-                secondTimeBuffer: secondTimeBuffer,
+                timeBuffers: timeBuffers,
                 description: description,
                 sonolistKeys: sonolistKeys,
             }

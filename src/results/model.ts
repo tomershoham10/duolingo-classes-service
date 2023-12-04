@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 
-
 const ResultsSchema = new Schema<ResultType>({
     userId: {
         type: String,
@@ -29,6 +28,8 @@ const ResultsSchema = new Schema<ResultType>({
     }],
     score: { type: Number, required: true },
 });
+
+ResultsSchema.index({ userId: 1, lessonId: 1, exerciseId: 1 }, { unique: true });
 
 const ResultsModel = mongoose.model<ResultType>('Result', ResultsSchema);
 

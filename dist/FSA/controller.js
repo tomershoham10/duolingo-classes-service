@@ -2,14 +2,13 @@ import FSAManager from "./manager.js";
 export default class FSAController {
     static async create(req, res, next) {
         try {
-            const { filesKeys, difficultyLevel, relevant, answers, firstTimeBuffer, secondTimeBuffer, description, sonolistKeys } = req.body;
+            const { filesKeys, difficultyLevel, relevant, answers, timeBuffers, description, sonolistKeys } = req.body;
             const reqExercise = {
                 filesKeys: filesKeys,
                 difficultyLevel: difficultyLevel,
                 relevant: relevant,
                 answers: answers,
-                firstTimeBuffer: firstTimeBuffer,
-                secondTimeBuffer: secondTimeBuffer,
+                timeBuffers: timeBuffers,
                 description: description,
                 sonolistKeys: sonolistKeys,
             };

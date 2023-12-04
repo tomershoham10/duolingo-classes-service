@@ -45,20 +45,18 @@ interface LessonsType {
 
 /////////////// FSA ///////////////////
 
-enum DifficultyLevel {
-    Easy = "Easy",
-    Medium = "Medium",
-    Hard = "Hard",
+interface TimeBuffersType {
+    timeBuffer: number;
+    grade: number;
 }
 
 interface FSAType {
     _id: string;
     filesKeys: string[];
-    difficultyLevel: DifficultyLevel;
+    difficultyLevel: number;
     relevant: string[];
     answers: string[]; //may be 2 correct answers
-    firstTimeBuffer: number; //in minutes
-    secondTimeBuffer: number; //in minutes
+    timeBuffers: TimeBuffersType[];
     description: string;
     dateCreated: Date;
     sonolistKeys: string[];
