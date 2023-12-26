@@ -55,7 +55,7 @@ export default class FSARepository {
             const exercise = await FSAModel.findById(exerciseId);
             console.log("FSA repo getAnswersByFSAId - exercise", exercise);
             if (exercise) {
-                const answersIds = exercise.answers;
+                const answersIds = exercise.answersList;
                 if (answersIds) {
                     const answersDetails = await TargetModel.find({ _id: { $in: answersIds } });
                     return answersDetails;

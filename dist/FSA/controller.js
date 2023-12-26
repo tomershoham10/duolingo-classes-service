@@ -2,16 +2,16 @@ import FSAManager from "./manager.js";
 export default class FSAController {
     static async create(req, res, next) {
         try {
-            const { filesKeys, difficultyLevel, relevant, answers, timeBuffers, description, sonolistKeys } = req.body;
-            const reqExercise = {
-                filesKeys: filesKeys,
+            const { recordsKeys, difficultyLevel, relevant, answersList, timeBuffers, description, sonolistKeys } = req.body;
+            let reqExercise = {
+                recordsKeys: recordsKeys,
                 difficultyLevel: difficultyLevel,
-                relevant: relevant,
-                answers: answers,
+                answersList: answersList,
                 timeBuffers: timeBuffers,
-                description: description,
-                sonolistKeys: sonolistKeys,
             };
+            relevant ? reqExercise = { ...reqExercise, relevant } : null;
+            description ? reqExercise = { ...reqExercise, description } : null;
+            sonolistKeys ? reqExercise = { ...reqExercise, sonolistKeys } : null;
             const newExercise = await FSAManager.createExercise(reqExercise);
             return res.status(201)
                 .json({ message: "Exercise created successfully", newExercise });

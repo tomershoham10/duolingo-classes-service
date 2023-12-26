@@ -52,12 +52,12 @@ interface TimeBuffersType {
 
 interface FSAType {
     _id: string;
-    filesKeys: string[];
+    recordsKeys: string[];
     difficultyLevel: number;
-    relevant: string[];
-    answers: string[]; //may be 2 correct answers
+    relevant?: string[];
+    answersList: string[]; //may be 2 correct answers
     timeBuffers: TimeBuffersType[];
-    description: string;
+    description?: string;
     dateCreated: Date;
     sonolistKeys: string[];
 }

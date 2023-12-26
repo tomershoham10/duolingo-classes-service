@@ -7,25 +7,28 @@ export default class FSAController {
         res: Express.Response,
         next: NextFunction
     ) {
+        interface ExerciseRequest {
+            recordsKeys: string[];
+            difficultyLevel: number;
+            relevant?: string[];
+            answersList: string[];
+            timeBuffers: [TimeBuffersType];
+            description?: string;
+            sonolistKeys?: string[];
+        }
+
         try {
-            const { filesKeys, difficultyLevel, relevant, answers, timeBuffers, description, sonolistKeys } = req.body as {
-                filesKeys: string[],
-                difficultyLevel: number,
-                relevant: string[],
-                answers: string[],
-                timeBuffers: [TimeBuffersType],
-                description: string,
-                sonolistKeys: string[],
-            };
-            const reqExercise = {
-                filesKeys: filesKeys,
+            const { recordsKeys, difficultyLevel, relevant, answersList, timeBuffers, description, sonolistKeys } = req.body as ExerciseRequest;
+            let reqExercise: ExerciseRequest = {
+                recordsKeys: recordsKeys,
                 difficultyLevel: difficultyLevel,
-                relevant: relevant,
-                answers: answers,
+                answersList: answersList,
                 timeBuffers: timeBuffers,
-                description: description,
-                sonolistKeys: sonolistKeys,
             }
+
+            relevant ? reqExercise = { ...reqExercise, relevant } : null;
+            description ? reqExercise = { ...reqExercise, description } : null;
+            sonolistKeys ? reqExercise = { ...reqExercise, sonolistKeys } : null;
 
             const newExercise = await FSAManager.createExercise(reqExercise);
             return res.status(201)

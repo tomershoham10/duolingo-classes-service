@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 const FSASchema = new Schema({
-    filesKeys: [{
+    recordsKeys: [{
             type: String,
             ref: 'File',
             required: true
@@ -16,7 +16,7 @@ const FSASchema = new Schema({
             ref: 'Target',
             required: true
         }],
-    answers: [{
+    answersList: [{
             type: String,
             ref: 'Target',
             required: true
