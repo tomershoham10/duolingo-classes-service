@@ -12,7 +12,7 @@ export default class FSAController {
             difficultyLevel: number;
             relevant?: string[];
             answersList: string[];
-            timeBuffers: [TimeBuffersType];
+            timeBuffers: TimeBuffersType[];
             description?: string;
             sonolistKeys?: string[];
         }
