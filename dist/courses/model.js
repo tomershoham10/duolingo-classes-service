@@ -1,17 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-var TypesOfCourses;
-(function (TypesOfCourses) {
-    TypesOfCourses["searider"] = "searider";
-    TypesOfCourses["crew"] = "crew";
-    TypesOfCourses["senior"] = "senior";
-})(TypesOfCourses || (TypesOfCourses = {}));
 const CoursesSchema = new Schema({
-    type: {
-        type: String,
-        enum: Object.values(TypesOfCourses),
-        required: true,
-        unique: true
-    },
     units: [{
             type: String,
             ref: 'Units',

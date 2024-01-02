@@ -39,7 +39,7 @@ export default class UnitsController {
                 return res.status(404).json({ message: 'Course not found' });
             }
             const newUnit = new UnitsModel(unitData);
-            course.units.push(newUnit._id.toString());
+            course.units ? course.units.push(newUnit._id.toString()) : course.units = [newUnit._id.toString()];
             await newUnit.save({ session: session });
             await course.save({ session: session });
             await session.commitTransaction();

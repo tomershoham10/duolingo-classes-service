@@ -2,8 +2,8 @@ import CoursesManager from "./manager.js";
 export default class CoursesController {
     static async create(req, res, next) {
         try {
-            const { type, units } = req.body;
-            const course = { type: type, units: units };
+            const { units } = req.body;
+            const course = { units: units };
             const newCourse = await CoursesManager.createCourse(course);
             res.status(201)
                 .json({ message: "course created successfully", newCourse });
@@ -39,22 +39,6 @@ export default class CoursesController {
                 return res.status(404).json({ message: "units not found" });
             }
             res.status(200).json({ units });
-        }
-        catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
-        }
-    }
-    static async getByType(req, res, next) {
-        try {
-            const courseType = req.params.type;
-            console.log("controller: getByType", courseType);
-            const course = await CoursesManager.getCourseByType(courseType);
-            if (!course) {
-                return res.status(404).json({ message: "course not found" });
-            }
-            res.status(200).json({ course });
         }
         catch (error) {
             console.error(error);

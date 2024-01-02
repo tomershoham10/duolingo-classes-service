@@ -20,23 +20,13 @@ export default class CoursesRepository {
             throw new Error(`Error repo getCourseById: ${err}`);
         }
     }
-    static async getCourseByType(courseType) {
-        try {
-            const course = await CoursesModel.findOne({ type: courseType });
-            console.log("courses repo - getCourseByType :", course);
-            return course;
-        }
-        catch (err) {
-            throw new Error(`Error repo getCourseByType: ${err}`);
-        }
-    }
     static async getNextUnitId(pervUnitId) {
         try {
             const course = await CoursesModel.findOne({ units: { $in: [pervUnitId] } });
             console.log("courses repo - getNextUnitId :", course);
             if (course) {
                 const unitsIds = course.units;
-                if (unitsIds.length !== unitsIds.indexOf(pervUnitId) + 1) {
+                if (unitsIds && unitsIds.length !== unitsIds.indexOf(pervUnitId) + 1) {
                     const nextUnitId = unitsIds[unitsIds.indexOf(pervUnitId) + 1];
                     if (nextUnitId) {
                         return nextUnitId;
