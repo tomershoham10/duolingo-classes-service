@@ -8,15 +8,13 @@ export default class CoursesController {
         next: NextFunction
     ) {
         try {
-            const { type, units } = req.body as {
-                type: TypesOfCourses,
+            const { units } = req.body as {
                 units: string[]
             };
 
             const course: {
-                type: TypesOfCourses,
                 units: string[]
-            } = { type: type, units: units };
+            } = { units: units };
 
 
             const newCourse = await CoursesManager.createCourse(course);
@@ -64,27 +62,6 @@ export default class CoursesController {
             }
 
             res.status(200).json({ units });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
-        }
-    }
-
-    static async getByType(
-        req: Express.Request,
-        res: Express.Response,
-        next: NextFunction
-    ) {
-        try {
-            const courseType: TypesOfCourses = req.params.type as TypesOfCourses;
-            console.log("controller: getByType", courseType);
-            const course = await CoursesManager.getCourseByType(courseType);
-            if (!course) {
-                return res.status(404).json({ message: "course not found" });
-            }
-
-            res.status(200).json({ course });
         } catch (error) {
             console.error(error);
             res.status(500).json({ err: "Internal Server Error" });

@@ -1,15 +1,8 @@
 /////////////// COURSES //////////////////
 
-enum TypesOfCourses {
-    SEARIDER = "searider",
-    CREW = "crew",
-    SENIOR = "senior"
-}
-
 interface CoursesType {
     _id: string;
-    type: TypesOfCourses;
-    units: string[];
+    units?: string[];
 }
 
 /////////////// UNITS //////////////////

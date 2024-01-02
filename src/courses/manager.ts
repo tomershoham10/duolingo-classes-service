@@ -23,17 +23,6 @@ export default class CoursesManager {
         }
     }
 
-    static async getCourseByType(courseType: TypesOfCourses): Promise<CoursesType | null | undefined> {
-        try {
-            const course = await CoursesRepository.getCourseByType(courseType);
-            console.log("courses manager - getCourseByType :", course);
-            return course;
-        } catch (err) {
-            console.error(err);
-            throw new Error(`course manager - getCourseByType ${err}`);
-        }
-    }
-
     static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null | undefined> {
         try {
             const units = await CoursesRepository.getUnitsByCourseId(courseId);
