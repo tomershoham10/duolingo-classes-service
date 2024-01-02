@@ -8,13 +8,14 @@ export default class CoursesController {
         next: NextFunction
     ) {
         try {
-            const { units } = req.body as {
+            const { name, units } = req.body as {
+                name: string;
                 units: string[]
             };
 
             const course: {
-                units: string[]
-            } = { units: units };
+                name: string, units: string[]
+            } = { name: name, units: units };
 
 
             const newCourse = await CoursesManager.createCourse(course);

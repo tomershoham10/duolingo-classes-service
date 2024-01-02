@@ -2,6 +2,7 @@
 
 interface CoursesType {
     _id: string;
+    name:string;
     units?: string[];
 }
 

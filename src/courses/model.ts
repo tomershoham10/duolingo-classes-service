@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 const CoursesSchema = new Schema<CoursesType>({
+    name: { type: String, required: true, unique: true },
     units: [{
         type: String,
         ref: 'Units',

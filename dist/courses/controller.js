@@ -2,8 +2,8 @@ import CoursesManager from "./manager.js";
 export default class CoursesController {
     static async create(req, res, next) {
         try {
-            const { units } = req.body;
-            const course = { units: units };
+            const { name, units } = req.body;
+            const course = { name: name, units: units };
             const newCourse = await CoursesManager.createCourse(course);
             res.status(201)
                 .json({ message: "course created successfully", newCourse });
