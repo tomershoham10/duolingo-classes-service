@@ -10,11 +10,11 @@ export default class CoursesController {
         try {
             const { name, units } = req.body as {
                 name: string;
-                units: string[]
+                units?: string[]
             };
 
             const course: {
-                name: string, units: string[]
+                name: string, units?: string[]
             } = { name: name, units: units };
 
 
