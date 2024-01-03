@@ -1,8 +1,14 @@
 import CoursesManager from "./manager.js";
+import CoursesModel from "./model.js";
 export default class CoursesController {
     static async create(req, res, next) {
         try {
             const { name, units } = req.body;
+            const isExisted = await CoursesModel.findOne({ name: name });
+            if (isExisted) {
+                console.error('course already existed');
+                return res.status(403).json({ error: 'course already existed' });
+            }
             const course = { name: name, units: units };
             const newCourse = await CoursesManager.createCourse(course);
             res.status(201)

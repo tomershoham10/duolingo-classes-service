@@ -1,5 +1,6 @@
 import Express, { NextFunction } from "express";
 import CountryManager from "./manager.js";
+import CountryModel from "./model.js";
 
 export default class CountryController {
   static async create(
@@ -11,6 +12,14 @@ export default class CountryController {
       const { name } = req.body as { name: string };
 
       const reqCountry: { name: string, } = { name: name }
+
+      const isExisted = await CountryModel.findOne({ name: name });
+      if (isExisted) {
+        console.error('country already existed');
+        return res.status(403).json({ error: 'country already existed' });
+      }
+
+
       console.log("CountryController create - reqCountry", reqCountry);
       const newCountry = await CountryManager.createCountry(reqCountry);
       res

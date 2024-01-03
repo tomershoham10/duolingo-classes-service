@@ -1,5 +1,6 @@
 import Express, { NextFunction } from "express";
 import CoursesManager from "./manager.js";
+import CoursesModel from "./model.js";
 
 export default class CoursesController {
     static async create(
@@ -12,6 +13,13 @@ export default class CoursesController {
                 name: string;
                 units?: string[]
             };
+
+            const isExisted = await CoursesModel.findOne({ name: name });
+            if (isExisted) {
+                console.error('course already existed');
+                return res.status(403).json({ error: 'course already existed' });
+            }
+
 
             const course: {
                 name: string, units?: string[]

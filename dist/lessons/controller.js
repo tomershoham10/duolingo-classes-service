@@ -1,4 +1,5 @@
 import LessonsManager from "./manager.js";
+import LessonsModel from "./model.js";
 export default class LessonsController {
     static async create(req, res, next) {
         try {
@@ -8,6 +9,11 @@ export default class LessonsController {
                 exercises: exercises,
                 type: type,
             };
+            const isExisted = await LessonsModel.findOne({ name: name });
+            if (isExisted) {
+                console.error('lesson already existed');
+                return res.status(403).json({ error: 'lesson already existed' });
+            }
             const newLesson = await LessonsManager.createLesson(reqLesson);
             res.status(201)
                 .json({ message: "Lesson created successfully", newLesson });

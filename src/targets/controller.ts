@@ -1,5 +1,6 @@
 import Express, { NextFunction } from "express";
 import TargetManager from "./manager.js";
+import TargetModel from "./model.js";
 
 export default class TargetController {
   static async create(
@@ -17,6 +18,11 @@ export default class TargetController {
         subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars
       } = { name: name, countryId: countryId, type: type, subType: subType };
       console.log("TargetController create - reqTarget", reqTarget);
+      const isExisted = await TargetModel.findOne({ name: name });
+      if (isExisted) {
+        console.error('Target already existed');
+        return res.status(403).json({ error: 'Target already existed' });
+      }
       const newTarget = await TargetManager.createTarget(reqTarget);
       res
         .status(201)

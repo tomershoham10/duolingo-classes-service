@@ -4,7 +4,6 @@ import CoursesModel from "./model.js";
 export default class CoursesRepository {
     static async createCourse(course: Partial<CoursesType>): Promise<CoursesType> {
         try {
-
             const newCourse = await CoursesModel.create(course);
             return newCourse;
         }
