@@ -56,7 +56,28 @@ export default class CoursesController {
             next(error);
         }
     }
+    
+    static async getByName(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const courseName: string = req.params.courseName;
+            console.log("courses controller - getByName", courseName);
+            const course = await CoursesManager.getCourseByName(courseName);
+            if (!course) {
+                return res.status(404).json({ message: "course not found" });
+            }
 
+            res.status(200).json({ course });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
+   
     static async getUnitsById(
         req: Express.Request,
         res: Express.Response,

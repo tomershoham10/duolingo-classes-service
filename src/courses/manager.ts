@@ -12,7 +12,7 @@ export default class CoursesManager {
         }
     }
 
-    static async getCourseById(courseId: string): Promise<CoursesType | null | undefined> {
+    static async getCourseById(courseId: string): Promise<CoursesType | null> {
         try {
             const course = await CoursesRepository.getCourseById(courseId);
             console.log("courses manager", course);
@@ -23,7 +23,19 @@ export default class CoursesManager {
         }
     }
 
-    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null | undefined> {
+
+    static async getCourseByName(courseName: string): Promise<CoursesType | null> {
+        try {
+            const course = await CoursesRepository.getCourseByName(courseName);
+            console.log("courses manager", course);
+            return course;
+        } catch (err) {
+            console.error(err);
+            throw new Error(`course manager - getCourseById ${err}`);
+        }
+    }
+
+    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
         try {
             const units = await CoursesRepository.getUnitsByCourseId(courseId);
             console.log("courses manager getUnitsByCourseId", units);
@@ -47,7 +59,7 @@ export default class CoursesManager {
         }
     }
 
-    static async getAllCourses(): Promise<CoursesType[] | null | undefined> {
+    static async getAllCourses(): Promise<CoursesType[] | null> {
         try {
             const courses = await CoursesRepository.getAllCourses();
             return courses;
@@ -60,7 +72,7 @@ export default class CoursesManager {
     static async updateCourse(
         courseId: string,
         filedsToUpdate: Partial<CoursesType>
-    ): Promise<CoursesType | null | undefined> {
+    ): Promise<CoursesType | null> {
         const updatedCourse = await CoursesRepository.updateCourse(
             courseId,
             filedsToUpdate
@@ -73,7 +85,7 @@ export default class CoursesManager {
         }
     }
 
-    static async deleteCourses(courseId: string): Promise<CoursesType | null | undefined> {
+    static async deleteCourses(courseId: string): Promise<CoursesType | null> {
         try {
 
             const status = await CoursesRepository.deleteCourses(courseId);
