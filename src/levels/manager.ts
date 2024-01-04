@@ -1,15 +1,25 @@
+import mongoose from "mongoose";
 import LevelsRepository from "./repository.js";
+import LessonsManager from "../lessons/manager.js";
 
 export default class LevelsManager {
-    static async createLevel(
-        level: Partial<LevelsType>): Promise<LevelsType> {
+    static async createLevel(): Promise<LevelsType> {
+        const session = await mongoose.startSession();
+        session.startTransaction();
         try {
+            const createdLesson = await LessonsManager.createLesson({ name: 'Lesson no.1' });
+            console.log("createLevel manager - createdLesson", createdLesson);
 
-            const response = await LevelsRepository.createLevel(level);
-            return response
+            const createdLevel = await LevelsRepository.createLevel({ lessons: [createdLesson._id] });
+            await session.commitTransaction();
+            return createdLevel;
         }
-        catch (err) {
-            throw new Error(`Error manager createLevel: ${err}`);
+        catch (error: any) {
+            await session.abortTransaction();
+            console.error('Manager Error [createLevel]:', error.message);
+            throw new Error('Error in level creation process');
+        } finally {
+            session.endSession();
         }
     }
 
@@ -20,8 +30,9 @@ export default class LevelsManager {
             console.log("levels manager", level);
             return level;
         }
-        catch (err) {
-            throw new Error(`Error manager getLevelById: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [getLevelById]:', error.message);
+            throw new Error('Error in getLevelById');
         }
     }
 
@@ -31,8 +42,9 @@ export default class LevelsManager {
             console.log("levels manager getsLessonsByLevelId", lessons);
             return lessons;
         }
-        catch (err) {
-            throw new Error(`Error manager getsLessonsByLevelId: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [getsLessonsByLevelId]:', error.message);
+            throw new Error('Error in getsLessonsByLevelId');
         }
     }
 
@@ -42,19 +54,21 @@ export default class LevelsManager {
             console.log("levels manager getNextLessonId", nextLessonId, prevLessonId);
             return nextLessonId;
         }
-        catch (err) {
-            throw new Error(`Error manager getNextLessonId: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [getNextLessonId]:', error.message);
+            throw new Error('Error in getNextLessonId');
         }
     }
 
-    static async getAllLevels(): Promise<LevelsType[] | null> {
+    static async getAllLevels(): Promise<LevelsType[]> {
         try {
 
             const levels = await LevelsRepository.getAllLevels();
             return levels;
         }
-        catch (err) {
-            throw new Error(`Error manager getAllLevels: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [getAllLevels]:', error.message);
+            throw new Error('Error in getAllLevels');
         }
     }
 
@@ -69,8 +83,9 @@ export default class LevelsManager {
             );
             return updatedLevel;
         }
-        catch (err) {
-            throw new Error(`Error manager updateLevel: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [updateLevel]:', error.message);
+            throw new Error('Error in updateLevel');
         }
     }
 
@@ -79,8 +94,9 @@ export default class LevelsManager {
             const status = await LevelsRepository.deleteLevel(levelId);
             return status;
         }
-        catch (err) {
-            throw new Error(`Error manager deleteLevel: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [deleteLevel]:', error.message);
+            throw new Error('Error in deleteLevel');
         }
     }
 }  

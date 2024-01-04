@@ -1,12 +1,24 @@
+import mongoose from "mongoose";
 import LevelsRepository from "./repository.js";
+import LessonsManager from "../lessons/manager.js";
 export default class LevelsManager {
-    static async createLevel(level) {
+    static async createLevel() {
+        const session = await mongoose.startSession();
+        session.startTransaction();
         try {
-            const response = await LevelsRepository.createLevel(level);
-            return response;
+            const createdLesson = await LessonsManager.createLesson({ name: 'Lesson no.1' });
+            console.log("createLevel manager - createdLesson", createdLesson);
+            const createdLevel = await LevelsRepository.createLevel({ lessons: [createdLesson._id] });
+            await session.commitTransaction();
+            return createdLevel;
         }
-        catch (err) {
-            throw new Error(`Error manager createLevel: ${err}`);
+        catch (error) {
+            await session.abortTransaction();
+            console.error('Manager Error [createLevel]:', error.message);
+            throw new Error('Error in level creation process');
+        }
+        finally {
+            session.endSession();
         }
     }
     static async getLevelById(levelId) {
@@ -15,8 +27,9 @@ export default class LevelsManager {
             console.log("levels manager", level);
             return level;
         }
-        catch (err) {
-            throw new Error(`Error manager getLevelById: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getLevelById]:', error.message);
+            throw new Error('Error in getLevelById');
         }
     }
     static async getsLessonsByLevelId(levelId) {
@@ -25,8 +38,9 @@ export default class LevelsManager {
             console.log("levels manager getsLessonsByLevelId", lessons);
             return lessons;
         }
-        catch (err) {
-            throw new Error(`Error manager getsLessonsByLevelId: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getsLessonsByLevelId]:', error.message);
+            throw new Error('Error in getsLessonsByLevelId');
         }
     }
     static async getNextLessonId(prevLessonId) {
@@ -35,8 +49,9 @@ export default class LevelsManager {
             console.log("levels manager getNextLessonId", nextLessonId, prevLessonId);
             return nextLessonId;
         }
-        catch (err) {
-            throw new Error(`Error manager getNextLessonId: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getNextLessonId]:', error.message);
+            throw new Error('Error in getNextLessonId');
         }
     }
     static async getAllLevels() {
@@ -44,8 +59,9 @@ export default class LevelsManager {
             const levels = await LevelsRepository.getAllLevels();
             return levels;
         }
-        catch (err) {
-            throw new Error(`Error manager getAllLevels: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getAllLevels]:', error.message);
+            throw new Error('Error in getAllLevels');
         }
     }
     static async updateLevel(levelId, filedsToUpdate) {
@@ -53,8 +69,9 @@ export default class LevelsManager {
             const updatedLevel = await LevelsRepository.updateLevel(levelId, filedsToUpdate);
             return updatedLevel;
         }
-        catch (err) {
-            throw new Error(`Error manager updateLevel: ${err}`);
+        catch (error) {
+            console.error('Manager Error [updateLevel]:', error.message);
+            throw new Error('Error in updateLevel');
         }
     }
     static async deleteLevel(levelId) {
@@ -62,8 +79,9 @@ export default class LevelsManager {
             const status = await LevelsRepository.deleteLevel(levelId);
             return status;
         }
-        catch (err) {
-            throw new Error(`Error manager deleteLevel: ${err}`);
+        catch (error) {
+            console.error('Manager Error [deleteLevel]:', error.message);
+            throw new Error('Error in deleteLevel');
         }
     }
 }

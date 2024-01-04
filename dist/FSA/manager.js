@@ -6,7 +6,8 @@ export default class FSAManager {
             return response;
         }
         catch (error) {
-            throw new Error(`FSA manager createExercise: ${error}`);
+            console.error('Manager Error [createExercise]:', error.message);
+            throw new Error('Error in createExercise');
         }
     }
     static async getResultByUserAndFSAId(exerciseId, useId) {
@@ -17,7 +18,8 @@ export default class FSAManager {
             return result;
         }
         catch (error) {
-            throw new Error(`FSA manager getResultByUserAndFSAId: ${error}`);
+            console.error('Manager Error [getResultByUserAndFSAId]:', error.message);
+            throw new Error('Error in getResultByUserAndFSAId');
         }
     }
     static async getRelevantByFSAId(exerciseId) {
@@ -28,7 +30,8 @@ export default class FSAManager {
             return relevant;
         }
         catch (error) {
-            throw new Error(`FSA manager getRelevantByFSAId: ${error}`);
+            console.error('Manager Error [getRelevantByFSAId]:', error.message);
+            throw new Error('Error in getRelevantByFSAId');
         }
     }
     static async getAnswersByFSAId(exerciseId) {
@@ -39,7 +42,8 @@ export default class FSAManager {
             return targets;
         }
         catch (error) {
-            throw new Error(`FSA manager getAnswersByFSAId: ${error}`);
+            console.error('Manager Error [getAnswersByFSAId]:', error.message);
+            throw new Error('Error in getAnswersByFSAId');
         }
     }
     static async getExerciseByAnswerId(answerId) {
@@ -49,7 +53,8 @@ export default class FSAManager {
             return exercises;
         }
         catch (error) {
-            throw new Error(`FSA manager getExerciseByAnswerId: ${error}`);
+            console.error('Manager Error [getExerciseByAnswerId]:', error.message);
+            throw new Error('Error in getExerciseByAnswerId');
         }
     }
     static async getExerciseById(exerciseId) {
@@ -59,7 +64,8 @@ export default class FSAManager {
             return exercise;
         }
         catch (error) {
-            throw new Error(`FSA manager getExerciseById: ${error}`);
+            console.error('Manager Error [getExerciseByAnswerId]:', error.message);
+            throw new Error('Error in getExerciseByAnswerId');
         }
     }
     static async getAllExercise() {
@@ -68,7 +74,8 @@ export default class FSAManager {
             return exercises;
         }
         catch (error) {
-            throw new Error(`FSA manager getAllExercise: ${error}`);
+            console.error('Manager Error [getAllExercise]:', error.message);
+            throw new Error('Error in getAllExercise');
         }
     }
     static async updateExercise(exerciseId, filedsToUpdate) {
@@ -77,7 +84,8 @@ export default class FSAManager {
             return updatedExercise;
         }
         catch (error) {
-            throw new Error(`FSA manager updateExercise: ${error}`);
+            console.error('Manager Error [updateExercise]:', error.message);
+            throw new Error('Error in updateExercise');
         }
     }
     static async deleteExercise(exerciseId) {
@@ -86,7 +94,8 @@ export default class FSAManager {
             return status;
         }
         catch (error) {
-            throw new Error(`FSA manager deleteExercise: ${error}`);
+            console.error('Manager Error [deleteExercise]:', error.message);
+            throw new Error('Error in deleteExercise');
         }
     }
 }

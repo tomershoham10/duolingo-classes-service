@@ -7,8 +7,9 @@ export default class LevelsRepository {
             const newlevel = await LevelsModel.create(level);
             return newlevel;
         }
-        catch (err) {
-            throw new Error(`Error repo createlevel: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - createLevel: ${error}`);
         }
     }
     static async getLevelById(levelId) {
@@ -17,8 +18,9 @@ export default class LevelsRepository {
             console.log("levels repo", levelId);
             return level;
         }
-        catch (err) {
-            throw new Error(`Error repo getLevelById: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - getLevelById: ${error}`);
         }
     }
     static async getsLessonsByLevelId(levelId) {
@@ -32,12 +34,15 @@ export default class LevelsRepository {
                     // console.log("levels repo getsLessonsByLevelId", levelId);
                     return lessonsDetails;
                 }
+                else
+                    return null;
             }
             else
                 return null;
         }
-        catch (err) {
-            throw new Error(`Error repo getsLessonsByLevelId: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - getsLessonsByLevelId: ${error}`);
         }
     }
     static async getNextLessonId(prevLessonId) {
@@ -77,8 +82,9 @@ export default class LevelsRepository {
             else
                 return null;
         }
-        catch (err) {
-            throw new Error(`Error repo getsLessonsByLevelId: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - getNextLessonId: ${error}`);
         }
     }
     static async getAllLevels() {
@@ -87,8 +93,9 @@ export default class LevelsRepository {
             console.log("repo getAllLevels", levels);
             return levels;
         }
-        catch (err) {
-            throw new Error(`Error repo getAllLevels: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - getAllLevels: ${error}`);
         }
     }
     static async updateLevel(levelId, fieldsToUpdate) {
@@ -97,8 +104,9 @@ export default class LevelsRepository {
             console.log("lessons repo updateLevel", updatedLevel);
             return updatedLevel;
         }
-        catch (err) {
-            throw new Error(`Error repo updateLevel: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - updateLevel: ${error}`);
         }
     }
     static async deleteLevel(levelId) {
@@ -107,8 +115,9 @@ export default class LevelsRepository {
             console.log("lessons repo deleteLevel", status);
             return status;
         }
-        catch (err) {
-            throw new Error(`Error repo deleteLevel: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - deleteLevel: ${error}`);
         }
     }
 }

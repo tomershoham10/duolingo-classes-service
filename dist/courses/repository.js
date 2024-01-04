@@ -6,8 +6,19 @@ export default class CoursesRepository {
             const newCourse = await CoursesModel.create(course);
             return newCourse;
         }
-        catch (err) {
-            throw new Error(`Error repo createCourse: ${err}`);
+        catch (error) {
+            if (error.name === 'ValidationError') {
+                console.error('Repository Validation Error:', error.message);
+                throw new Error('Validation error while creating course');
+            }
+            else if (error.code === 11000) {
+                console.error('Repository Duplicate Key Error:', error.message);
+                throw new Error('Duplicate key error while creating course');
+            }
+            else {
+                console.error('Repository Error:', error.message);
+                throw new Error('Error creating course');
+            }
         }
     }
     static async getCourseById(courseId) {
@@ -16,8 +27,9 @@ export default class CoursesRepository {
             console.log("courses repo", courseId);
             return course;
         }
-        catch (err) {
-            throw new Error(`Error repo getCourseById: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getCourseById: ${error}`);
         }
     }
     static async getCourseByName(courseName) {
@@ -26,8 +38,9 @@ export default class CoursesRepository {
             console.log("courses repo", courseName, course);
             return course;
         }
-        catch (err) {
-            throw new Error(`Error repo getCourseById: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getCourseByName: ${error}`);
         }
     }
     static async getNextUnitId(pervUnitId) {
@@ -52,8 +65,9 @@ export default class CoursesRepository {
                 return null;
             }
         }
-        catch (err) {
-            throw new Error(`Error repo getCourseByType: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getNextUnitId: ${error}`);
         }
     }
     static async getUnitsByCourseId(courseId) {
@@ -71,8 +85,9 @@ export default class CoursesRepository {
             else
                 return null;
         }
-        catch (err) {
-            throw new Error(`Error fetching units for the course: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
         }
     }
     static async getAllCourses() {
@@ -80,8 +95,9 @@ export default class CoursesRepository {
             const courses = await CoursesModel.find({});
             return courses;
         }
-        catch (err) {
-            throw new Error(`Error repo getAllCourses: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getAllCourses: ${error}`);
         }
     }
     static async updateCourse(courseId, fieldsToUpdate) {
@@ -89,17 +105,19 @@ export default class CoursesRepository {
             const updatedCourse = await CoursesModel.findByIdAndUpdate(courseId, fieldsToUpdate, { new: true });
             return updatedCourse;
         }
-        catch (err) {
-            throw new Error(`Error repo updateCourse: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - updateCourse: ${error}`);
         }
     }
-    static async deleteCourses(courseId) {
+    static async deleteCourse(courseId) {
         try {
             const status = await CoursesModel.findOneAndDelete({ _id: courseId });
             return status;
         }
-        catch (err) {
-            throw new Error(`Error repo deleteCourses: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - deleteCourses: ${error}`);
         }
     }
 }

@@ -2,13 +2,12 @@ import UnitsManager from "./manager.js";
 import mongoose from "mongoose";
 import UnitsModel from "./model.js";
 import CoursesModel from "../courses/model.js";
+// import CoursesRepository from "../courses/repository.js";
 export default class UnitsController {
-    static async create(req, res, next) {
+    static async create(req, res) {
         try {
-            const { levels, guidebook, description } = req.body;
-            const reqUnit = {
-                levels,
-            };
+            const { guidebook, description } = req.body;
+            const reqUnit = {};
             if (guidebook) {
                 reqUnit.guidebook = guidebook;
             }
@@ -16,16 +15,19 @@ export default class UnitsController {
                 reqUnit.description = description;
             }
             const newUnit = await UnitsManager.createUnit(reqUnit);
-            res.status(201)
-                .json({ message: "Unit created successfully", newUnit });
+            if (!!newUnit) {
+                return res.status(201).json({ message: "unit created successfully", newUnit });
+            }
+            else {
+                throw new Error('unit controller create error.');
+            }
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(400).json({ error: error.message });
         }
     }
-    static async createByCourse(req, res, next) {
+    static async createByCourse(req, res) {
         const { unitData, courseId } = req.body;
         try {
             const session = await mongoose.startSession();
@@ -40,6 +42,7 @@ export default class UnitsController {
             }
             const newUnit = new UnitsModel(unitData);
             course.units ? course.units.push(newUnit._id.toString()) : course.units = [newUnit._id.toString()];
+            // const updatedCourse = await CoursesRepository.updateCourse(course._id, { units: course.units })
             await newUnit.save({ session: session });
             await course.save({ session: session });
             await session.commitTransaction();
@@ -47,12 +50,11 @@ export default class UnitsController {
             res.status(200).json({ message: 'New unit created and course updated successfully' });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(400).json({ error: error.message });
         }
     }
-    static async getById(req, res, next) {
+    static async getById(req, res) {
         try {
             const unitId = req.params.id;
             console.log("units controller", unitId);
@@ -63,12 +65,11 @@ export default class UnitsController {
             res.status(200).json({ unit });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getLevelsById(req, res, next) {
+    static async getLevelsById(req, res) {
         try {
             const unitId = req.params.id;
             console.log("units controller: getLevelsById", unitId);
@@ -79,12 +80,11 @@ export default class UnitsController {
             res.status(200).json({ levels });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getNextLevelId(req, res, next) {
+    static async getNextLevelId(req, res) {
         try {
             const pervLevelId = req.params.pervLevelId;
             console.log("units controller: getNextLevelId", pervLevelId);
@@ -95,24 +95,22 @@ export default class UnitsController {
             res.status(200).json({ nextLevelId });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getMany(_req, res, next) {
+    static async getMany(_req, res) {
         try {
             const units = await UnitsManager.getAllUnits();
             console.log(units);
             res.status(200).json({ units });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async update(req, res, next) {
+    static async update(req, res) {
         try {
             const unitId = req.params.id;
             const fieldsToUpdate = req.body;
@@ -123,12 +121,11 @@ export default class UnitsController {
             res.status(200).json({ updatedUnit });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async delete(req, res, next) {
+    static async delete(req, res) {
         try {
             const unitId = req.params.id;
             const status = await UnitsManager.deleteUnit(unitId);
@@ -138,9 +135,8 @@ export default class UnitsController {
             res.status(200).json({ status });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
 }

@@ -7,8 +7,19 @@ export default class UnitsRepository {
             const newUnit = await UnitsModel.create(unit);
             return newUnit;
         }
-        catch (err) {
-            throw new Error(`Error repo createUnit: ${err}`);
+        catch (error) {
+            if (error.name === 'ValidationError') {
+                console.error('Repository Validation Error:', error.message);
+                throw new Error('Validation error while creating unit');
+            }
+            else if (error.code === 11000) {
+                console.error('Repository Duplicate Key Error:', error.message);
+                throw new Error('Duplicate key error while creating unit');
+            }
+            else {
+                console.error('Repository Error:', error.message);
+                throw new Error('Error creating unit');
+            }
         }
     }
     static async getUnitById(unitId) {
@@ -37,8 +48,9 @@ export default class UnitsRepository {
             else
                 return null;
         }
-        catch (err) {
-            throw new Error(`Error repo getsLevelsByUnitId: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
     static async getNextLevelId(pervLevelId) {
@@ -79,8 +91,9 @@ export default class UnitsRepository {
             else
                 return null;
         }
-        catch (err) {
-            throw new Error(`Error repo getsLevelsByUnitId: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
     static async getAllUnits() {
@@ -88,8 +101,9 @@ export default class UnitsRepository {
             const units = await UnitsModel.find({});
             return units;
         }
-        catch (err) {
-            throw new Error(`Error repo getAllUnits: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
     static async updateUnit(unitId, fieldsToUpdate) {
@@ -97,8 +111,9 @@ export default class UnitsRepository {
             const updatedUnit = await UnitsModel.findByIdAndUpdate(unitId, fieldsToUpdate, { new: true });
             return updatedUnit;
         }
-        catch (err) {
-            throw new Error(`Error repo updateUnit: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
     static async deleteUnit(unitId) {
@@ -106,8 +121,9 @@ export default class UnitsRepository {
             const status = await UnitsModel.findOneAndDelete({ _id: unitId });
             return status;
         }
-        catch (err) {
-            throw new Error(`Error repo deleteUnit: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
 }

@@ -1,13 +1,24 @@
+import mongoose from "mongoose";
 import CoursesRepository from "./repository.js";
+import UnitsManager from "../units/manager.js";
 export default class CoursesManager {
     static async createCourse(course) {
+        const session = await mongoose.startSession();
+        session.startTransaction();
         try {
-            const response = await CoursesRepository.createCourse(course);
-            return response;
+            const createdUnit = await UnitsManager.createUnit({});
+            console.log("createCourse manager - createdUnit", createdUnit);
+            const createdCourse = await CoursesRepository.createCourse({ ...course, units: [createdUnit._id] });
+            await session.commitTransaction();
+            return createdCourse;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - createCourse ${err}`);
+        catch (error) {
+            await session.abortTransaction();
+            console.error('Manager Error [createCourse]:', error.message);
+            throw new Error('Error in course creation process');
+        }
+        finally {
+            session.endSession();
         }
     }
     static async getCourseById(courseId) {
@@ -16,9 +27,9 @@ export default class CoursesManager {
             console.log("courses manager", course);
             return course;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - getCourseById ${err}`);
+        catch (error) {
+            console.error('Manager Error [getCourseById]:', error.message);
+            throw new Error('Error in getCourseById');
         }
     }
     static async getCourseByName(courseName) {
@@ -27,9 +38,9 @@ export default class CoursesManager {
             console.log("courses manager", course);
             return course;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - getCourseById ${err}`);
+        catch (error) {
+            console.error('Manager Error [getCourseById]:', error.message);
+            throw new Error('Error in getting course by id');
         }
     }
     static async getUnitsByCourseId(courseId) {
@@ -38,9 +49,9 @@ export default class CoursesManager {
             console.log("courses manager getUnitsByCourseId", units);
             return units;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - getUnitsByCourseId ${err}`);
+        catch (error) {
+            console.error('Manager Error [getUnitsByCourseId]:', error.message);
+            throw new Error('Error in getting units by course id');
         }
     }
     static async getNextUnitId(pervUnitId) {
@@ -53,9 +64,9 @@ export default class CoursesManager {
             else
                 return null;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - getNextUnitId ${err}`);
+        catch (error) {
+            console.error('Manager Error [getNextUnitId]:', error.message);
+            throw new Error('Error in getting next unit id');
         }
     }
     static async getAllCourses() {
@@ -63,9 +74,9 @@ export default class CoursesManager {
             const courses = await CoursesRepository.getAllCourses();
             return courses;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - getAllCourses ${err}`);
+        catch (error) {
+            console.error('Manager Error [getAllCourses]:', error.message);
+            throw new Error('Error in getAllCourses');
         }
     }
     static async updateCourse(courseId, filedsToUpdate) {
@@ -73,19 +84,19 @@ export default class CoursesManager {
         try {
             return updatedCourse;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - updateCourse ${err}`);
+        catch (error) {
+            console.error('Manager Error [updateCourse]:', error.message);
+            throw new Error('Error in updateCourse');
         }
     }
-    static async deleteCourses(courseId) {
+    static async deleteCourse(courseId) {
         try {
-            const status = await CoursesRepository.deleteCourses(courseId);
+            const status = await CoursesRepository.deleteCourse(courseId);
             return status;
         }
-        catch (err) {
-            console.error(err);
-            throw new Error(`course manager - deleteCourses ${err}`);
+        catch (error) {
+            console.error('Manager Error [deleteCourse]:', error.message);
+            throw new Error('Error in deleteCourse');
         }
     }
 }

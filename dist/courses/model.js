@@ -4,7 +4,7 @@ const CoursesSchema = new Schema({
     units: [{
             type: String,
             ref: 'Units',
-            required: false
+            required: true
         }]
 });
 const CoursesModel = mongoose.model('Courses', CoursesSchema);

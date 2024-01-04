@@ -1,0 +1,1 @@
+{"version":3,"file":"capitalizeWords.js","sourceRoot":"","sources":["../../src/utils/capitalizeWords.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,UAAU,eAAe,CAAC,WAAmB;IACvD,OAAO,WAAW,CAAC,OAAO,CAAC,OAAO,EAAE,CAAC,KAAK,EAAE,EAAE,CAAC,KAAK,CAAC,WAAW,EAAE,CAAC,CAAC;AACxE,CAAC"}

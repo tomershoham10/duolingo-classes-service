@@ -1,22 +1,21 @@
 import LevelsManager from "./manager.js";
 export default class LevelsController {
-    static async create(req, res, next) {
+    static async create(_req, res) {
         try {
-            const { lessons } = req.body;
-            const reqLevel = {
-                lessons: lessons,
-            };
-            const newLevel = await LevelsManager.createLevel(reqLevel);
-            res.status(201)
-                .json({ message: "Level created successfully", newLevel });
+            const newLevel = await LevelsManager.createLevel();
+            if (!!newLevel) {
+                return res.status(201).json({ message: "level created successfully", newLevel });
+            }
+            else {
+                throw new Error('level controller create error.');
+            }
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(400).json({ error: error.message });
         }
     }
-    static async getById(req, res, next) {
+    static async getById(req, res) {
         try {
             const levelId = req.params.id;
             console.log("levels controller", levelId);
@@ -27,12 +26,11 @@ export default class LevelsController {
             res.status(200).json({ level });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getLessonsById(req, res, next) {
+    static async getLessonsById(req, res) {
         try {
             const levelId = req.params.id;
             console.log("controller: getLessonsById", levelId);
@@ -43,12 +41,11 @@ export default class LevelsController {
             res.status(200).json({ lessons });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getNextLessonId(req, res, next) {
+    static async getNextLessonId(req, res) {
         try {
             const prevLessonId = req.params.prevLessonId;
             console.log("controller: getNextLessonId", prevLessonId);
@@ -59,24 +56,22 @@ export default class LevelsController {
             res.status(200).json({ nextLessonId });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getMany(_req, res, next) {
+    static async getMany(_req, res) {
         try {
             const levels = await LevelsManager.getAllLevels();
             console.log(levels);
             res.status(200).json({ levels });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async update(req, res, next) {
+    static async update(req, res) {
         try {
             const levelId = req.params.id;
             const fieldsToUpdate = req.body;
@@ -87,12 +82,11 @@ export default class LevelsController {
             res.status(200).json({ updatedLevel });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async delete(req, res, next) {
+    static async delete(req, res) {
         try {
             const levelId = req.params.id;
             const status = await LevelsManager.deleteLevel(levelId);
@@ -102,9 +96,8 @@ export default class LevelsController {
             res.status(200).json({ status });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
 }

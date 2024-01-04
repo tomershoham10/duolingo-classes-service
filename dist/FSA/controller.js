@@ -1,6 +1,6 @@
 import FSAManager from "./manager.js";
 export default class FSAController {
-    static async create(req, res, next) {
+    static async create(req, res) {
         try {
             const { recordsKeys, difficultyLevel, relevant, answersList, timeBuffers, description, sonolistKeys } = req.body;
             let reqExercise = {
@@ -13,16 +13,19 @@ export default class FSAController {
             description ? reqExercise = { ...reqExercise, description } : null;
             sonolistKeys ? reqExercise = { ...reqExercise, sonolistKeys } : null;
             const newExercise = await FSAManager.createExercise(reqExercise);
-            return res.status(201)
-                .json({ message: "Exercise created successfully", newExercise });
+            if (!!newExercise) {
+                return res.status(201).json({ message: "Exercise created successfully", newExercise });
+            }
+            else {
+                throw new Error('Course controller create error.');
+            }
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getResultByUserAndFSAId(req, res, next) {
+    static async getResultByUserAndFSAId(req, res) {
         try {
             const exerciseId = req.params.exerciseId;
             const userId = req.params.userId;
@@ -35,12 +38,11 @@ export default class FSAController {
             return res.status(200).json({ result });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getRelevantByFSAId(req, res, next) {
+    static async getRelevantByFSAId(req, res) {
         try {
             const exerciseId = req.params.exerciseId;
             console.log("FSA controller getRelevantByFSAId", exerciseId);
@@ -51,12 +53,11 @@ export default class FSAController {
             return res.status(200).json({ relevantTargets });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getAnswersByFSAId(req, res, next) {
+    static async getAnswersByFSAId(req, res) {
         try {
             const exerciseId = req.params.exerciseId;
             console.log("FSA controller getAnswersByFSAId", exerciseId);
@@ -67,12 +68,11 @@ export default class FSAController {
             return res.status(200).json({ answers });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getByAnswerId(req, res, next) {
+    static async getByAnswerId(req, res) {
         try {
             const answerId = req.params.answerId;
             console.log("FSA controller getByAnswerId", answerId);
@@ -83,12 +83,11 @@ export default class FSAController {
             return res.status(200).json({ exercises });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getById(req, res, next) {
+    static async getById(req, res) {
         try {
             const exerciseId = req.params.id;
             console.log("FSA controller", exerciseId);
@@ -99,24 +98,22 @@ export default class FSAController {
             return res.status(200).json({ exercise });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async getMany(_req, res, next) {
+    static async getMany(_req, res) {
         try {
             const exercises = await FSAManager.getAllExercise();
             console.log(exercises);
             return res.status(200).json({ exercises });
         }
-        catch (err) {
-            console.error(err);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(err);
+        catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async update(req, res, next) {
+    static async update(req, res) {
         try {
             const exerciseId = req.params.id;
             const fieldsToUpdate = req.body;
@@ -127,12 +124,11 @@ export default class FSAController {
             return res.status(200).json({ updatedExercise });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
-    static async delete(req, res, next) {
+    static async delete(req, res) {
         try {
             const exerciseId = req.params.id;
             const status = await FSAManager.deleteExercise(exerciseId);
@@ -142,9 +138,8 @@ export default class FSAController {
             return res.status(200).json({ status });
         }
         catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
         }
     }
 }

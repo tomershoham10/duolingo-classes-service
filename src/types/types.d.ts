@@ -3,14 +3,14 @@
 interface CoursesType {
     _id: string;
     name:string;
-    units?: string[];
+    units: string[];
 }
 
 /////////////// UNITS //////////////////
 
 interface UnitsType {
     _id: string;
-    levels?: string[];
+    levels: string[];
     guidebook?: string;
     description?: string;
 }
@@ -24,17 +24,10 @@ interface LevelsType {
 
 /////////////// LESSONS ///////////////
 
-enum TypesOfLessons {
-    searider = "searider",
-    crew = "crew",
-    senior = "senior"
-}
-
 interface LessonsType {
     _id: string;
-    name: string;
-    exercises: string[];
-    type: TypesOfLessons;
+    name?: string;
+    exercises?: string[];
 }
 
 /////////////// FSA ///////////////////

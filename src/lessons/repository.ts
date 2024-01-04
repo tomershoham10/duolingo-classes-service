@@ -4,17 +4,30 @@ import LessonsModel from "./model.js";
 
 export default class LessonsRepository {
     static async createLesson(lesson: Partial<LessonsType>): Promise<LessonsType> {
-        const newLesson = await LessonsModel.create(lesson);
-        return newLesson;
+        try {
+            const newLesson = await LessonsModel.create(lesson);
+            return newLesson;
+        }
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getsExercisesByLessonId: ${error}`);
+        }
     }
 
     static async getLessonById(lessonId: string): Promise<LessonsType | null> {
-        const lesson = await LessonsModel.findById(lessonId);
-        console.log("lessons repo", lessonId);
-        return lesson;
+        try {
+            const lesson = await LessonsModel.findById(lessonId);
+            console.log("lessons repo", lessonId);
+            return lesson;
+        }
+
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getLessonById: ${error}`);
+        }
     }
 
-    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[] | undefined | null> {
+    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[] | null> {
         try {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
@@ -30,15 +43,16 @@ export default class LessonsRepository {
                     // console.log("lessons repo getsExercisesByLessonId", FSAIds, FSADetails, FSAsInOrder);
                     return FSADetails as FSAType[];
                 }
-                //bee was here
+                else return null;
             }
-            else return null
-        } catch (err) {
-            throw new Error(`Error repo getsLessonsByUnitId: ${err}`);
+            else return null;
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getsExercisesByLessonId: ${error}`);
         }
     }
 
-    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<{ numOfExercises: number, results: ResultType[] } | undefined | null> {
+    static async getResultsByLessonIdAndUserId(lessonId: string, userId: string): Promise<{ numOfExercises: number, results: ResultType[] } | null> {
         try {
             console.log("lessons repo getsExercisesByUnitId", "lessonId", lessonId, "userId", userId);
 
@@ -59,37 +73,51 @@ export default class LessonsRepository {
                     const results = { numOfExercises: FSAIds.length, results: resResults }
                     return results as { numOfExercises: number, results: ResultType[] };
                 }
+                else return null;
             }
-            else return null
-        } catch (err) {
-            throw new Error(`Error repo getsLessonsByUnitId: ${err}`);
+            else return null;
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getResultsByLessonIdAndUserId: ${error}`);
         }
     }
 
-    static async getAllLessons(): Promise<LessonsType[] | null> {
-        const lessons = await LessonsModel.find({});
-        return lessons;
-    }
-
-    static async getLessonsByType(lessonType: TypesOfLessons): Promise<LessonsType[] | null> {
-        const lessons = await LessonsModel.find({ type: lessonType });
-        return lessons;
+    static async getAllLessons(): Promise<LessonsType[]> {
+        try {
+            const lessons = await LessonsModel.find({});
+            return lessons;
+        }
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getAllLessons: ${error}`);
+        }
     }
 
     static async updateLesson(
         lessonId: string,
         fieldsToUpdate: Partial<LessonsType>
     ): Promise<LessonsType | null> {
-        const updatedLesson = await LessonsModel.findByIdAndUpdate(
-            lessonId,
-            fieldsToUpdate,
-            { new: true }
-        );
-        return updatedLesson;
+        try {
+            const updatedLesson = await LessonsModel.findByIdAndUpdate(
+                lessonId,
+                fieldsToUpdate,
+                { new: true }
+            );
+            return updatedLesson;
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - updateLesson: ${error}`);
+        }
     }
 
     static async deleteLesson(lessonId: string): Promise<LessonsType | null> {
-        const status = await LessonsModel.findOneAndDelete({ _id: lessonId });
-        return status;
+        try {
+            const status = await LessonsModel.findOneAndDelete({ _id: lessonId });
+            return status;
+        }
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - deleteLesson: ${error}`);
+        }
     }
 }

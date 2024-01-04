@@ -3,14 +3,26 @@ import LessonsRepository from "./repository.js";
 export default class LessonsManager {
     static async createLesson(
         lesson: Partial<LessonsType>): Promise<LessonsType> {
-        const response = await LessonsRepository.createLesson(lesson);
-        return response
+        try {
+            const response = await LessonsRepository.createLesson(lesson);
+            return response;
+        }
+        catch (error: any) {
+            console.error('Manager Error [createLesson]:', error.message);
+            throw new Error('Error in createLesson');
+        }
     }
 
     static async getLessonById(lessonId: string): Promise<LessonsType | null> {
-        const lesson = await LessonsRepository.getLessonById(lessonId);
-        console.log("Lessons manager", lesson);
-        return lesson;
+        try {
+            const lesson = await LessonsRepository.getLessonById(lessonId);
+            console.log("Lessons manager", lesson);
+            return lesson;
+        }
+        catch (error: any) {
+            console.error('Manager Error [getLessonById]:', error.message);
+            throw new Error('Error in getLessonById');
+        }
     }
 
     static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[] | null | undefined> {
@@ -19,8 +31,9 @@ export default class LessonsManager {
             console.log("lesson manager getsExercisesByLessonId", exercises);
             return exercises;
         }
-        catch (err) {
-            throw new Error(`Error manager getsExercisesByUnitId: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [getsExercisesByLessonId]:', error.message);
+            throw new Error('Error in getsExercisesByLessonId');
         }
     }
 
@@ -30,34 +43,45 @@ export default class LessonsManager {
             console.log("lesson manager getsResultsByLessonId", results);
             return results;
         }
-        catch (err) {
-            throw new Error(`Error manager getsResultsByLessonId: ${err}`);
+        catch (error: any) {
+            console.error('Manager Error [getResultsByLessonIdAndUserId]:', error.message);
+            throw new Error('Error in getResultsByLessonIdAndUserId');
         }
     }
 
-    static async getAllLessons(): Promise<LessonsType[] | null> {
-        const lessons = await LessonsRepository.getAllLessons();
-        return lessons;
-    }
-
-    static async getLessonsByType(lessonType: TypesOfLessons): Promise<LessonsType[] | null> {
-        const lessons = await LessonsRepository.getLessonsByType(lessonType);
-        return lessons;
+    static async getAllLessons(): Promise<LessonsType[]> {
+        try {
+            const lessons = await LessonsRepository.getAllLessons();
+            return lessons;
+        } catch (error: any) {
+            console.error('Manager Error [getAllLessons]:', error.message);
+            throw new Error('Error in getAllLessons');
+        }
     }
 
     static async updateLesson(
         lessonId: string,
         filedsToUpdate: Partial<LessonsType>
     ): Promise<LessonsType | null> {
-        const updatedLesson = await LessonsRepository.updateLesson(
-            lessonId,
-            filedsToUpdate
-        );
-        return updatedLesson;
+        try {
+            const updatedLesson = await LessonsRepository.updateLesson(
+                lessonId,
+                filedsToUpdate
+            );
+            return updatedLesson;
+        } catch (error: any) {
+            console.error('Manager Error [updateLesson]:', error.message);
+            throw new Error('Error in updateLesson');
+        }
     }
 
     static async deleteLesson(lessonId: string): Promise<LessonsType | null> {
-        const status = await LessonsRepository.deleteLesson(lessonId);
-        return status;
+        try {
+            const status = await LessonsRepository.deleteLesson(lessonId);
+            return status;
+        } catch (error: any) {
+            console.error('Manager Error [deleteLesson]:', error.message);
+            throw new Error('Error in deleteLesson');
+        }
     }
 }

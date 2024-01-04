@@ -9,16 +9,13 @@ export default class LessonsController {
         next: NextFunction
     ) {
         try {
-            const { name, exercises, type } = req.body as {
+            const { name, exercises } = req.body as {
                 name: string,
-                exercises: string[],
-                type: TypesOfLessons,
-
+                exercises?: string[],
             };
             const reqLesson = {
                 name: name,
                 exercises: exercises,
-                type: type,
             }
 
             const isExisted = await LessonsModel.findOne({ name: name });
@@ -116,28 +113,7 @@ export default class LessonsController {
             next(err);
         }
     }
-
-    static async getByType(
-        req: Express.Request,
-        res: Express.Response,
-        next: NextFunction
-    ) {
-        try {
-            const lessonType: TypesOfLessons = req.params.type as TypesOfLessons;
-            console.log("lessons controller", lessonType);
-            const lesson = await LessonsManager.getLessonsByType(lessonType);
-            if (!lesson) {
-                return res.status(404).json({ message: "lesson not found" });
-            }
-
-            res.status(200).json({ lesson });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
-        }
-    }
-
+    
     static async update(
         req: Express.Request,
         res: Express.Response,

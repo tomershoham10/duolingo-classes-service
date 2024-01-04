@@ -9,12 +9,13 @@ export default class FSARepository {
             const newExercise = await FSAModel.create(exercise);
             return newExercise;
         }
-        catch (error) {
-            throw new Error(`fsa repo create: ${error}`);
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - createExercise: ${error}`);
         }
     }
 
-    static async getResultByUserAndFSAId(exerciseId: string, userId: string): Promise<ResultType | undefined | null> {
+    static async getResultByUserAndFSAId(exerciseId: string, userId: string): Promise<ResultType | null> {
         try {
             const exercise = await FSAModel.findById(exerciseId);
             console.log("FSA repo getResultByUserAndFSAId - exercise", exercise);
@@ -26,12 +27,13 @@ export default class FSARepository {
             }
             else return null;
         }
-        catch (error) {
-            throw new Error(`fsa repo getResultByUserAndFSAId: ${error}`);
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getResultByUserAndFSAId: ${error}`);
         }
     }
 
-    static async getRelevantByFSAId(exerciseId: string): Promise<TargetType[] | undefined | null> {
+    static async getRelevantByFSAId(exerciseId: string): Promise<TargetType[] | null> {
         try {
             const exercise = await FSAModel.findById(exerciseId);
             console.log("FSA repo getRelevantByFSAId - exercise", exercise);
@@ -42,15 +44,18 @@ export default class FSARepository {
                     console.log("FSA repo getRelevantByFSAId - targetsDetails", relevantIds, targetsDetails);
                     return targetsDetails;
                 }
+                else return null;
+
             }
             else return null;
         }
-        catch (error) {
-            throw new Error(`fsa repo getRelevantByFSAId: ${error}`);
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getRelevantByFSAId: ${error}`);
         }
     }
 
-    static async getAnswersByFSAId(exerciseId: string): Promise<TargetType[] | undefined | null> {
+    static async getAnswersByFSAId(exerciseId: string): Promise<TargetType[] | null> {
         try {
             const exercise = await FSAModel.findById(exerciseId);
             console.log("FSA repo getAnswersByFSAId - exercise", exercise);
@@ -60,11 +65,13 @@ export default class FSARepository {
                     const answersDetails = await TargetModel.find({ _id: { $in: answersIds } });
                     return answersDetails;
                 }
+                else return null;
             }
             else return null;
         }
-        catch (error) {
-            throw new Error(`fsa repo getAnswersByFSAId: ${error}`);
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getAnswersByFSAId: ${error}`);
         }
     }
 
@@ -74,8 +81,9 @@ export default class FSARepository {
             console.log("FSA repo getExerciseByAnswerId", exercises);
             return exercises;
         }
-        catch (error) {
-            throw new Error(`fsa repo getExerciseByAnswerId: ${error}`);
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getRelevantByFSAId: ${error}`);
         }
     }
 
@@ -115,8 +123,9 @@ export default class FSARepository {
             );
             return updatedExercise;
         }
-        catch (error) {
-            throw new Error(`fsa repo updateExercise: ${error}`);
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - updateExercise: ${error}`);
         }
     }
 
@@ -126,8 +135,9 @@ export default class FSARepository {
             const status = await FSAModel.findOneAndDelete({ _id: exerciseId });
             return status;
         }
-        catch (error) {
-            throw new Error(`fsa repo deleteExercise: ${error}`);
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - deleteExercise: ${error}`);
         }
     }
 }

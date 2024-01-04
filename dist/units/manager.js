@@ -1,12 +1,24 @@
+import mongoose from "mongoose";
 import UnitsRepository from "./repository.js";
+import LevelsManager from "../levels/manager.js";
 export default class UnitsManager {
     static async createUnit(unit) {
+        const session = await mongoose.startSession();
+        session.startTransaction();
         try {
-            const response = await UnitsRepository.createUnit(unit);
-            return response;
+            const createdLevel = await LevelsManager.createLevel();
+            console.log("createUnit manager - createdLevel", createdLevel);
+            const createdUnit = await UnitsRepository.createUnit({ ...unit, levels: [createdLevel._id] });
+            await session.commitTransaction();
+            return createdUnit;
         }
-        catch (err) {
-            throw new Error(`Error manager createUnit: ${err}`);
+        catch (error) {
+            await session.abortTransaction();
+            console.error('Manager Error [createUnit]:', error.message);
+            throw new Error('Error in unit creation process');
+        }
+        finally {
+            session.endSession();
         }
     }
     static async getUnitById(unitId) {
@@ -15,8 +27,9 @@ export default class UnitsManager {
             console.log("units manager", unit);
             return unit;
         }
-        catch (err) {
-            throw new Error(`Error manager getUnitById: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getUnitById]:', error.message);
+            throw new Error('Error in getUnitById');
         }
     }
     static async getsLevelsByUnitId(unitId) {
@@ -25,8 +38,9 @@ export default class UnitsManager {
             console.log("units manager getsLevelsByUnitId", units);
             return units;
         }
-        catch (err) {
-            throw new Error(`Error manager getsLevelsByUnitId: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getsLevelsByUnitId]:', error.message);
+            throw new Error('Error in getsLevelsByUnitId');
         }
     }
     static async getNextLevelId(pervLevelId) {
@@ -35,8 +49,9 @@ export default class UnitsManager {
             console.log("units manager getNextLevelId", nextLevelId);
             return nextLevelId;
         }
-        catch (err) {
-            throw new Error(`Error manager getNextLevelId: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getNextLevelId]:', error.message);
+            throw new Error('Error in getNextLevelId');
         }
     }
     static async getAllUnits() {
@@ -44,8 +59,9 @@ export default class UnitsManager {
             const units = await UnitsRepository.getAllUnits();
             return units;
         }
-        catch (err) {
-            throw new Error(`Error manager getAllUnits: ${err}`);
+        catch (error) {
+            console.error('Manager Error [getAllUnits]:', error.message);
+            throw new Error('Error in getAllUnits');
         }
     }
     static async updateUnit(unitId, filedsToUpdate) {
@@ -53,8 +69,9 @@ export default class UnitsManager {
         try {
             return updatedunit;
         }
-        catch (err) {
-            throw new Error(`Error manager updateUnit: ${err}`);
+        catch (error) {
+            console.error('Manager Error [updateUnit]:', error.message);
+            throw new Error('Error in updateUnit');
         }
     }
     static async deleteUnit(unitId) {
@@ -62,8 +79,9 @@ export default class UnitsManager {
             const status = await UnitsRepository.deleteUnit(unitId);
             return status;
         }
-        catch (err) {
-            throw new Error(`Error manager deleteUnit: ${err}`);
+        catch (error) {
+            console.error('Manager Error [deleteUnit]:', error.message);
+            throw new Error('Error in deleteUnit');
         }
     }
 }

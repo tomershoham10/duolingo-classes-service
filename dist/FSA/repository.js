@@ -9,7 +9,8 @@ export default class FSARepository {
             return newExercise;
         }
         catch (error) {
-            throw new Error(`fsa repo create: ${error}`);
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - createExercise: ${error}`);
         }
     }
     static async getResultByUserAndFSAId(exerciseId, userId) {
@@ -25,7 +26,8 @@ export default class FSARepository {
                 return null;
         }
         catch (error) {
-            throw new Error(`fsa repo getResultByUserAndFSAId: ${error}`);
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getResultByUserAndFSAId: ${error}`);
         }
     }
     static async getRelevantByFSAId(exerciseId) {
@@ -39,12 +41,15 @@ export default class FSARepository {
                     console.log("FSA repo getRelevantByFSAId - targetsDetails", relevantIds, targetsDetails);
                     return targetsDetails;
                 }
+                else
+                    return null;
             }
             else
                 return null;
         }
         catch (error) {
-            throw new Error(`fsa repo getRelevantByFSAId: ${error}`);
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getRelevantByFSAId: ${error}`);
         }
     }
     static async getAnswersByFSAId(exerciseId) {
@@ -57,12 +62,15 @@ export default class FSARepository {
                     const answersDetails = await TargetModel.find({ _id: { $in: answersIds } });
                     return answersDetails;
                 }
+                else
+                    return null;
             }
             else
                 return null;
         }
         catch (error) {
-            throw new Error(`fsa repo getAnswersByFSAId: ${error}`);
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getAnswersByFSAId: ${error}`);
         }
     }
     static async getExerciseByAnswerId(answerId) {
@@ -72,7 +80,8 @@ export default class FSARepository {
             return exercises;
         }
         catch (error) {
-            throw new Error(`fsa repo getExerciseByAnswerId: ${error}`);
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - getRelevantByFSAId: ${error}`);
         }
     }
     static async getExerciseById(exerciseId) {
@@ -100,7 +109,8 @@ export default class FSARepository {
             return updatedExercise;
         }
         catch (error) {
-            throw new Error(`fsa repo updateExercise: ${error}`);
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - updateExercise: ${error}`);
         }
     }
     static async deleteExercise(exerciseId) {
@@ -109,7 +119,8 @@ export default class FSARepository {
             return status;
         }
         catch (error) {
-            throw new Error(`fsa repo deleteExercise: ${error}`);
+            console.error('Repository Error:', error.message);
+            throw new Error(`FSA repo - deleteExercise: ${error}`);
         }
     }
 }

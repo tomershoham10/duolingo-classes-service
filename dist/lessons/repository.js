@@ -3,13 +3,25 @@ import ResultsModel from "../results/model.js";
 import LessonsModel from "./model.js";
 export default class LessonsRepository {
     static async createLesson(lesson) {
-        const newLesson = await LessonsModel.create(lesson);
-        return newLesson;
+        try {
+            const newLesson = await LessonsModel.create(lesson);
+            return newLesson;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getsExercisesByLessonId: ${error}`);
+        }
     }
     static async getLessonById(lessonId) {
-        const lesson = await LessonsModel.findById(lessonId);
-        console.log("lessons repo", lessonId);
-        return lesson;
+        try {
+            const lesson = await LessonsModel.findById(lessonId);
+            console.log("lessons repo", lessonId);
+            return lesson;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getLessonById: ${error}`);
+        }
     }
     static async getsExercisesByLessonId(lessonId) {
         try {
@@ -23,13 +35,15 @@ export default class LessonsRepository {
                     // console.log("lessons repo getsExercisesByLessonId", FSAIds, FSADetails, FSAsInOrder);
                     return FSADetails;
                 }
-                //bee was here
+                else
+                    return null;
             }
             else
                 return null;
         }
-        catch (err) {
-            throw new Error(`Error repo getsLessonsByUnitId: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getsExercisesByLessonId: ${error}`);
         }
     }
     static async getResultsByLessonIdAndUserId(lessonId, userId) {
@@ -48,29 +62,46 @@ export default class LessonsRepository {
                     const results = { numOfExercises: FSAIds.length, results: resResults };
                     return results;
                 }
+                else
+                    return null;
             }
             else
                 return null;
         }
-        catch (err) {
-            throw new Error(`Error repo getsLessonsByUnitId: ${err}`);
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getResultsByLessonIdAndUserId: ${error}`);
         }
     }
     static async getAllLessons() {
-        const lessons = await LessonsModel.find({});
-        return lessons;
-    }
-    static async getLessonsByType(lessonType) {
-        const lessons = await LessonsModel.find({ type: lessonType });
-        return lessons;
+        try {
+            const lessons = await LessonsModel.find({});
+            return lessons;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getAllLessons: ${error}`);
+        }
     }
     static async updateLesson(lessonId, fieldsToUpdate) {
-        const updatedLesson = await LessonsModel.findByIdAndUpdate(lessonId, fieldsToUpdate, { new: true });
-        return updatedLesson;
+        try {
+            const updatedLesson = await LessonsModel.findByIdAndUpdate(lessonId, fieldsToUpdate, { new: true });
+            return updatedLesson;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - updateLesson: ${error}`);
+        }
     }
     static async deleteLesson(lessonId) {
-        const status = await LessonsModel.findOneAndDelete({ _id: lessonId });
-        return status;
+        try {
+            const status = await LessonsModel.findOneAndDelete({ _id: lessonId });
+            return status;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - deleteLesson: ${error}`);
+        }
     }
 }
 //# sourceMappingURL=repository.js.map

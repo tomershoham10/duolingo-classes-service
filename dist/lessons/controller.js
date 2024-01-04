@@ -3,11 +3,10 @@ import LessonsModel from "./model.js";
 export default class LessonsController {
     static async create(req, res, next) {
         try {
-            const { name, exercises, type } = req.body;
+            const { name, exercises } = req.body;
             const reqLesson = {
                 name: name,
                 exercises: exercises,
-                type: type,
             };
             const isExisted = await LessonsModel.findOne({ name: name });
             if (isExisted) {
@@ -82,22 +81,6 @@ export default class LessonsController {
             console.error(err);
             res.status(500).json({ err: "Internal Server Error" });
             next(err);
-        }
-    }
-    static async getByType(req, res, next) {
-        try {
-            const lessonType = req.params.type;
-            console.log("lessons controller", lessonType);
-            const lesson = await LessonsManager.getLessonsByType(lessonType);
-            if (!lesson) {
-                return res.status(404).json({ message: "lesson not found" });
-            }
-            res.status(200).json({ lesson });
-        }
-        catch (error) {
-            console.error(error);
-            res.status(500).json({ err: "Internal Server Error" });
-            next(error);
         }
     }
     static async update(req, res, next) {

@@ -8,8 +8,17 @@ export default class UnitsRepository {
 
             const newUnit = await UnitsModel.create(unit);
             return newUnit;
-        } catch (err) {
-            throw new Error(`Error repo createUnit: ${err}`);
+        } catch (error: any) {
+            if (error.name === 'ValidationError') {
+                console.error('Repository Validation Error:', error.message);
+                throw new Error('Validation error while creating unit');
+            } else if (error.code === 11000) {
+                console.error('Repository Duplicate Key Error:', error.message);
+                throw new Error('Duplicate key error while creating unit');
+            } else {
+                console.error('Repository Error:', error.message);
+                throw new Error('Error creating unit');
+            }
         }
     }
 
@@ -40,8 +49,9 @@ export default class UnitsRepository {
                 }
             }
             else return null
-        } catch (err) {
-            throw new Error(`Error repo getsLevelsByUnitId: ${err}`);
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
 
@@ -76,18 +86,20 @@ export default class UnitsRepository {
                 else return null;
             }
             else return null;
-        } catch (err) {
-            throw new Error(`Error repo getsLevelsByUnitId: ${err}`);
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
 
-    static async getAllUnits(): Promise<UnitsType[] | null> {
+    static async getAllUnits(): Promise<UnitsType[]> {
         try {
 
             const units = await UnitsModel.find({});
             return units;
-        } catch (err) {
-            throw new Error(`Error repo getAllUnits: ${err}`);
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
 
@@ -103,8 +115,9 @@ export default class UnitsRepository {
                 { new: true }
             );
             return updatedUnit;
-        } catch (err) {
-            throw new Error(`Error repo updateUnit: ${err}`);
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
 
@@ -113,8 +126,9 @@ export default class UnitsRepository {
 
             const status = await UnitsModel.findOneAndDelete({ _id: unitId });
             return status;
-        } catch (err) {
-            throw new Error(`Error repo deleteUnit: ${err}`);
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
 }
