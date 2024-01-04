@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import CoursesRepository from "./repository.js";
 import UnitsManager from "../units/manager.js";
+import UnitsRepository from "../units/repository.js";
+import LevelsRepository from "../levels/repository.js";
 export default class CoursesManager {
     static async createCourse(course) {
         const session = await mongoose.startSession();
@@ -52,6 +54,25 @@ export default class CoursesManager {
         catch (error) {
             console.error('Manager Error [getUnitsByCourseId]:', error.message);
             throw new Error('Error in getting units by course id');
+        }
+    }
+    static async getFirstLessonId(courseId) {
+        try {
+            const units = await CoursesRepository.getUnitsByCourseId(courseId);
+            if (!!units) {
+                const firstUnitId = units[0]._id;
+                const levels = await UnitsRepository.getsLevelsByUnitId(firstUnitId);
+                if (!!levels) {
+                    const firstLevelId = levels[0]._id;
+                    const lessons = await LevelsRepository.getsLessonsByLevelId(firstLevelId);
+                    return !!lessons ? lessons[0]._id : null;
+                }
+            }
+            return null;
+        }
+        catch (error) {
+            console.error('Manager Error [getFirstLessonId]:', error.message);
+            throw new Error('Error in getFirstLessonId');
         }
     }
     static async getNextUnitId(pervUnitId) {

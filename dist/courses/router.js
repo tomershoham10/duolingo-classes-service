@@ -3,6 +3,7 @@ import CoursesController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 const CoursesRouter = express.Router();
 CoursesRouter
+    .get("/getFirstLessonId/:courseId", asyncHandler(CoursesController.getFirstLessonId))
     .get("/getNextUnitId/:pervUnitId", asyncHandler(CoursesController.getNextUnitId))
     .get("/getUnitsById/:id", asyncHandler(CoursesController.getUnitsById))
     .get("/getByName/:courseName", asyncHandler(CoursesController.getByName))

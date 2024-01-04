@@ -69,6 +69,21 @@ export default class CoursesController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async getFirstLessonId(req, res) {
+        try {
+            const courseId = req.params.id;
+            console.log("controller: getFirstLessonId", courseId);
+            const lessonId = await CoursesManager.getFirstLessonId(courseId);
+            if (!lessonId) {
+                return res.status(404).json({ message: "lesson not found" });
+            }
+            res.status(200).json({ lessonId });
+        }
+        catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
     static async getNextUnitId(req, res) {
         try {
             const pervUnitId = req.params.pervUnitId;
