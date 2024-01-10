@@ -2,7 +2,7 @@
 
 interface CoursesType {
     _id: string;
-    name:string;
+    name: string;
     units: string[];
 }
 
@@ -39,13 +39,13 @@ interface TimeBuffersType {
 
 interface FSAType {
     _id: string;
-    recordsKeys: string[];
-    difficultyLevel: number;
     relevant?: string[];
     answersList: string[]; //may be 2 correct answers
+    acceptableAnswers?: string[];
     timeBuffers: TimeBuffersType[];
     description?: string;
     dateCreated: Date;
+    recordsKeys: string[];
     sonolistKeys: string[];
 }
 

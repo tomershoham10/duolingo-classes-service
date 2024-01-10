@@ -1,26 +1,20 @@
 import mongoose, { Schema } from 'mongoose';
 
 const FSASchema = new Schema<FSAType>({
-  recordsKeys: [{
-    type: String,
-    ref: 'File',
-    required: true
-  }],
-  difficultyLevel: {
-    type: Number,
-    min: 0,
-    max: 10,
-    required: true
-  },
   relevant: [{
     type: String,
     ref: 'Target',
-    required: true
+    required: false
   }],
   answersList: [{
     type: String,
     ref: 'Target',
     required: true
+  }],
+  acceptableAnswers: [{
+    type: String,
+    ref: 'Target',
+    required: false
   }],
   timeBuffers: {
     type: [{
@@ -47,6 +41,11 @@ const FSASchema = new Schema<FSAType>({
     type: Date,
     default: Date.now
   },
+  recordsKeys: [{
+    type: String,
+    ref: 'File',
+    required: true
+  }],
   sonolistKeys: [{
     type: String,
     ref: 'File',

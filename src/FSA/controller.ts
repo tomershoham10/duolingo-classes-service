@@ -6,6 +6,7 @@ interface ExerciseRequest {
     difficultyLevel: number;
     relevant?: string[];
     answersList: string[];
+    acceptableAnswers?: string[];
     timeBuffers: TimeBuffersType[];
     description?: string;
     sonolistKeys?: string[];
@@ -14,14 +15,14 @@ interface ExerciseRequest {
 export default class FSAController {
     static async create(req: Express.Request, res: Express.Response) {
         try {
-            const { recordsKeys, difficultyLevel, relevant, answersList, timeBuffers, description, sonolistKeys } = req.body as ExerciseRequest;
+            const { recordsKeys, difficultyLevel, relevant, answersList, acceptableAnswers, timeBuffers, description, sonolistKeys } = req.body as ExerciseRequest;
             let reqExercise: ExerciseRequest = {
                 recordsKeys: recordsKeys,
                 difficultyLevel: difficultyLevel,
                 answersList: answersList,
                 timeBuffers: timeBuffers,
             }
-
+            acceptableAnswers ? reqExercise = { ...reqExercise, acceptableAnswers } : null;
             relevant ? reqExercise = { ...reqExercise, relevant } : null;
             description ? reqExercise = { ...reqExercise, description } : null;
             sonolistKeys ? reqExercise = { ...reqExercise, sonolistKeys } : null;
