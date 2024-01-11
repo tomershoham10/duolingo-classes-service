@@ -2,7 +2,7 @@ import Express, { NextFunction } from "express";
 import FSAManager from "./manager.js";
 
 interface ExerciseRequest {
-    recordsKeys: string[];
+    recordsKey: string;
     difficultyLevel: number;
     relevant?: string[];
     answersList: string[];
@@ -15,9 +15,9 @@ interface ExerciseRequest {
 export default class FSAController {
     static async create(req: Express.Request, res: Express.Response) {
         try {
-            const { recordsKeys, difficultyLevel, relevant, answersList, acceptableAnswers, timeBuffers, description, sonolistKeys } = req.body as ExerciseRequest;
+            const { recordsKey, difficultyLevel, relevant, answersList, acceptableAnswers, timeBuffers, description, sonolistKeys } = req.body as ExerciseRequest;
             let reqExercise: ExerciseRequest = {
-                recordsKeys: recordsKeys,
+                recordsKey: recordsKey,
                 difficultyLevel: difficultyLevel,
                 answersList: answersList,
                 timeBuffers: timeBuffers,

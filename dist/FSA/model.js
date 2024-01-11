@@ -40,11 +40,11 @@ const FSASchema = new Schema({
         type: Date,
         default: Date.now
     },
-    recordsKeys: [{
-            type: String,
-            ref: 'File',
-            required: true
-        }],
+    recordsKey: {
+        type: String,
+        ref: 'File',
+        required: true
+    },
     sonolistKeys: [{
             type: String,
             ref: 'File',

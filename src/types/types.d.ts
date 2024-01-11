@@ -45,7 +45,7 @@ interface FSAType {
     timeBuffers: TimeBuffersType[];
     description?: string;
     dateCreated: Date;
-    recordsKeys: string[];
+    recordsKey: string;
     sonolistKeys: string[];
 }
 
