@@ -8,6 +8,7 @@ import FSARouter from "./FSA/router.js";
 import CountryRouter from "./countries/router.js";
 import TargetRouter from "./targets/router.js";
 import ResultsRouter from "./results/router.js";
+import SourcesRouter from "./sources/router.js";
 
 const router: Router = express.Router();
 
@@ -31,5 +32,7 @@ router.use("/api/countries/", CountryRouter);
 router.use("/api/targets/", TargetRouter);
 
 router.use("/api/results/", ResultsRouter);
+
+router.use("/api/results/", SourcesRouter);
 
 export default router;
