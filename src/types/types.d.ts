@@ -81,11 +81,18 @@ enum TypesOfSonars {
 }
 
 interface TargetType {
-    id: string;
+    _id: string;
     name: string;
     countryId: string;
     type: TypesOfTargets;
     subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars;
+}
+
+/////////////// SOURCES ///////////////
+
+interface SourceType {
+    _id: string;
+    name: string;
 }
 
 /////////////// RESULTS ///////////////

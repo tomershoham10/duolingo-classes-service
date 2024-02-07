@@ -75,12 +75,12 @@ export default class UnitsManager {
         unitId: string,
         filedsToUpdate: Partial<UnitsType>
     ): Promise<UnitsType | null | undefined> {
-        const updatedunit = await UnitsRepository.updateUnit(
+        const updatedUnit = await UnitsRepository.updateUnit(
             unitId,
             filedsToUpdate
         );
         try {
-            return updatedunit;
+            return updatedUnit;
         }
         catch (error: any) {
             console.error('Manager Error [updateUnit]:', error.message);

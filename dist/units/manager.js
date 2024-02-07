@@ -65,9 +65,9 @@ export default class UnitsManager {
         }
     }
     static async updateUnit(unitId, filedsToUpdate) {
-        const updatedunit = await UnitsRepository.updateUnit(unitId, filedsToUpdate);
+        const updatedUnit = await UnitsRepository.updateUnit(unitId, filedsToUpdate);
         try {
-            return updatedunit;
+            return updatedUnit;
         }
         catch (error) {
             console.error('Manager Error [updateUnit]:', error.message);
