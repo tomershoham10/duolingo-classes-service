@@ -7,6 +7,7 @@ const LevelsRouter = express.Router();
 LevelsRouter
     .get("/getNextLessonId/:prevLessonId", asyncHandler(LevelsController.getNextLessonId))
     .get("/getLessonsById/:id", asyncHandler(LevelsController.getLessonsById))
+    .get("/getsUnsuspendedLessonsById/:id", asyncHandler(LevelsController.getsUnsuspendedLessonsById))
     .get("/:id", asyncHandler(LevelsController.getById))
     .get("/", asyncHandler(LevelsController.getMany));
 

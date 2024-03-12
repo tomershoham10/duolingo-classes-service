@@ -43,6 +43,17 @@ export default class LevelsManager {
             throw new Error('Error in getsLessonsByLevelId');
         }
     }
+    static async getsUnsuspendedLessonsByLevelId(levelId) {
+        try {
+            const lessons = await LevelsRepository.getsUnsuspendedLessonsByLevelId(levelId);
+            console.log("levels manager getsUnsuspendedLessonsByLevelId", lessons);
+            return lessons;
+        }
+        catch (error) {
+            console.error('Manager Error [getsUnsuspendedLessonsByLevelId]:', error.message);
+            throw new Error('Error in getsUnsuspendedLessonsByLevelId');
+        }
+    }
     static async getNextLessonId(prevLessonId) {
         try {
             const nextLessonId = await LevelsRepository.getNextLessonId(prevLessonId);

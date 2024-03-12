@@ -49,6 +49,30 @@ export default class LevelsRepository {
         }
     }
 
+    static async getsUnsuspendedLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
+        try {
+            const level = await LevelsModel.findById(levelId);
+            if (level) {
+                const lessonsIds = level.lessons;
+                const unSuspendLessonsIds = lessonsIds.filter(lessonId => !level.suspendedLessons.includes(lessonId));
+
+
+                if (unSuspendLessonsIds.length > 0) {
+                    // const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id === id));
+                    const lessonsDetails = await LessonsModel.find({ _id: { $in: unSuspendLessonsIds } });
+
+                    // console.log("levels repo getsLessonsByLevelId", levelId);
+                    return lessonsDetails;
+                }
+                else return [];
+            }
+            else return [];
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - getsLessonsByLevelId: ${error}`);
+        }
+    }
+
     static async getNextLessonId(prevLessonId: string): Promise<string | null> {
         try {
             const level = await LevelsModel.findOne({ lessons: { $in: [prevLessonId] } });

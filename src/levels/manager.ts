@@ -36,7 +36,7 @@ export default class LevelsManager {
         }
     }
 
-    static async getsLessonsByLevelId(levelId: string): Promise<LessonsType[] | null | undefined> {
+    static async getsLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
         try {
             const lessons = await LevelsRepository.getsLessonsByLevelId(levelId);
             console.log("levels manager getsLessonsByLevelId", lessons);
@@ -45,6 +45,18 @@ export default class LevelsManager {
         catch (error: any) {
             console.error('Manager Error [getsLessonsByLevelId]:', error.message);
             throw new Error('Error in getsLessonsByLevelId');
+        }
+    }
+
+    static async getsUnsuspendedLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
+        try {
+            const lessons = await LevelsRepository.getsUnsuspendedLessonsByLevelId(levelId);
+            console.log("levels manager getsUnsuspendedLessonsByLevelId", lessons);
+            return lessons;
+        }
+        catch (error: any) {
+            console.error('Manager Error [getsUnsuspendedLessonsByLevelId]:', error.message);
+            throw new Error('Error in getsUnsuspendedLessonsByLevelId');
         }
     }
 

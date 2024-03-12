@@ -35,7 +35,22 @@ export default class LevelsController {
             const levelId = req.params.id;
             console.log("controller: getLessonsById", levelId);
             const lessons = await LevelsManager.getsLessonsByLevelId(levelId);
-            if (!lessons) {
+            if (lessons.length <= 0) {
+                return res.status(404).json({ message: "lessons not found" });
+            }
+            res.status(200).json({ lessons });
+        }
+        catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
+    static async getsUnsuspendedLessonsById(req, res) {
+        try {
+            const levelId = req.params.id;
+            console.log("controller: getsUnsuspendedLessonsById", levelId);
+            const lessons = await LevelsManager.getsUnsuspendedLessonsByLevelId(levelId);
+            if (lessons.length <= 0) {
                 return res.status(404).json({ message: "lessons not found" });
             }
             res.status(200).json({ lessons });
