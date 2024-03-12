@@ -84,6 +84,21 @@ export default class UnitsController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async getUnsuspendedLevelsById(req, res) {
+        try {
+            const unitId = req.params.id;
+            console.log("units controller: getUnsuspendedLevelsById", unitId);
+            const levels = await UnitsManager.getUnsuspendedLevelsByUnitId(unitId);
+            if (!levels) {
+                return res.status(404).json({ message: "units not found" });
+            }
+            res.status(200).json({ levels });
+        }
+        catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
     static async getNextLevelId(req, res) {
         try {
             const prevLevelId = req.params.prevLevelId;

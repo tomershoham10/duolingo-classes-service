@@ -5,6 +5,7 @@ const UnitsRouter = express.Router();
 UnitsRouter
     .get("/getNextLevelId/:prevLevelId", asyncHandler(UnitsController.getNextLevelId))
     .get("/getLevelsById/:id", asyncHandler(UnitsController.getLevelsById))
+    .get("/getUnsuspendedLevelsById/:id", asyncHandler(UnitsController.getUnsuspendedLevelsById))
     .get("/:id", asyncHandler(UnitsController.getById))
     .get("/", asyncHandler(UnitsController.getMany));
 UnitsRouter

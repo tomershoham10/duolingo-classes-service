@@ -36,7 +36,7 @@ export default class UnitsManager {
         }
     }
 
-    static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[] | null | undefined> {
+    static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[]> {
         try {
             const units = await UnitsRepository.getsLevelsByUnitId(unitId);
             console.log("units manager getsLevelsByUnitId", units);
@@ -45,6 +45,18 @@ export default class UnitsManager {
         catch (error: any) {
             console.error('Manager Error [getsLevelsByUnitId]:', error.message);
             throw new Error('Error in getsLevelsByUnitId');
+        }
+    }
+
+    static async getUnsuspendedLevelsByUnitId(unitId: string): Promise<LevelsType[]> {
+        try {
+            const units = await UnitsRepository.getUnsuspendedLevelsByUnitId(unitId);
+            console.log("units manager getUnsuspendedLevelsByUnitId", units);
+            return units;
+        }
+        catch (error: any) {
+            console.error('Manager Error [getUnsuspendedLevelsByUnitId]:', error.message);
+            throw new Error('Error in getUnsuspendedLevelsByUnitId');
         }
     }
 

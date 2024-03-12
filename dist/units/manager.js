@@ -43,6 +43,17 @@ export default class UnitsManager {
             throw new Error('Error in getsLevelsByUnitId');
         }
     }
+    static async getUnsuspendedLevelsByUnitId(unitId) {
+        try {
+            const units = await UnitsRepository.getUnsuspendedLevelsByUnitId(unitId);
+            console.log("units manager getUnsuspendedLevelsByUnitId", units);
+            return units;
+        }
+        catch (error) {
+            console.error('Manager Error [getUnsuspendedLevelsByUnitId]:', error.message);
+            throw new Error('Error in getUnsuspendedLevelsByUnitId');
+        }
+    }
     static async getNextLevelId(prevLevelId) {
         try {
             const nextLevelId = await UnitsRepository.getNextLevelId(prevLevelId);
