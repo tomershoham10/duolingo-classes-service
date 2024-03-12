@@ -25,23 +25,24 @@ export default class LevelsRepository {
         }
     }
 
-    static async getsLessonsByLevelId(levelId: string): Promise<LessonsType[] | null> {
+    static async getsLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
         try {
             const level = await LevelsModel.findById(levelId);
             if (level) {
                 const lessonsIds = level.lessons;
+                const unSuspendLessonsIds = lessonsIds.filter(lessonId => !level.suspendedLessons.includes(lessonId));
 
 
-                if (lessonsIds) {
+                if (unSuspendLessonsIds.length > 0) {
                     // const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id === id));
-                    const lessonsDetails = await LessonsModel.find({ _id: { $in: lessonsIds } });
+                    const lessonsDetails = await LessonsModel.find({ _id: { $in: unSuspendLessonsIds } });
 
                     // console.log("levels repo getsLessonsByLevelId", levelId);
                     return lessonsDetails;
                 }
-                else return null;
+                else return [];
             }
-            else return null;
+            else return [];
         } catch (error: any) {
             console.error('Repository Error:', error.message);
             throw new Error(`Level repo - getsLessonsByLevelId: ${error}`);
@@ -54,11 +55,14 @@ export default class LevelsRepository {
             console.log("getNextLessonId repo - level", level);
             if (level) {
                 const lessonsIds = level.lessons;
-
                 if (lessonsIds) {
-                    const indexOfPervLessonId = lessonsIds.indexOf(prevLessonId);
-                    if (indexOfPervLessonId + 1 !== lessonsIds.length) {
-                        return lessonsIds[indexOfPervLessonId + 1];
+                    const prevLessonIdIndex = lessonsIds.indexOf(prevLessonId);
+                    if (prevLessonIdIndex !== -1 && prevLessonIdIndex + 1 !== lessonsIds.length) {
+                        const nextLessonId = lessonsIds[lessonsIds.indexOf(prevLessonId) + 1];
+                        if (level.suspendedLessons.includes(nextLessonId)) {
+                            await this.getNextLessonId(nextLessonId);
+                        }
+                        return nextLessonId;
                     } else {
                         const response = await UnitsManager.getNextLevelId(level._id);
                         //returns the next level's id
@@ -70,6 +74,9 @@ export default class LevelsRepository {
                             const nextLevel = await LevelsModel.findById(response);
                             if (nextLevel) {
                                 const nextLessonId = nextLevel.lessons[0];
+                                if (nextLevel.suspendedLessons.includes(nextLessonId)) {
+                                    await this.getNextLessonId(nextLessonId);
+                                }
                                 return nextLessonId;
                             } else return null;
                         } else return null;

@@ -32,6 +32,17 @@ export default class LessonsManager {
             throw new Error('Error in getsExercisesByLessonId');
         }
     }
+    static async getsUnsuspendedExercisesByLessonId(lessonId) {
+        try {
+            const exercises = await LessonsRepository.getsUnsuspendedExercisesByLessonId(lessonId);
+            console.log("lesson manager getsUnsuspendedExercisesByLessonId", exercises);
+            return exercises;
+        }
+        catch (error) {
+            console.error('Manager Error [getsUnsuspendedExercisesByLessonId]:', error.message);
+            throw new Error('Error in getsUnsuspendedExercisesByLessonId');
+        }
+    }
     static async getResultsByLessonIdAndUserId(lessonId, userId) {
         try {
             const results = await LessonsRepository.getResultsByLessonIdAndUserId(lessonId, userId);

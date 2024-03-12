@@ -4,13 +4,13 @@ import UnitsManager from "../units/manager.js";
 import UnitsRepository from "../units/repository.js";
 import LevelsRepository from "../levels/repository.js";
 export default class CoursesManager {
-    static async createCourse(course) {
+    static async createCourse(courseName) {
         const session = await mongoose.startSession();
         session.startTransaction();
         try {
             const createdUnit = await UnitsManager.createUnit({});
             console.log("createCourse manager - createdUnit", createdUnit);
-            const createdCourse = await CoursesRepository.createCourse({ ...course, units: [createdUnit._id] });
+            const createdCourse = await CoursesRepository.createCourse({ name: courseName, units: [createdUnit._id] });
             await session.commitTransaction();
             return createdCourse;
         }
@@ -56,16 +56,27 @@ export default class CoursesManager {
             throw new Error('Error in getting units by course id');
         }
     }
+    static async getUnsuspendedUnitsByCourseId(courseId) {
+        try {
+            const units = await CoursesRepository.getUnsuspendedUnitsByCourseId(courseId);
+            console.log("courses manager getUnsuspendedUnitsByCourseId", units);
+            return units;
+        }
+        catch (error) {
+            console.error('Manager Error [getUnsuspendedUnitsByCourseId]:', error.message);
+            throw new Error('Error in getting unsuspended units by course id');
+        }
+    }
     static async getFirstLessonId(courseId) {
         try {
-            const units = await CoursesRepository.getUnitsByCourseId(courseId);
-            if (!!units) {
+            const units = await CoursesRepository.getUnsuspendedUnitsByCourseId(courseId);
+            if (units.length > 0) {
                 const firstUnitId = units[0]._id;
-                const levels = await UnitsRepository.getsLevelsByUnitId(firstUnitId);
-                if (!!levels) {
+                const levels = await UnitsRepository.getUnsuspendedLevelsByUnitId(firstUnitId);
+                if (levels.length > 0) {
                     const firstLevelId = levels[0]._id;
                     const lessons = await LevelsRepository.getsLessonsByLevelId(firstLevelId);
-                    return !!lessons ? lessons[0]._id : null;
+                    return lessons.length > 0 ? lessons[0]._id : null;
                 }
             }
             return null;
@@ -75,9 +86,9 @@ export default class CoursesManager {
             throw new Error('Error in getFirstLessonId');
         }
     }
-    static async getNextUnitId(pervUnitId) {
+    static async getNextUnitId(prevUnitId) {
         try {
-            const nextUnitId = await CoursesRepository.getNextUnitId(pervUnitId);
+            const nextUnitId = await CoursesRepository.getNextUnitId(prevUnitId);
             console.log("courses manager getNextUnitId", nextUnitId);
             if (nextUnitId) {
                 return nextUnitId;

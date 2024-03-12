@@ -5,7 +5,12 @@ const LessonsSchema = new Schema<LessonsType>({
     exercises: [{
         type: String,
         ref: 'FSA',
-        required: false
+        required: true
+    }],
+    suspendedExercises: [{
+        type: String,
+        ref: 'FSA',
+        required: true
     }],
 });
 

@@ -65,7 +65,28 @@ export default class LessonsController {
             const lessonId: string = req.params.id;
             console.log("lessons controller: getExercisesById", lessonId);
             const exercises = await LessonsManager.getsExercisesByLessonId(lessonId);
-            if (!exercises) {
+            if (exercises.length <= 0) {
+                return res.status(404).json({ message: "Exercises not found" });
+            }
+
+            res.status(200).json({ exercises });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ err: "Internal Server Error" });
+            next(error);
+        }
+    }
+
+    static async getUnsuspendedExercisesById(
+        req: Express.Request,
+        res: Express.Response,
+        next: NextFunction
+    ) {
+        try {
+            const lessonId: string = req.params.id;
+            console.log("lessons controller: getUnsuspendedExercisesById", lessonId);
+            const exercises = await LessonsManager.getsUnsuspendedExercisesByLessonId(lessonId);
+            if (exercises.length <= 0) {
                 return res.status(404).json({ message: "Exercises not found" });
             }
 
@@ -113,7 +134,7 @@ export default class LessonsController {
             next(err);
         }
     }
-    
+
     static async update(
         req: Express.Request,
         res: Express.Response,

@@ -86,9 +86,9 @@ export default class UnitsController {
     }
     static async getNextLevelId(req, res) {
         try {
-            const pervLevelId = req.params.pervLevelId;
-            console.log("units controller: getNextLevelId", pervLevelId);
-            const nextLevelId = await UnitsManager.getNextLevelId(pervLevelId);
+            const prevLevelId = req.params.prevLevelId;
+            console.log("units controller: getNextLevelId", prevLevelId);
+            const nextLevelId = await UnitsManager.getNextLevelId(prevLevelId);
             if (!nextLevelId) {
                 return res.status(404).json({ message: "nextLevelId not found" });
             }

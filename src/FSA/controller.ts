@@ -1,31 +1,18 @@
 import Express, { NextFunction } from "express";
 import FSAManager from "./manager.js";
 
-interface ExerciseRequest {
-    recordsKey: string;
-    difficultyLevel: number;
-    relevant?: string[];
-    answersList: string[];
-    acceptableAnswers?: string[];
-    timeBuffers: TimeBuffersType[];
-    description?: string;
-    sonolistKeys?: string[];
-}
-
 export default class FSAController {
     static async create(req: Express.Request, res: Express.Response) {
         try {
-            const { recordsKey, difficultyLevel, relevant, answersList, acceptableAnswers, timeBuffers, description, sonolistKeys } = req.body as ExerciseRequest;
-            let reqExercise: ExerciseRequest = {
-                recordsKey: recordsKey,
-                difficultyLevel: difficultyLevel,
+            const { relevant, answersList, acceptableAnswers, timeBuffers, description, recordKey } = req.body as Partial<FSAType>;
+            let reqExercise: Partial<FSAType> = {
+                recordKey: recordKey,
                 answersList: answersList,
                 timeBuffers: timeBuffers,
             }
-            acceptableAnswers ? reqExercise = { ...reqExercise, acceptableAnswers } : null;
             relevant ? reqExercise = { ...reqExercise, relevant } : null;
+            acceptableAnswers ? reqExercise = { ...reqExercise, acceptableAnswers } : null;
             description ? reqExercise = { ...reqExercise, description } : null;
-            sonolistKeys ? reqExercise = { ...reqExercise, sonolistKeys } : null;
 
             const newExercise = await FSAManager.createExercise(reqExercise);
             if (!!newExercise) {

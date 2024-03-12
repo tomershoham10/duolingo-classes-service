@@ -47,31 +47,7 @@ export default class CoursesRepository {
         }
     }
 
-    static async getNextUnitId(pervUnitId: string): Promise<string | null> {
-        try {
-            const course = await CoursesModel.findOne({ units: { $in: [pervUnitId] } });
-            console.log("courses repo - getNextUnitId :", course);
-            if (course) {
-                const unitsIds = course.units;
-                if (unitsIds && unitsIds.length !== unitsIds.indexOf(pervUnitId) + 1) {
-                    const nextUnitId = unitsIds[unitsIds.indexOf(pervUnitId) + 1];
-                    if (nextUnitId) {
-                        return nextUnitId;
-                    } else {
-                        return null;
-                    }
-                } else return "finished";
-            } else {
-                return null;
-            }
-        }
-        catch (error: any) {
-            console.error('Repository Error:', error.message);
-            throw new Error(`Course repo - getNextUnitId: ${error}`);
-        }
-    }
-
-    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
+    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
         try {
             const course = await CoursesModel.findById(courseId);
             console.log("courses repo - getUnitsByCourseId - course", course);
@@ -86,11 +62,60 @@ export default class CoursesRepository {
                 console.log("courses repo getUnitsById - unitsDetails", unitsDetails);
                 return unitsDetails as UnitsType[];
             }
-            else return null
+            else return [];
         }
         catch (error: any) {
             console.error('Repository Error:', error.message);
             throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
+        }
+    }
+
+    static async getUnsuspendedUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
+        try {
+            const course = await CoursesModel.findById(courseId);
+            console.log("courses repo - getUnsuspendedUnitsByCourseId - course", course);
+
+            if (course) {
+                const unitsIds = course.units;
+                console.log("courses repo - getUnsuspendedUnitsByCourseId - unitsIds", unitsIds);
+                const unsuspendedUnitsIds = unitsIds.filter(unitId => !course.suspendedUnits.includes(unitId));
+                console.log("courses repo - getUnsuspendedUnitsByCourseId - unsuspendedUnitsIds", unsuspendedUnitsIds);
+                const unitsDetails = await UnitsModel.find({ _id: { $in: unsuspendedUnitsIds } });
+
+                // const unitsInOrder = unitsIds.map(id => unitsDetails.find(unit => unit._id === id));
+
+                console.log("courses repo getUnsuspendedUnitsByCourseId - unitsDetails", unitsDetails);
+                return unitsDetails as UnitsType[];
+            }
+            else return []
+        }
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
+        }
+    }
+
+    static async getNextUnitId(prevUnitId: string): Promise<string | null> {
+        try {
+            const course = await CoursesModel.findOne({ units: { $in: [prevUnitId] } });
+            console.log("courses repo - getNextUnitId :", course);
+            if (course) {
+                const unitsIds = course.units;
+                const indexOfUnit = unitsIds.indexOf(prevUnitId);
+                if (indexOfUnit !== -1 && indexOfUnit + 1 < unitsIds.length) {
+                    const nextUnitId = unitsIds[unitsIds.indexOf(prevUnitId) + 1];
+                    if (course.suspendedUnits.includes(nextUnitId)) {
+                        await this.getNextUnitId(nextUnitId);
+                    }
+                    return nextUnitId;
+                } else return "finished";
+            } else {
+                return null;
+            }
+        }
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getNextUnitId: ${error}`);
         }
     }
 

@@ -5,6 +5,7 @@ const LessonsRouter = express.Router();
 LessonsRouter
     .get("/getResultsByLessonAndUser/:lessonId/results/:userId", asyncHandler(LessonsController.getResultsByLessonAndUser))
     .get("/getExercisesById/:id", asyncHandler(LessonsController.getExercisesById))
+    .get("/getUnsuspendedExercisesById/:id", asyncHandler(LessonsController.getUnsuspendedExercisesById))
     .get("/type/:type", asyncHandler(LessonsController.getById))
     .get("/:id", asyncHandler(LessonsController.getById))
     .get("/", asyncHandler(LessonsController.getMany));

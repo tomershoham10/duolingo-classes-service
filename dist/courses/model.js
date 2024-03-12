@@ -5,6 +5,11 @@ const CoursesSchema = new Schema({
             type: String,
             ref: 'Units',
             required: true
+        }],
+    suspendedUnits: [{
+            type: String,
+            ref: 'Units',
+            required: true
         }]
 });
 const CoursesModel = mongoose.model('Courses', CoursesSchema);

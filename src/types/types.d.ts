@@ -4,6 +4,7 @@ interface CoursesType {
     _id: string;
     name: string;
     units: string[];
+    suspendedUnits: string[];
 }
 
 /////////////// UNITS //////////////////
@@ -11,6 +12,7 @@ interface CoursesType {
 interface UnitsType {
     _id: string;
     levels: string[];
+    suspendedLevels: string[];
     guidebook?: string;
     description?: string;
 }
@@ -20,6 +22,7 @@ interface UnitsType {
 interface LevelsType {
     _id: string;
     lessons: string[];
+    suspendedLessons: string[];
 }
 
 /////////////// LESSONS ///////////////
@@ -27,7 +30,8 @@ interface LevelsType {
 interface LessonsType {
     _id: string;
     name?: string;
-    exercises?: string[];
+    exercises: string[];
+    suspendedExercises: string[];
 }
 
 /////////////// FSA ///////////////////
@@ -45,8 +49,7 @@ interface FSAType {
     timeBuffers: TimeBuffersType[];
     description?: string;
     dateCreated: Date;
-    recordsKey: string;
-    sonolistKeys: string[];
+    recordKey: string;
 }
 
 /////////////// COUNTRIES ///////////////

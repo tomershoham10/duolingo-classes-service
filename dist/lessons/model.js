@@ -4,7 +4,12 @@ const LessonsSchema = new Schema({
     exercises: [{
             type: String,
             ref: 'FSA',
-            required: false
+            required: true
+        }],
+    suspendedExercises: [{
+            type: String,
+            ref: 'FSA',
+            required: true
         }],
 });
 const LessonsModel = mongoose.model('Lessons', LessonsSchema);

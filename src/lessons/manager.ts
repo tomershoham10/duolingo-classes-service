@@ -25,7 +25,7 @@ export default class LessonsManager {
         }
     }
 
-    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[] | null | undefined> {
+    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[]> {
         try {
             const exercises = await LessonsRepository.getsExercisesByLessonId(lessonId);
             console.log("lesson manager getsExercisesByLessonId", exercises);
@@ -34,6 +34,18 @@ export default class LessonsManager {
         catch (error: any) {
             console.error('Manager Error [getsExercisesByLessonId]:', error.message);
             throw new Error('Error in getsExercisesByLessonId');
+        }
+    }
+
+    static async getsUnsuspendedExercisesByLessonId(lessonId: string): Promise<FSAType[]> {
+        try {
+            const exercises = await LessonsRepository.getsUnsuspendedExercisesByLessonId(lessonId);
+            console.log("lesson manager getsUnsuspendedExercisesByLessonId", exercises);
+            return exercises;
+        }
+        catch (error: any) {
+            console.error('Manager Error [getsUnsuspendedExercisesByLessonId]:', error.message);
+            throw new Error('Error in getsUnsuspendedExercisesByLessonId');
         }
     }
 

@@ -28,18 +28,39 @@ export default class LessonsRepository {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
                 const FSAIds = lesson.exercises;
-                // const FSADetails2 = await FSAModel.find({ _id: { $in: FSAIds.map(id => (id)) } });
                 if (FSAIds) {
                     const FSADetails = await FSAModel.find({ _id: { $in: FSAIds } });
-                    // const FSAsInOrder = FSAIds.map((id: any) => FSADetails.find(fsa => fsa._id === id));
-                    // console.log("lessons repo getsExercisesByLessonId", FSAIds, FSADetails, FSAsInOrder);
                     return FSADetails;
                 }
                 else
-                    return null;
+                    return [];
             }
             else
-                return null;
+                return [];
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`lesson repo - getsExercisesByLessonId: ${error}`);
+        }
+    }
+    static async getsUnsuspendedExercisesByLessonId(lessonId) {
+        try {
+            const lesson = await LessonsModel.findById(lessonId);
+            if (lesson) {
+                const FSAIds = lesson.exercises;
+                console.log('repo - getsUnsuspendedExercisesByLessonId: FSAIds', FSAIds);
+                const unSuspendFSAsIds = FSAIds.filter(lessonId => !lesson.suspendedExercises.includes(lessonId));
+                console.log('repo - getsUnsuspendedExercisesByLessonId: unSuspendFSAsIds', lesson.suspendedExercises, unSuspendFSAsIds);
+                if (unSuspendFSAsIds.length > 0) {
+                    const FSADetails = await FSAModel.find({ _id: { $in: unSuspendFSAsIds } });
+                    console.log('repo - getsUnsuspendedExercisesByLessonId: FSADetails', FSADetails);
+                    return FSADetails;
+                }
+                else
+                    return [];
+            }
+            else
+                return [];
         }
         catch (error) {
             console.error('Repository Error:', error.message);

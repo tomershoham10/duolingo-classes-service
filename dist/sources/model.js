@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 const SourcesSchema = new Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
 });
 const SourcesModel = mongoose.model('Sources', SourcesSchema);
 export default SourcesModel;

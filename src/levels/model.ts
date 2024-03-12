@@ -6,6 +6,11 @@ const LevelSchema = new Schema<LevelsType>({
         ref: 'Lessons',
         required: true
     }],
+    suspendedLessons: [{
+        type: String,
+        ref: 'Lessons',
+        required: true
+    }],
 });
 
 const LevelsModel = mongoose.model<LevelsType>('Levels', LevelSchema);

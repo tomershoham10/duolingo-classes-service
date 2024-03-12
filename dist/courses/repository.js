@@ -43,33 +43,6 @@ export default class CoursesRepository {
             throw new Error(`Course repo - getCourseByName: ${error}`);
         }
     }
-    static async getNextUnitId(pervUnitId) {
-        try {
-            const course = await CoursesModel.findOne({ units: { $in: [pervUnitId] } });
-            console.log("courses repo - getNextUnitId :", course);
-            if (course) {
-                const unitsIds = course.units;
-                if (unitsIds && unitsIds.length !== unitsIds.indexOf(pervUnitId) + 1) {
-                    const nextUnitId = unitsIds[unitsIds.indexOf(pervUnitId) + 1];
-                    if (nextUnitId) {
-                        return nextUnitId;
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                else
-                    return "finished";
-            }
-            else {
-                return null;
-            }
-        }
-        catch (error) {
-            console.error('Repository Error:', error.message);
-            throw new Error(`Course repo - getNextUnitId: ${error}`);
-        }
-    }
     static async getUnitsByCourseId(courseId) {
         try {
             const course = await CoursesModel.findById(courseId);
@@ -83,11 +56,59 @@ export default class CoursesRepository {
                 return unitsDetails;
             }
             else
-                return null;
+                return [];
         }
         catch (error) {
             console.error('Repository Error:', error.message);
             throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
+        }
+    }
+    static async getUnsuspendedUnitsByCourseId(courseId) {
+        try {
+            const course = await CoursesModel.findById(courseId);
+            console.log("courses repo - getUnsuspendedUnitsByCourseId - course", course);
+            if (course) {
+                const unitsIds = course.units;
+                console.log("courses repo - getUnsuspendedUnitsByCourseId - unitsIds", unitsIds);
+                const unsuspendedUnitsIds = unitsIds.filter(unitId => !course.suspendedUnits.includes(unitId));
+                console.log("courses repo - getUnsuspendedUnitsByCourseId - unsuspendedUnitsIds", unsuspendedUnitsIds);
+                const unitsDetails = await UnitsModel.find({ _id: { $in: unsuspendedUnitsIds } });
+                // const unitsInOrder = unitsIds.map(id => unitsDetails.find(unit => unit._id === id));
+                console.log("courses repo getUnsuspendedUnitsByCourseId - unitsDetails", unitsDetails);
+                return unitsDetails;
+            }
+            else
+                return [];
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
+        }
+    }
+    static async getNextUnitId(prevUnitId) {
+        try {
+            const course = await CoursesModel.findOne({ units: { $in: [prevUnitId] } });
+            console.log("courses repo - getNextUnitId :", course);
+            if (course) {
+                const unitsIds = course.units;
+                const indexOfUnit = unitsIds.indexOf(prevUnitId);
+                if (indexOfUnit !== -1 && indexOfUnit + 1 < unitsIds.length) {
+                    const nextUnitId = unitsIds[unitsIds.indexOf(prevUnitId) + 1];
+                    if (course.suspendedUnits.includes(nextUnitId)) {
+                        await this.getNextUnitId(nextUnitId);
+                    }
+                    return nextUnitId;
+                }
+                else
+                    return "finished";
+            }
+            else {
+                return null;
+            }
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - getNextUnitId: ${error}`);
         }
     }
     static async getAllCourses() {

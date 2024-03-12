@@ -37,32 +37,66 @@ export default class UnitsRepository {
             const unit = await UnitsModel.findById(unitId);
             if (unit) {
                 const levelsIds = unit.levels;
-                if (levelsIds) {
-                    const levelsDetails = await LevelsModel.find({ _id: { $in: levelsIds } });
+                console.log('repo - getsLevelsByUnitId: levelsIds', levelsIds);
+                const unSuspendLevelsIds = levelsIds.filter(levelId => !unit.suspendedLevels.includes(levelId));
+                console.log('repo - getsLevelsByUnitId: unSuspendLevelsIds', unit.suspendedLevels, unSuspendLevelsIds);
+                if (unSuspendLevelsIds.length > 0) {
+                    const levelsDetails = await LevelsModel.find({ _id: { $in: unSuspendLevelsIds } });
                     console.log("units repo - getsLevelsByUnitId unit, levelsId, levelsDetails", unit, levelsIds, levelsDetails);
                     // const levelsInOrder = levelsIds.map((id: any) => levelsDetails.find(level => level._id === id));
                     // console.log("courses repo getUnitsById", unitId);
                     return levelsDetails;
                 }
+                else
+                    return [];
             }
             else
-                return null;
+                return [];
         }
         catch (error) {
             console.error('Repository Error:', error.message);
             throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
-    static async getNextLevelId(pervLevelId) {
+    static async getUnsuspendedLevelsByUnitId(unitId) {
         try {
-            const unit = await UnitsModel.findOne({ levels: { $in: [pervLevelId] } });
+            const unit = await UnitsModel.findById(unitId);
+            console.log("courses repo - getUnsuspendedUnitsByCourseId - unit", unit);
+            if (unit) {
+                const levelsIds = unit.levels;
+                console.log('repo - getUnsuspendedUnitsByCourseId: levelsIds', levelsIds);
+                const unSuspendLevelsIds = levelsIds.filter(levelId => !unit.suspendedLevels.includes(levelId));
+                console.log('repo - getUnsuspendedLevelsByUnitId: unSuspendLevelsIds', unit.suspendedLevels, unSuspendLevelsIds);
+                if (unSuspendLevelsIds.length > 0) {
+                    const levelsDetails = await LevelsModel.find({ _id: { $in: unSuspendLevelsIds } });
+                    console.log("units repo - getsLevelsByUnitId unit, levelsId, levelsDetails", unit, levelsIds, levelsDetails);
+                    return levelsDetails;
+                }
+                else
+                    return [];
+            }
+            else
+                return [];
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
+        }
+    }
+    static async getNextLevelId(prevLevelId) {
+        try {
+            const unit = await UnitsModel.findOne({ levels: { $in: [prevLevelId] } });
             console.log("units repo - getNextLevelId - unit", unit);
             if (unit) {
                 const levelsIds = unit.levels;
                 if (levelsIds) {
-                    const pervLevelIdIndex = levelsIds.indexOf(pervLevelId);
-                    if (pervLevelIdIndex + 1 !== levelsIds.length) {
-                        return levelsIds[pervLevelIdIndex + 1];
+                    const prevLevelIdIndex = levelsIds.indexOf(prevLevelId);
+                    if (prevLevelIdIndex !== -1 && prevLevelIdIndex + 1 !== levelsIds.length) {
+                        const nextLevelId = levelsIds[levelsIds.indexOf(prevLevelId) + 1];
+                        if (unit.suspendedLevels.includes(nextLevelId)) {
+                            await this.getNextLevelId(nextLevelId);
+                        }
+                        return nextLevelId;
                     }
                     else {
                         const response = await CoursesManager.getNextUnitId(unit._id);
@@ -74,6 +108,9 @@ export default class UnitsRepository {
                                 const nextUnit = await UnitsModel.findById(response);
                                 if (nextUnit && nextUnit.levels) {
                                     const nextLevelnId = nextUnit.levels[0];
+                                    if (nextUnit.suspendedLevels.includes(nextLevelnId)) {
+                                        await this.getNextLevelId(nextLevelnId);
+                                    }
                                     return nextLevelnId;
                                 }
                                 else

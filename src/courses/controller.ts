@@ -6,24 +6,15 @@ import capitalizeWords from "../utils/capitalizeWords.js";
 export default class CoursesController {
     static async create(req: Express.Request, res: Express.Response) {
         try {
-            const { name, units } = req.body as {
-                name: string;
-                units?: string[]
-            };
-
-            const isExisted = await CoursesModel.findOne({ name: name });
+            const courseName = req.body.name as string;
+            console.log('create course - courseName', courseName);
+            const isExisted = await CoursesModel.findOne({ name: courseName });
             if (isExisted) {
                 console.error('course already existed');
                 return res.status(403).json({ error: 'course already existed' });
             }
 
-
-            const course: {
-                name: string, units?: string[]
-            } = { name: capitalizeWords(name), units: units };
-
-
-            const newCourse = await CoursesManager.createCourse(course);
+            const newCourse = await CoursesManager.createCourse(courseName);
             if (!!newCourse) {
                 return res.status(201).json({ message: "course created successfully", newCourse });
             } else {
@@ -72,11 +63,25 @@ export default class CoursesController {
             const courseId: string = req.params.id;
             console.log("controller: getUnitsById", courseId);
             const units = await CoursesManager.getUnitsByCourseId(courseId);
-            if (!units) {
-                return res.status(404).json({ message: "units not found" });
-            }
+            return (
+                (units.length <= 0) ?
+                    res.status(404).json({ message: "units not found" }) :
+                    res.status(200).json({ units }));
+        } catch (error: any) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
 
-            res.status(200).json({ units });
+    static async getUnsuspendedUnitsById(req: Express.Request, res: Express.Response) {
+        try {
+            const courseId: string = req.params.id;
+            console.log("controller: getUnitsById", courseId);
+            const units = await CoursesManager.getUnsuspendedUnitsByCourseId(courseId);
+            return (
+                (units.length <= 0) ?
+                    res.status(404).json({ message: "units not found" }) :
+                    res.status(200).json({ units }));
         } catch (error: any) {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
@@ -101,13 +106,12 @@ export default class CoursesController {
 
     static async getNextUnitId(req: Express.Request, res: Express.Response) {
         try {
-            const pervUnitId: string = req.params.pervUnitId as string;
-            console.log("course controller: pervUnitId", pervUnitId);
-            const nextUnitId = await CoursesManager.getNextUnitId(pervUnitId);
+            const prevUnitId: string = req.params.prevUnitId as string;
+            console.log("course controller: prevUnitId", prevUnitId);
+            const nextUnitId = await CoursesManager.getNextUnitId(prevUnitId);
             if (!nextUnitId) {
                 return res.status(404).json({ message: "nextUnitId not found" });
             }
-
             res.status(200).json({ nextUnitId });
         } catch (error: any) {
             console.error('Controller Error:', error.message);

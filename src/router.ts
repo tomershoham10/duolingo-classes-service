@@ -33,6 +33,6 @@ router.use("/api/targets/", TargetRouter);
 
 router.use("/api/results/", ResultsRouter);
 
-router.use("/api/results/", SourcesRouter);
+router.use("/api/sources/", SourcesRouter);
 
 export default router;

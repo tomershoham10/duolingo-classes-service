@@ -43,9 +43,9 @@ export default class UnitsManager {
             throw new Error('Error in getsLevelsByUnitId');
         }
     }
-    static async getNextLevelId(pervLevelId) {
+    static async getNextLevelId(prevLevelId) {
         try {
-            const nextLevelId = await UnitsRepository.getNextLevelId(pervLevelId);
+            const nextLevelId = await UnitsRepository.getNextLevelId(prevLevelId);
             console.log("units manager getNextLevelId", nextLevelId);
             return nextLevelId;
         }

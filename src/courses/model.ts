@@ -6,6 +6,11 @@ const CoursesSchema = new Schema<CoursesType>({
         type: String,
         ref: 'Units',
         required: true
+    }],
+    suspendedUnits: [{
+        type: String,
+        ref: 'Units',
+        required: true
     }]
 });
 

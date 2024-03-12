@@ -5,14 +5,13 @@ import UnitsRepository from "../units/repository.js";
 import LevelsRepository from "../levels/repository.js";
 
 export default class CoursesManager {
-    static async createCourse(
-        course: Partial<CoursesType>): Promise<CoursesType | undefined> {
+    static async createCourse(courseName: string): Promise<CoursesType | undefined> {
         const session = await mongoose.startSession();
         session.startTransaction();
         try {
             const createdUnit = await UnitsManager.createUnit({});
             console.log("createCourse manager - createdUnit", createdUnit);
-            const createdCourse = await CoursesRepository.createCourse({ ...course, units: [createdUnit._id] });
+            const createdCourse = await CoursesRepository.createCourse({ name: courseName, units: [createdUnit._id] });
             await session.commitTransaction();
             return createdCourse;
         } catch (error: any) {
@@ -35,7 +34,6 @@ export default class CoursesManager {
         }
     }
 
-
     static async getCourseByName(courseName: string): Promise<CoursesType | null> {
         try {
             const course = await CoursesRepository.getCourseByName(courseName);
@@ -47,7 +45,7 @@ export default class CoursesManager {
         }
     }
 
-    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[] | null> {
+    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
         try {
             const units = await CoursesRepository.getUnitsByCourseId(courseId);
             console.log("courses manager getUnitsByCourseId", units);
@@ -58,16 +56,27 @@ export default class CoursesManager {
         }
     }
 
+    static async getUnsuspendedUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
+        try {
+            const units = await CoursesRepository.getUnsuspendedUnitsByCourseId(courseId);
+            console.log("courses manager getUnsuspendedUnitsByCourseId", units);
+            return units;
+        } catch (error: any) {
+            console.error('Manager Error [getUnsuspendedUnitsByCourseId]:', error.message);
+            throw new Error('Error in getting unsuspended units by course id');
+        }
+    }
+
     static async getFirstLessonId(courseId: string): Promise<string | null> {
         try {
-            const units = await CoursesRepository.getUnitsByCourseId(courseId);
-            if (!!units) {
+            const units = await CoursesRepository.getUnsuspendedUnitsByCourseId(courseId);
+            if (units.length > 0) {
                 const firstUnitId = units[0]._id;
-                const levels = await UnitsRepository.getsLevelsByUnitId(firstUnitId);
-                if (!!levels) {
+                const levels = await UnitsRepository.getUnsuspendedLevelsByUnitId(firstUnitId);
+                if (levels.length > 0) {
                     const firstLevelId = levels[0]._id;
                     const lessons = await LevelsRepository.getsLessonsByLevelId(firstLevelId);
-                    return !!lessons ? lessons[0]._id : null;
+                    return lessons.length > 0 ? lessons[0]._id : null;
                 }
             }
             return null;
@@ -77,9 +86,9 @@ export default class CoursesManager {
         }
     }
 
-    static async getNextUnitId(pervUnitId: string): Promise<string | null> {
+    static async getNextUnitId(prevUnitId: string): Promise<string | null> {
         try {
-            const nextUnitId = await CoursesRepository.getNextUnitId(pervUnitId);
+            const nextUnitId = await CoursesRepository.getNextUnitId(prevUnitId);
             console.log("courses manager getNextUnitId", nextUnitId);
             if (nextUnitId) {
                 return nextUnitId;

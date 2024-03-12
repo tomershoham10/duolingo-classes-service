@@ -27,30 +27,22 @@ const FSASchema = new Schema<FSAType>({
         required: true,
       },
     }],
-    validate: {
-      validator: (arr: any[]) => arr.length >= 2,
-      message: 'timeBuffers must have at least 2 values',
-    },
     required: true,
+    _id: false
   },
   description: {
     type: String,
-    required: true
+    required: false
   },
   dateCreated: {
     type: Date,
     default: Date.now
   },
-  recordsKey: {
+  recordKey: {
     type: String,
     ref: 'File',
     required: true
   },
-  sonolistKeys: [{
-    type: String,
-    ref: 'File',
-    required: true
-  }],
 });
 
 const FSAModel = mongoose.model<FSAType>('FSA', FSASchema);
