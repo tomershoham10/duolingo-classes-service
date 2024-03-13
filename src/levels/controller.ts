@@ -135,6 +135,27 @@ export default class LevelsController {
         }
     }
 
+    static async unsuspendLesson(req: Express.Request, res: Express.Response) {
+        try {
+            const levelId: string = req.params.levelId;
+            const lessonId: string = req.params.lessonId;
+
+            const updatedLevel = await LevelsManager.unsuspendLessonById(
+                levelId,
+                lessonId
+            );
+
+            if (!updatedLevel) {
+                return res.status(404).json({ message: "Level not found / lesson was already unsuspended" });
+            }
+
+            res.status(200).json({ updatedLevel });
+        } catch (error: any) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
     static async delete(req: Express.Request, res: Express.Response) {
         try {
             const levelId: string = req.params.id;

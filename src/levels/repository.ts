@@ -167,6 +167,30 @@ export default class LevelsRepository {
         }
     }
 
+    static async unsuspendLessonById(
+        levelId: string,
+        lessonId: string,
+    ): Promise<LevelsType | null> {
+        try {
+            const level = await LevelsModel.findById(levelId);
+            if (!!!level) { return null };
+
+            const suspendedLessons = level.suspendedLessons;
+            if (!suspendedLessons.includes(lessonId)) { return null };
+
+            const updatedLevel = await LevelsModel.findByIdAndUpdate(
+                levelId,
+                { suspendedLessons: suspendedLessons.filter(lesson => lesson !== lessonId) },
+                { new: true }
+            );
+            console.log("lessons repo unsuspendLessonById", updatedLevel);
+            return updatedLevel;
+        } catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - unsuspendLessonById: ${error}`);
+        }
+    }
+
     static async deleteLevel(levelId: string): Promise<LevelsType | null> {
         try {
             const status = await LevelsModel.findOneAndDelete({ _id: levelId });

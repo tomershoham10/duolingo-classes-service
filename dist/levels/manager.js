@@ -95,6 +95,16 @@ export default class LevelsManager {
             throw new Error('Error in suspendLessonById');
         }
     }
+    static async unsuspendLessonById(levelId, lessonId) {
+        try {
+            const updatedLevel = await LevelsRepository.unsuspendLessonById(levelId, lessonId);
+            return updatedLevel;
+        }
+        catch (error) {
+            console.error('Manager Error [unsuspendLessonById]:', error.message);
+            throw new Error('Error in unsuspendLessonById');
+        }
+    }
     static async deleteLevel(levelId) {
         try {
             const status = await LevelsRepository.deleteLevel(levelId);

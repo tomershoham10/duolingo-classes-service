@@ -11,6 +11,7 @@ LevelsRouter
 LevelsRouter.post("/", asyncHandler(LevelsController.create));
 LevelsRouter
     .put("/suspendLesson/:levelId/:lessonId", asyncHandler(LevelsController.suspendLesson))
+    .put("/unsuspendLesson/:levelId/:lessonId", asyncHandler(LevelsController.unsuspendLesson))
     .put("/:id", asyncHandler(LevelsController.update));
 LevelsRouter.delete("/:id", asyncHandler(LevelsController.delete));
 export default LevelsRouter;

@@ -118,6 +118,23 @@ export default class LevelsManager {
         }
     }
 
+    static async unsuspendLessonById(
+        levelId: string,
+        lessonId: string,
+    ): Promise<LevelsType | null> {
+        try {
+            const updatedLevel = await LevelsRepository.unsuspendLessonById(
+                levelId,
+                lessonId
+            );
+            return updatedLevel;
+        }
+        catch (error: any) {
+            console.error('Manager Error [unsuspendLessonById]:', error.message);
+            throw new Error('Error in unsuspendLessonById');
+        }
+    }
+
     static async deleteLevel(levelId: string): Promise<LevelsType | null> {
         try {
             const status = await LevelsRepository.deleteLevel(levelId);

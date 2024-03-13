@@ -185,7 +185,6 @@ export default class UnitsController {
         }
     }
 
-
     static async unsuspendLevel(req: Express.Request, res: Express.Response) {
         try {
             const unitId: string = req.params.unitId;
