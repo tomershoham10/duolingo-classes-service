@@ -30,12 +30,9 @@ export default class LevelsRepository {
             const level = await LevelsModel.findById(levelId);
             if (level) {
                 const lessonsIds = level.lessons;
-                const unSuspendLessonsIds = lessonsIds.filter(lessonId => !level.suspendedLessons.includes(lessonId));
-
-
-                if (unSuspendLessonsIds.length > 0) {
+                if (lessonsIds.length > 0) {
                     // const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id === id));
-                    const lessonsDetails = await LessonsModel.find({ _id: { $in: unSuspendLessonsIds } });
+                    const lessonsDetails = await LessonsModel.find({ _id: { $in: lessonsIds } });
 
                     // console.log("levels repo getsLessonsByLevelId", levelId);
                     return lessonsDetails;
