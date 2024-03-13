@@ -9,7 +9,9 @@ LevelsRouter
     .get("/:id", asyncHandler(LevelsController.getById))
     .get("/", asyncHandler(LevelsController.getMany));
 LevelsRouter.post("/", asyncHandler(LevelsController.create));
-LevelsRouter.put("/:id", asyncHandler(LevelsController.update));
+LevelsRouter
+    .put("/suspendLesson/:levelId/:lessonId", asyncHandler(LevelsController.suspendLesson))
+    .put("/:id", asyncHandler(LevelsController.update));
 LevelsRouter.delete("/:id", asyncHandler(LevelsController.delete));
 export default LevelsRouter;
 //# sourceMappingURL=router.js.map

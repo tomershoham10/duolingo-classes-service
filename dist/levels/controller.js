@@ -101,6 +101,21 @@ export default class LevelsController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async suspendLesson(req, res) {
+        try {
+            const levelId = req.params.levelId;
+            const lessonId = req.params.lessonId;
+            const updatedLevel = await LevelsManager.suspendLessonById(levelId, lessonId);
+            if (!updatedLevel) {
+                return res.status(404).json({ message: "Level not found / lesson was already suspended" });
+            }
+            res.status(200).json({ updatedLevel });
+        }
+        catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
     static async delete(req, res) {
         try {
             const levelId = req.params.id;

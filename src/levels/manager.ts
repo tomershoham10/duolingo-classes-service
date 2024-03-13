@@ -101,6 +101,23 @@ export default class LevelsManager {
         }
     }
 
+    static async suspendLessonById(
+        levelId: string,
+        lessonId: string,
+    ): Promise<LevelsType | null> {
+        try {
+            const updatedLevel = await LevelsRepository.suspendLessonById(
+                levelId,
+                lessonId
+            );
+            return updatedLevel;
+        }
+        catch (error: any) {
+            console.error('Manager Error [suspendLessonById]:', error.message);
+            throw new Error('Error in suspendLessonById');
+        }
+    }
+
     static async deleteLevel(levelId: string): Promise<LevelsType | null> {
         try {
             const status = await LevelsRepository.deleteLevel(levelId);

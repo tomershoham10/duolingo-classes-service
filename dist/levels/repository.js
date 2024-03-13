@@ -140,6 +140,27 @@ export default class LevelsRepository {
             throw new Error(`Level repo - updateLevel: ${error}`);
         }
     }
+    static async suspendLessonById(levelId, lessonId) {
+        try {
+            const level = await LevelsModel.findById(levelId);
+            if (!!!level) {
+                return null;
+            }
+            ;
+            const suspendedLessons = level.suspendedLessons;
+            if (suspendedLessons.includes(lessonId)) {
+                return null;
+            }
+            ;
+            const updatedLevel = await LevelsModel.findByIdAndUpdate(levelId, { suspendedLessons: [...suspendedLessons, lessonId] }, { new: true });
+            console.log("lessons repo suspendLessonById", updatedLevel);
+            return updatedLevel;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Level repo - suspendLessonById: ${error}`);
+        }
+    }
     static async deleteLevel(levelId) {
         try {
             const status = await LevelsModel.findOneAndDelete({ _id: levelId });
