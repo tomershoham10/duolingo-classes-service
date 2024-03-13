@@ -172,6 +172,27 @@ export default class CoursesController {
         }
     }
 
+    static async unsuspendUnit(req: Express.Request, res: Express.Response) {
+        try {
+            const courseId: string = req.params.courseId;
+            const unitId: string = req.params.unitId;
+
+            const updatedCouse = await CoursesManager.unsuspendUnitByCourseId(
+                courseId,
+                unitId
+            );
+
+            if (!!!updatedCouse) {
+                return res.status(404).json({ message: "course controller - unsuspendUnit: error while unsuspending a unit" });
+            }
+
+            res.status(200).json({ updatedCouse });
+        } catch (error: any) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
     static async delete(req: Express.Request, res: Express.Response) {
         try {
             const courseId: string = req.params.id;

@@ -148,7 +148,27 @@ export default class CoursesRepository {
         }
         catch (error) {
             console.error('Repository Error:', error.message);
-            throw new Error(`Course repo - updateCourse: ${error}`);
+            throw new Error(`Course repo - suspendUnitByCourseId: ${error}`);
+        }
+    }
+    static async unsuspendUnitByCourseId(courseId, unitId) {
+        try {
+            const course = await CoursesModel.findById(courseId);
+            if (!!!course) {
+                return null;
+            }
+            ;
+            const suspendedUnits = course.suspendedUnits;
+            if (!suspendedUnits.includes(unitId)) {
+                return null;
+            }
+            ;
+            const updatedCourse = await CoursesModel.findByIdAndUpdate(courseId, { suspendedUnits: suspendedUnits.filter(unit => unit !== unitId) }, { new: true });
+            return updatedCourse;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - unsuspendUnitByCourseId: ${error}`);
         }
     }
     static async deleteCourse(courseId) {

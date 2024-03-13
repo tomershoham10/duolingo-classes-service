@@ -131,6 +131,16 @@ export default class CoursesManager {
             throw new Error('Error in suspendUnitByCourseId');
         }
     }
+    static async unsuspendUnitByCourseId(courseId, unitId) {
+        const updatedCourse = await CoursesRepository.unsuspendUnitByCourseId(courseId, unitId);
+        try {
+            return updatedCourse;
+        }
+        catch (error) {
+            console.error('Manager Error [unsuspendUnitByCourseId]:', error.message);
+            throw new Error('Error in unsuspendUnitByCourseId');
+        }
+    }
     static async deleteCourse(courseId) {
         try {
             const status = await CoursesRepository.deleteCourse(courseId);

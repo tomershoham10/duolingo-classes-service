@@ -13,6 +13,7 @@ CoursesRouter
 CoursesRouter.post("/", asyncHandler(CoursesController.create));
 CoursesRouter
     .put("/suspendUnit/:courseId/:unitId", asyncHandler(CoursesController.suspendUnit))
+    .put("/unsuspendUnit/:courseId/:unitId", asyncHandler(CoursesController.unsuspendUnit))
     .put("/:id", asyncHandler(CoursesController.update));
 CoursesRouter.delete("/:id", asyncHandler(CoursesController.delete));
 export default CoursesRouter;
