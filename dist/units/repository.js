@@ -173,6 +173,26 @@ export default class UnitsRepository {
             throw new Error(`Units repo - suspendLevelByUnitId: ${error}`);
         }
     }
+    static async unsuspendLevelByUnitId(unitId, levelId) {
+        try {
+            const unit = await UnitsModel.findById(unitId);
+            if (!!!unit) {
+                return null;
+            }
+            ;
+            const suspendedLevels = unit.suspendedLevels;
+            if (!suspendedLevels.includes(levelId)) {
+                return null;
+            }
+            ;
+            const updatedUnit = await UnitsModel.findByIdAndUpdate(unitId, { suspendedLevels: suspendedLevels.filter(level => level !== levelId) }, { new: true });
+            return updatedUnit;
+        }
+        catch (error) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Units repo - unsuspendLevelByUnitId: ${error}`);
+        }
+    }
     static async deleteUnit(unitId) {
         try {
             const status = await UnitsModel.findOneAndDelete({ _id: unitId });

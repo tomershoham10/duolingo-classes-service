@@ -13,6 +13,7 @@ UnitsRouter
     .post("/", asyncHandler(UnitsController.create));
 UnitsRouter
     .put("/suspendLevel/:unitId/:levelId", asyncHandler(UnitsController.suspendLevel))
+    .put("/unsuspendLevel/:unitId/:levelId", asyncHandler(UnitsController.unsuspendLevel))
     .put("/:id", asyncHandler(UnitsController.update));
 UnitsRouter.delete("/:id", asyncHandler(UnitsController.delete));
 export default UnitsRouter;

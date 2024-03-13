@@ -95,6 +95,16 @@ export default class UnitsManager {
             throw new Error('Error in suspendLevelByUnitId');
         }
     }
+    static async unsuspendLevelByUnitId(unitId, levelId) {
+        const updatedUnit = await UnitsRepository.unsuspendLevelByUnitId(unitId, levelId);
+        try {
+            return updatedUnit;
+        }
+        catch (error) {
+            console.error('Manager Error [unsuspendLevelByUnitId]:', error.message);
+            throw new Error('Error in unsuspendLevelByUnitId');
+        }
+    }
     static async deleteUnit(unitId) {
         try {
             const status = await UnitsRepository.deleteUnit(unitId);

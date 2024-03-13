@@ -185,6 +185,28 @@ export default class UnitsController {
         }
     }
 
+
+    static async unsuspendLevel(req: Express.Request, res: Express.Response) {
+        try {
+            const unitId: string = req.params.unitId;
+            const levelId: string = req.params.levelId;
+
+            const updatedUnit = await UnitsManager.unsuspendLevelByUnitId(
+                unitId,
+                levelId
+            );
+
+            if (!!!updatedUnit) {
+                return res.status(404).json({ message: "unit not found / level was already unsuspended" });
+            }
+
+            res.status(200).json({ updatedUnit });
+        } catch (error: any) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
     static async delete(req: Express.Request, res: Express.Response) {
         try {
             const unitId: string = req.params.id;

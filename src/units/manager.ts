@@ -114,6 +114,20 @@ export default class UnitsManager {
         }
     }
 
+    static async unsuspendLevelByUnitId(unitId: string, levelId: string): Promise<UnitsType | null> {
+        const updatedUnit = await UnitsRepository.unsuspendLevelByUnitId(
+            unitId,
+            levelId
+        );
+        try {
+            return updatedUnit;
+        }
+        catch (error: any) {
+            console.error('Manager Error [unsuspendLevelByUnitId]:', error.message);
+            throw new Error('Error in unsuspendLevelByUnitId');
+        }
+    }
+
     static async deleteUnit(unitId: string): Promise<UnitsType | null | undefined> {
         try {
             const status = await UnitsRepository.deleteUnit(unitId);
