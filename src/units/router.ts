@@ -15,7 +15,9 @@ UnitsRouter
     .post("/createByCourse", asyncHandler(UnitsController.createByCourse))
     .post("/", asyncHandler(UnitsController.create));
 
-UnitsRouter.put("/:id", asyncHandler(UnitsController.update));
+UnitsRouter
+    .put("/suspendLevel/:unitId/:levelId", asyncHandler(UnitsController.suspendLevel))
+    .put("/:id", asyncHandler(UnitsController.update));
 
 UnitsRouter.delete("/:id", asyncHandler(UnitsController.delete));
 

@@ -86,7 +86,7 @@ export default class UnitsManager {
     static async updateUnit(
         unitId: string,
         filedsToUpdate: Partial<UnitsType>
-    ): Promise<UnitsType | null | undefined> {
+    ): Promise<UnitsType | null> {
         const updatedUnit = await UnitsRepository.updateUnit(
             unitId,
             filedsToUpdate
@@ -97,6 +97,20 @@ export default class UnitsManager {
         catch (error: any) {
             console.error('Manager Error [updateUnit]:', error.message);
             throw new Error('Error in updateUnit');
+        }
+    }
+
+    static async suspendLevelByUnitId(unitId: string, levelId: string): Promise<UnitsType | null> {
+        const updatedUnit = await UnitsRepository.suspendLevelByUnitId(
+            unitId,
+            levelId
+        );
+        try {
+            return updatedUnit;
+        }
+        catch (error: any) {
+            console.error('Manager Error [suspendLevelByUnitId]:', error.message);
+            throw new Error('Error in suspendLevelByUnitId');
         }
     }
 
