@@ -128,8 +128,23 @@ export default class CoursesController {
             const courseId = req.params.id;
             const fieldsToUpdate = req.body;
             const updatedCouse = await CoursesManager.updateCourse(courseId, fieldsToUpdate);
-            if (!updatedCouse) {
-                return res.status(404).json({ message: "unit not found" });
+            if (!!!updatedCouse) {
+                return res.status(404).json({ message: "course controller - update: error while update a course" });
+            }
+            res.status(200).json({ updatedCouse });
+        }
+        catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({ error: error.message });
+        }
+    }
+    static async suspendUnit(req, res) {
+        try {
+            const courseId = req.params.courseId;
+            const unitId = req.params.unitId;
+            const updatedCouse = await CoursesManager.suspendUnitByCourseId(courseId, unitId);
+            if (!!!updatedCouse) {
+                return res.status(404).json({ message: "course controller - suspendUnit: error while suspending a unit" });
             }
             res.status(200).json({ updatedCouse });
         }

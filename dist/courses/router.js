@@ -11,7 +11,9 @@ CoursesRouter
     .get("/:id", asyncHandler(CoursesController.getById))
     .get("/", asyncHandler(CoursesController.getMany));
 CoursesRouter.post("/", asyncHandler(CoursesController.create));
-CoursesRouter.put("/:id", asyncHandler(CoursesController.update));
+CoursesRouter
+    .put("/suspendUnit/:courseId/:unitId", asyncHandler(CoursesController.suspendUnit))
+    .put("/:id", asyncHandler(CoursesController.update));
 CoursesRouter.delete("/:id", asyncHandler(CoursesController.delete));
 export default CoursesRouter;
 //# sourceMappingURL=router.js.map

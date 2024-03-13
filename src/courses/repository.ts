@@ -149,6 +149,30 @@ export default class CoursesRepository {
         }
     }
 
+    static async suspendUnitByCourseId(
+        courseId: string,
+        unitId: string
+    ): Promise<CoursesType | null> {
+        try {
+            const course = await CoursesModel.findById(courseId);
+            if (!!!course) { return null };
+
+            const suspendedUnits = course.suspendedUnits;
+            if (suspendedUnits.includes(unitId)) { return null };
+
+            const updatedCourse = await CoursesModel.findByIdAndUpdate(
+                courseId,
+                { suspendedUnits: [...suspendedUnits, unitId] },
+                { new: true }
+            );
+            return updatedCourse;
+        }
+        catch (error: any) {
+            console.error('Repository Error:', error.message);
+            throw new Error(`Course repo - updateCourse: ${error}`);
+        }
+    }
+
     static async deleteCourse(courseId: string): Promise<CoursesType | null> {
         try {
 
