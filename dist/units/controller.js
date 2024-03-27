@@ -35,7 +35,7 @@ export default class UnitsController {
             console.log("controller - createByCourse", courseId, unitData);
             const course = await CoursesModel.findById(courseId);
             console.log(course);
-            if (!course) {
+            if (!!!course) {
                 await session.abortTransaction();
                 session.endSession();
                 return res.status(404).json({ message: 'Course not found' });
@@ -59,7 +59,7 @@ export default class UnitsController {
             const unitId = req.params.id;
             console.log("units controller", unitId);
             const unit = await UnitsManager.getUnitById(unitId);
-            if (!unit) {
+            if (!!!unit) {
                 return res.status(404).json({ message: "unit not found" });
             }
             res.status(200).json({ unit });
@@ -74,7 +74,7 @@ export default class UnitsController {
             const unitId = req.params.id;
             console.log("units controller: getLevelsById", unitId);
             const levels = await UnitsManager.getsLevelsByUnitId(unitId);
-            if (!levels) {
+            if (!!!levels) {
                 return res.status(404).json({ message: "units not found" });
             }
             res.status(200).json({ levels });
@@ -140,6 +140,21 @@ export default class UnitsController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async createNewLevel(req, res) {
+        try {
+            const unitId = req.params.id;
+            console.log("controller - createNewLevel", unitId);
+            const updatedUnit = await UnitsManager.createNewLevel(unitId);
+            if (!updatedUnit) {
+                return res.status(404).json({ message: "unit not found" });
+            }
+            res.status(200).json({ message: 'level created successfully', updatedUnit });
+        }
+        catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(400).json({ error: error.message });
+        }
+    }
     static async suspendLevel(req, res) {
         try {
             const unitId = req.params.unitId;
@@ -174,7 +189,7 @@ export default class UnitsController {
         try {
             const unitId = req.params.id;
             const status = await UnitsManager.deleteUnit(unitId);
-            if (!status) {
+            if (!!!status) {
                 return res.status(404).json({ message: "Unit not found" });
             }
             res.status(200).json({ status });

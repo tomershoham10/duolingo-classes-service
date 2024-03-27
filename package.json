@@ -1,5 +1,5 @@
 {
-  "name": "lessons-service",
+  "name": "classes-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,7 +15,7 @@
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",
     "@types/express": "^4.17.17",
-    "@types/node": "^20.6.0",
+    "@types/node": "^20.11.30",
     "concurrently": "^8.2.1",
     "typescript": "^5.2.2"
   },

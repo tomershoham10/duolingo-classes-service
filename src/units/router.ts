@@ -18,6 +18,7 @@ UnitsRouter
 UnitsRouter
     .put("/suspendLevel/:unitId/:levelId", asyncHandler(UnitsController.suspendLevel))
     .put("/unsuspendLevel/:unitId/:levelId", asyncHandler(UnitsController.unsuspendLevel))
+    .put("/:createNewLevel/:id", asyncHandler(UnitsController.createNewLevel))
     .put("/:id", asyncHandler(UnitsController.update));
 
 UnitsRouter.delete("/:id", asyncHandler(UnitsController.delete));
