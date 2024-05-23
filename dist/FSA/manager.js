@@ -1,8 +1,11 @@
+import { getFromCache, resetNamespaceCache, setToCache } from "../utils/cache.js";
 import FSARepository from "./repository.js";
 export default class FSAManager {
     static async createExercise(exercise) {
         try {
             const response = await FSARepository.createExercise(exercise);
+            await setToCache('FSAs', response._id, JSON.stringify(response), 3600);
+            await resetNamespaceCache('getAllFSAs', 'allFSAs');
             return response;
         }
         catch (error) {
@@ -12,8 +15,14 @@ export default class FSAManager {
     }
     static async getResultByUserAndFSAId(exerciseId, useId) {
         try {
+            const cachedResult = await getFromCache('getResultByUserAndFSAId', exerciseId + useId);
+            if (cachedResult) {
+                console.log("Cache hit: FSA manager - getResultByUserAndFSAId", exerciseId, useId);
+                return JSON.parse(cachedResult); // Parse cached JSON data
+            }
             console.log("FSA manager getResultByUserAndFSAId - exerciseId", exerciseId);
             const result = await FSARepository.getResultByUserAndFSAId(exerciseId, useId);
+            result !== null ? await setToCache('getResultByUserAndFSAId', exerciseId + useId, JSON.stringify(result), 36000) : null;
             console.log("FSA manager getResultByUserAndFSAId - result", result);
             return result;
         }
@@ -24,8 +33,14 @@ export default class FSAManager {
     }
     static async getRelevantByFSAId(exerciseId) {
         try {
+            const cachedRelevant = await getFromCache('getRelevantByFSAId', exerciseId);
+            if (cachedRelevant) {
+                console.log("Cache hit: FSA manager - getRelevantByFSAId", exerciseId);
+                return JSON.parse(cachedRelevant); // Parse cached JSON data
+            }
             console.log("FSA manager getRelevantByFSAId - exerciseId", exerciseId);
             const relevant = await FSARepository.getRelevantByFSAId(exerciseId);
+            relevant !== null ? await setToCache('getRelevantByFSAId', exerciseId, JSON.stringify(relevant), 36000) : null;
             console.log("FSA manager getRelevantByFSAId - relevant targets", relevant);
             return relevant;
         }
@@ -36,8 +51,14 @@ export default class FSAManager {
     }
     static async getAnswersByFSAId(exerciseId) {
         try {
+            const cachedTargets = await getFromCache('getAnswersByFSAId', exerciseId);
+            if (cachedTargets) {
+                console.log("Cache hit: FSA manager - getAnswersByFSAId", exerciseId);
+                return JSON.parse(cachedTargets); // Parse cached JSON data
+            }
             console.log("FSA manager getAnswersByFSAId - exerciseId", exerciseId);
             const targets = await FSARepository.getAnswersByFSAId(exerciseId);
+            targets !== null ? await setToCache('getAnswersByFSAId', exerciseId, JSON.stringify(targets), 36000) : null;
             console.log("FSA manager getAnswersByFSAId - targets", targets);
             return targets;
         }
@@ -48,7 +69,13 @@ export default class FSAManager {
     }
     static async getExerciseByAnswerId(answerId) {
         try {
+            const cachedExercises = await getFromCache('getExerciseByAnswerId', answerId);
+            if (cachedExercises) {
+                console.log("Cache hit: FSA manager - getExerciseByAnswerId", answerId);
+                return JSON.parse(cachedExercises); // Parse cached JSON data
+            }
             const exercises = await FSARepository.getExerciseByAnswerId(answerId);
+            exercises !== null ? await setToCache('getExerciseByAnswerId', answerId, JSON.stringify(exercises), 360) : null;
             console.log("FSA manager getExerciseByAnswerId", exercises);
             return exercises;
         }
@@ -59,7 +86,13 @@ export default class FSAManager {
     }
     static async getExerciseById(exerciseId) {
         try {
+            const cachedExercise = await getFromCache('getFSAById', exerciseId);
+            if (cachedExercise) {
+                console.log("Cache hit: FSA manager - getExerciseById", exerciseId);
+                return JSON.parse(cachedExercise); // Parse cached JSON data
+            }
             const exercise = await FSARepository.getExerciseById(exerciseId);
+            exercise !== null ? await setToCache('getExerciseById', exerciseId, JSON.stringify(exercise), 36000) : null;
             console.log("FSA manager", exercise);
             return exercise;
         }
@@ -70,7 +103,13 @@ export default class FSAManager {
     }
     static async getAllExercise() {
         try {
+            const cachedFSAs = await getFromCache('getAllFSAs', 'allFSAs');
+            if (cachedFSAs) {
+                console.log("Cache hit: FSAs manager - getAllExercise", cachedFSAs);
+                return JSON.parse(cachedFSAs); // Parse cached JSON data
+            }
             const exercises = await FSARepository.getAllExercises();
+            await setToCache('getAllFSAs', 'allFSAs', JSON.stringify(exercises), 3600);
             return exercises;
         }
         catch (error) {
@@ -81,6 +120,8 @@ export default class FSAManager {
     static async updateExercise(exerciseId, filedsToUpdate) {
         try {
             const updatedExercise = await FSARepository.updateExercise(exerciseId, filedsToUpdate);
+            await setToCache('FSAs', exerciseId, JSON.stringify(updatedExercise), 3600);
+            await resetNamespaceCache('getAllFSAs', 'allFSAs');
             return updatedExercise;
         }
         catch (error) {
@@ -91,6 +132,8 @@ export default class FSAManager {
     static async deleteExercise(exerciseId) {
         try {
             const status = await FSARepository.deleteExercise(exerciseId);
+            status ? await resetNamespaceCache('FSAs', exerciseId) : null;
+            await resetNamespaceCache('getAllFSAs', 'allFSAs');
             return status;
         }
         catch (error) {

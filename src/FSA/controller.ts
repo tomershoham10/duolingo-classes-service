@@ -1,4 +1,4 @@
-import Express, { NextFunction } from "express";
+import Express from "express";
 import FSAManager from "./manager.js";
 
 export default class FSAController {
