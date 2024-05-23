@@ -80,13 +80,17 @@ export default class LessonsRepository {
                 if (FSAIds) {
                     // const FSADetails: FSAType[] = await FSAModel.find({ _id: { $in: FSAIds } });
                     console.log(" lessons repo - FSAIds", FSAIds)
-                    // const FSAsInOrder = FSAIds.map((id: string) => FSADetails.find(fsa => fsa.id === id));
 
                     // const FSAsIdInOrder = FSADetails.map((FSA) => { if (FSA !== undefined) { FSA.id } });
 
                     const resResults: ResultType[] = await ResultsModel.find({ exerciseId: { $in: FSAIds }, userId: userId });
-                    console.log(" lessons repo - results", { numOfExercises: FSAIds.length, results: resResults })
-                    const results = { numOfExercises: FSAIds.length, results: resResults }
+                    const FSAsInOrder = resResults.sort((a, b) => {
+                        const aIndex = FSAIds.indexOf(a._id);
+                        const bIndex = FSAIds.indexOf(b._id);
+                        return aIndex - bIndex;
+                    });
+                    console.log(" lessons repo - results", { numOfExercises: FSAIds.length, results: FSAsInOrder })
+                    const results = { numOfExercises: FSAIds.length, results: FSAsInOrder }
                     return results as { numOfExercises: number, results: ResultType[] };
                 }
                 else return null;

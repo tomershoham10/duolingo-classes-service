@@ -31,8 +31,12 @@ export default class LevelsRepository {
             if (level) {
                 const lessonsIds = level.lessons;
                 if (lessonsIds.length > 0) {
-                    // const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id === id));
                     const lessonsDetails = await LessonsModel.find({ _id: { $in: lessonsIds } });
+                    const lessonsInOrder = lessonsDetails.sort((a, b) => {
+                        const aIndex = lessonsIds.indexOf(a._id);
+                        const bIndex = lessonsIds.indexOf(b._id);
+                        return aIndex - bIndex;
+                    });
 
                     // console.log("levels repo getsLessonsByLevelId", levelId);
                     return lessonsDetails;

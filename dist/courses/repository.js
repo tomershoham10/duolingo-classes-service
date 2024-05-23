@@ -51,9 +51,13 @@ export default class CoursesRepository {
                 const unitsIds = course.units;
                 console.log("courses repo - getUnitsByCourseId - unitsIds", unitsIds);
                 const unitsDetails = await UnitsModel.find({ _id: { $in: unitsIds } });
-                // const unitsInOrder = unitsIds.map(id => unitsDetails.find(unit => unit._id === id));
-                console.log("courses repo getUnitsById - unitsDetails", unitsDetails);
-                return unitsDetails;
+                const unitsInOrder = unitsDetails.sort((a, b) => {
+                    const aIndex = unitsIds.indexOf(a._id);
+                    const bIndex = unitsIds.indexOf(b._id);
+                    return aIndex - bIndex;
+                });
+                console.log("courses repo getUnitsById - unitsInOrder", unitsInOrder);
+                return unitsInOrder;
             }
             else
                 return [];

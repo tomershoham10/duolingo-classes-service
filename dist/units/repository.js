@@ -43,9 +43,13 @@ export default class UnitsRepository {
                 if (unSuspendLevelsIds.length > 0) {
                     const levelsDetails = await LevelsModel.find({ _id: { $in: unSuspendLevelsIds } });
                     console.log("units repo - getsLevelsByUnitId unit, levelsId, levelsDetails", unit, levelsIds, levelsDetails);
-                    // const levelsInOrder = levelsIds.map((id: any) => levelsDetails.find(level => level._id === id));
-                    // console.log("courses repo getUnitsById", unitId);
-                    return levelsDetails;
+                    const levelsInOrder = levelsDetails.sort((a, b) => {
+                        const aIndex = levelsIds.indexOf(a._id);
+                        const bIndex = levelsIds.indexOf(b._id);
+                        return aIndex - bIndex;
+                    });
+                    console.log("courses repo getUnitsById - levelsInOrder", levelsInOrder);
+                    return levelsInOrder;
                 }
                 else
                     return [];
@@ -58,6 +62,50 @@ export default class UnitsRepository {
             throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
         }
     }
+    // static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[]> {
+    //     try {
+    //         const result = await UnitsModel.aggregate([
+    //             { $match: { _id: unitId } },  // Match the unit by unitId
+    //             { $unwind: '$levels' },
+    //             {
+    //                 $lookup: {
+    //                     from: 'levels', // The collection name for LevelsModel
+    //                     localField: 'levels',
+    //                     foreignField: '_id',
+    //                     as: 'levelDetails'
+    //                 }
+    //             },
+    //             { $unwind: '$levelDetails' }
+    //             // { $unwind: "$levelsInOrder" },  // Unwind the filtered levels array
+    //             // {
+    //             //     $lookup: {
+    //             //         from: "levels",  // The name of the levels collection
+    //             //         localField: "levelsInOrder",
+    //             //         foreignField: "_id",
+    //             //         as: "levelDetails"
+    //             //     }
+    //             // },
+    //             // { $unwind: "$levelDetails" },  // Unwind the level details array
+    //             // { $sort: { "levels.index": 1 } },  // Sort based on the original order in the levels array
+    //             // {
+    //             //     $group: {
+    //             //         _id: "$_id",
+    //             //         levelsInOrder: { $push: "$levelDetails" }
+    //             //     }
+    //             // }
+    //         ]);
+    //         console.log('getsLevelsByUnitId', result);
+    //         if (result.length > 0) {
+    //             console.log('getsLevelsByUnitId aggregate', result[0]);
+    //             return result[0].levelsInOrder as LevelsType[];
+    //         } else {
+    //             return [];
+    //         }
+    //     } catch (error: any) {
+    //         console.error('Repository Error:', error.message);
+    //         throw new Error(`Units repo - getsLevelsByUnitId: ${error}`);
+    //     }
+    // }
     static async getUnsuspendedLevelsByUnitId(unitId) {
         try {
             const unit = await UnitsModel.findById(unitId);

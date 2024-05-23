@@ -29,19 +29,6 @@ const configureMiddlewares = (app: Express) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  //   app.use((req: Request, res: Response, next: NextFunction) => {
-  //     const now = new Date().toLocaleString();
-  //     console.log(`[${now}] ${req.method} ${req.originalUrl}`);
-  //     console.log("Headers:", req.headers);
-  //     if (["POST", "PUT"].includes(req.method)) {
-  //       console.log("Request Body:", req.body);
-  //     } else {
-  //       console.log("Request params ID:", req.params.id);
-  //     }
-
-  //     next();
-  //   });
-
 };
 
 export default startServer;
