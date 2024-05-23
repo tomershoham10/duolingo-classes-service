@@ -23,7 +23,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(400).json({ error: error.message });
         }
-    }
+    } // cached
     static async getById(req, res) {
         try {
             const courseId = req.params.id;
@@ -38,7 +38,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async getByName(req, res) {
         try {
             const courseName = req.params.courseName;
@@ -53,7 +53,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async getUnitsById(req, res) {
         try {
             const courseId = req.params.id;
@@ -67,7 +67,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async getUnsuspendedUnitsById(req, res) {
         try {
             const courseId = req.params.id;
@@ -81,7 +81,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async getFirstLessonId(req, res) {
         try {
             const courseId = req.params.id;
@@ -96,7 +96,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async getNextUnitId(req, res) {
         try {
             const prevUnitId = req.params.prevUnitId;
@@ -111,7 +111,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async getMany(_req, res) {
         try {
             const courses = await CoursesManager.getAllCourses();
@@ -122,7 +122,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async update(req, res) {
         try {
             const courseId = req.params.id;
@@ -137,7 +137,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async suspendUnit(req, res) {
         try {
             const courseId = req.params.courseId;
@@ -152,7 +152,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async unsuspendUnit(req, res) {
         try {
             const courseId = req.params.courseId;
@@ -167,7 +167,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
     static async delete(req, res) {
         try {
             const courseId = req.params.id;
@@ -181,6 +181,6 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 }
 //# sourceMappingURL=controller.js.map

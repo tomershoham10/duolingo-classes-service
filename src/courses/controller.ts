@@ -24,7 +24,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(400).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async getById(req: Express.Request, res: Express.Response) {
         try {
@@ -40,7 +40,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async getByName(req: Express.Request, res: Express.Response) {
         try {
@@ -56,7 +56,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async getUnitsById(req: Express.Request, res: Express.Response) {
         try {
@@ -71,7 +71,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async getUnsuspendedUnitsById(req: Express.Request, res: Express.Response) {
         try {
@@ -86,7 +86,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async getFirstLessonId(req: Express.Request, res: Express.Response) {
         try {
@@ -102,7 +102,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async getNextUnitId(req: Express.Request, res: Express.Response) {
         try {
@@ -117,7 +117,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async getMany(_req: Express.Request, res: Express.Response) {
         try {
@@ -128,7 +128,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async update(req: Express.Request, res: Express.Response) {
         try {
@@ -149,7 +149,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async suspendUnit(req: Express.Request, res: Express.Response) {
         try {
@@ -170,7 +170,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async unsuspendUnit(req: Express.Request, res: Express.Response) {
         try {
@@ -191,7 +191,7 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 
     static async delete(req: Express.Request, res: Express.Response) {
         try {
@@ -207,5 +207,5 @@ export default class CoursesController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached
 }
