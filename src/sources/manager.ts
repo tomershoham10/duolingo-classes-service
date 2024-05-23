@@ -39,7 +39,7 @@ export default class SourcesManager {
         try {
             const cachedSources = await getFromCache('getAllSources', 'allSources');
             if (cachedSources) {
-                console.log("Cache hit: units manager - getAllSources", cachedSources);
+                console.log("Cache hit: sources manager - getAllSources", cachedSources);
                 return JSON.parse(cachedSources); // Parse cached JSON data
             }
             const sources = await SourcesRepository.getAllSources();
