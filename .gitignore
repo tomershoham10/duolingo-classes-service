@@ -1,4 +1,5 @@
 /dist
+/dist/FSA
 /node_modules
 .env
 *.tar
