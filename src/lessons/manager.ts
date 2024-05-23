@@ -25,7 +25,7 @@ export default class LessonsManager {
             }
 
             const lesson = await LessonsRepository.getLessonById(lessonId);
-            lesson !== null ? await setToCache('lesson', lessonId, JSON.stringify(lesson), 3600) : null;
+            lesson !== null ? await setToCache('lessons', lessonId, JSON.stringify(lesson), 3600) : null;
 
             console.log("Lessons manager", lesson);
             return lesson;
