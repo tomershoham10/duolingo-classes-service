@@ -4,6 +4,7 @@ import LevelsManager from "../levels/manager.js";
 import UnitsModel from "./model.js";
 import LessonsModel from "../lessons/model.js";
 import LevelsModel from "../levels/model.js";
+import { getFromCache, resetNamespaceCache, setToCache } from "../utils/cache.js";
 
 export default class UnitsManager {
     static async createUnit(
@@ -14,6 +15,7 @@ export default class UnitsManager {
             const createdLevel = await LevelsManager.createLevel();
             console.log("createUnit manager - createdLevel", createdLevel);
             const createdUnit = await UnitsRepository.createUnit({ ...unit, levels: [createdLevel._id] });
+            await resetNamespaceCache('getAllUnits', 'allUnits');
             await session.commitTransaction();
             return createdUnit
         }
@@ -29,7 +31,14 @@ export default class UnitsManager {
 
     static async getUnitById(unitId: string): Promise<UnitsType | null | undefined> {
         try {
+            const cachedUnit = await getFromCache('units', unitId);
+            if (cachedUnit) {
+                console.log("Cache hit: units manager - getUnitById", unitId);
+                return JSON.parse(cachedUnit); // Parse cached JSON data
+            }
+
             const unit = await UnitsRepository.getUnitById(unitId);
+            unit !== null ? await setToCache('units', unitId, JSON.stringify(unit), 3600) : null;
             console.log("units manager", unit);
             return unit;
         }
@@ -41,9 +50,15 @@ export default class UnitsManager {
 
     static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[]> {
         try {
-            const units = await UnitsRepository.getsLevelsByUnitId(unitId);
-            console.log("units manager getsLevelsByUnitId", units);
-            return units;
+            const cachedLevels = await getFromCache('getsLevelsByUnitId', unitId);
+            if (cachedLevels) {
+                console.log("Cache hit: units manager - getsLevelsByUnitId", unitId);
+                return JSON.parse(cachedLevels); // Parse cached JSON data
+            }
+            const levels = await UnitsRepository.getsLevelsByUnitId(unitId);
+            await setToCache('getsLevelsByUnitId', unitId, JSON.stringify(levels), 3600);
+            console.log("units manager getsLevelsByUnitId", levels);
+            return levels;
         }
         catch (error: any) {
             console.error('Manager Error [getsLevelsByUnitId]:', error.message);
@@ -53,9 +68,15 @@ export default class UnitsManager {
 
     static async getUnsuspendedLevelsByUnitId(unitId: string): Promise<LevelsType[]> {
         try {
-            const units = await UnitsRepository.getUnsuspendedLevelsByUnitId(unitId);
-            console.log("units manager getUnsuspendedLevelsByUnitId", units);
-            return units;
+            const cachedLevels = await getFromCache('getUnsuspendedLevelsByUnitId', unitId);
+            if (cachedLevels) {
+                console.log("Cache hit: units manager - getUnsuspendedLevelsByUnitId", unitId);
+                return JSON.parse(cachedLevels); // Parse cached JSON data
+            }
+            const levels = await UnitsRepository.getUnsuspendedLevelsByUnitId(unitId);
+            await setToCache('getUnsuspendedLevelsByUnitId', unitId, JSON.stringify(levels), 3600);
+            console.log("units manager getUnsuspendedLevelsByUnitId", levels);
+            return levels;
         }
         catch (error: any) {
             console.error('Manager Error [getUnsuspendedLevelsByUnitId]:', error.message);
@@ -65,7 +86,14 @@ export default class UnitsManager {
 
     static async getNextLevelId(prevLevelId: string): Promise<string | null> {
         try {
+            const cachedNextLevelId = await getFromCache('getNextLevelId', prevLevelId);
+            if (cachedNextLevelId) {
+                console.log("Cache hit: units manager - getNextLevelId", cachedNextLevelId);
+                return JSON.parse(cachedNextLevelId); // Parse cached JSON data
+            }
+
             const nextLevelId = await UnitsRepository.getNextLevelId(prevLevelId);
+            await setToCache('getNextLevelId', prevLevelId, JSON.stringify(nextLevelId), 3600);
             console.log("units manager getNextLevelId", nextLevelId);
             return nextLevelId;
         }
@@ -77,7 +105,13 @@ export default class UnitsManager {
 
     static async getAllUnits(): Promise<UnitsType[]> {
         try {
+            const cachedUnits = await getFromCache('getAllUnits', 'allUnits');
+            if (cachedUnits) {
+                console.log("Cache hit: units manager - getAllUnits", cachedUnits);
+                return JSON.parse(cachedUnits); // Parse cached JSON data
+            }
             const units = await UnitsRepository.getAllUnits();
+            await setToCache('getAllUnits', 'allUnits', JSON.stringify(units), 3600);
             return units;
         }
         catch (error: any) {
@@ -95,6 +129,8 @@ export default class UnitsManager {
                 unitId,
                 filedsToUpdate
             );
+            await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+            await resetNamespaceCache('getAllUnits', 'allUnits');
             return updatedUnit;
         }
         catch (error: any) {
@@ -123,6 +159,8 @@ export default class UnitsManager {
                 { levels: [...unit.levels, newLevel._id] }
             );
             console.log('updatedUnit', updatedUnit);
+            await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+            await resetNamespaceCache('getAllUnits', 'allUnits');
 
             await newLesson.save({ session: session });
             await newLevel.save({ session: session });
@@ -178,6 +216,8 @@ export default class UnitsManager {
                 unitId,
                 levelId
             );
+            await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+            await resetNamespaceCache('getAllUnits', 'allUnits');
             return updatedUnit;
         }
         catch (error: any) {
@@ -192,6 +232,8 @@ export default class UnitsManager {
                 unitId,
                 levelId
             );
+            await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+            await resetNamespaceCache('getAllUnits', 'allUnits');
             return updatedUnit;
         }
         catch (error: any) {
@@ -203,6 +245,8 @@ export default class UnitsManager {
     static async deleteUnit(unitId: string): Promise<UnitsType | null> {
         try {
             const status = await UnitsRepository.deleteUnit(unitId);
+            await resetNamespaceCache('units', unitId);
+            await resetNamespaceCache('getAllUnits', 'allUnits');
             return status;
         }
         catch (error: any) {

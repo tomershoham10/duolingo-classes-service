@@ -26,7 +26,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(400).json({ error: error.message });
         }
-    }
+    } // cached
     static async createByCourse(req, res) {
         const { unitData, courseId } = req.body;
         try {
@@ -53,7 +53,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(400).json({ error: error.message });
         }
-    }
+    } // check this function
     static async getById(req, res) {
         try {
             const unitId = req.params.id;
@@ -68,7 +68,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached 
     static async getLevelsById(req, res) {
         try {
             const unitId = req.params.id;
@@ -83,7 +83,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached - *need to reset the cache if levels data changed!*
     static async getUnsuspendedLevelsById(req, res) {
         try {
             const unitId = req.params.id;
@@ -98,7 +98,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // cached - *need to reset the cache if levels data changed!*
     static async getNextLevelId(req, res) {
         try {
             const prevLevelId = req.params.prevLevelId;
@@ -113,7 +113,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // chached
     static async getMany(_req, res) {
         try {
             const units = await UnitsManager.getAllUnits();
@@ -124,7 +124,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // chached
     static async update(req, res) {
         try {
             const unitId = req.params.id;
@@ -139,7 +139,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // chached
     static async createNewLevel(req, res) {
         try {
             const unitId = req.params.id;
@@ -154,7 +154,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(400).json({ error: error.message });
         }
-    }
+    } // chached
     static async suspendLevel(req, res) {
         try {
             const unitId = req.params.unitId;
@@ -169,7 +169,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // chached
     static async unsuspendLevel(req, res) {
         try {
             const unitId = req.params.unitId;
@@ -184,7 +184,7 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // chached
     static async delete(req, res) {
         try {
             const unitId = req.params.id;
@@ -198,6 +198,6 @@ export default class UnitsController {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
         }
-    }
+    } // chached
 }
 //# sourceMappingURL=controller.js.map

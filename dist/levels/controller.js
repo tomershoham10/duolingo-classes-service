@@ -1,5 +1,4 @@
 import LevelsManager from "./manager.js";
-import { getFromCache, setToCache } from "../units/cache.js";
 export default class LevelsController {
     static async create(_req, res) {
         try {
@@ -18,20 +17,12 @@ export default class LevelsController {
     }
     static async getById(req, res) {
         const levelId = req.params.id;
-        const cacheKey = `level:${levelId}`;
         try {
-            const cachedLevel = await getFromCache(cacheKey);
-            if (cachedLevel) {
-                console.log('Cache hit');
-                return res.status(200).json({ level: JSON.parse(cachedLevel) });
-            }
-            console.log("Cache miss");
             console.log("levels controller", levelId);
             const level = await LevelsManager.getLevelById(levelId);
             if (!level) {
                 return res.status(404).json({ message: "level not found" });
             }
-            await setToCache(cacheKey, JSON.stringify(level));
             res.status(200).json({ level });
         }
         catch (error) {

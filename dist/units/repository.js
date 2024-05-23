@@ -1,10 +1,12 @@
 import CoursesManager from "../courses/manager.js";
 import LevelsModel from "../levels/model.js";
+import { setToCache } from "../utils/cache.js";
 import UnitsModel from "./model.js";
 export default class UnitsRepository {
     static async createUnit(unit) {
         try {
             const newUnit = await UnitsModel.create(unit);
+            await setToCache('units', newUnit._id, JSON.stringify(newUnit), 3600);
             return newUnit;
         }
         catch (error) {
