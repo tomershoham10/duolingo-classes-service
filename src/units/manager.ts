@@ -15,6 +15,7 @@ export default class UnitsManager {
             const createdLevel = await LevelsManager.createLevel();
             console.log("createUnit manager - createdLevel", createdLevel);
             const createdUnit = await UnitsRepository.createUnit({ ...unit, levels: [createdLevel._id] });
+            await setToCache('units', createdUnit._id, JSON.stringify(createdUnit), 3600);
             await resetNamespaceCache('getAllUnits', 'allUnits');
             await session.commitTransaction();
             return createdUnit
