@@ -55,7 +55,7 @@ interface FSAType {
 /////////////// COUNTRIES ///////////////
 
 interface CountryType {
-    id: string;
+    _id: string;
     name: string;
 }
 

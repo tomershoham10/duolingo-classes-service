@@ -246,7 +246,7 @@ export default class UnitsManager {
     static async deleteUnit(unitId: string): Promise<UnitsType | null> {
         try {
             const status = await UnitsRepository.deleteUnit(unitId);
-            await resetNamespaceCache('units', unitId);
+            status ? await resetNamespaceCache('units', unitId) : null;
             await resetNamespaceCache('getAllUnits', 'allUnits');
             return status;
         }

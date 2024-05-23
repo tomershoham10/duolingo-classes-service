@@ -21,7 +21,7 @@ export default class CountryController {
             res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
-    }
+    } // cached
     static async getById(req, res, next) {
         try {
             const countryId = req.params.id;
@@ -37,7 +37,7 @@ export default class CountryController {
             res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
-    }
+    } // cached
     static async getMany(_req, res, next) {
         try {
             console.log("country controller getAll");
@@ -50,7 +50,7 @@ export default class CountryController {
             res.status(500).json({ err: "Internal Server Error" });
             next(error);
         }
-    }
+    } // cached
     static async update(req, res, next) {
         try {
             const countryId = req.params.id;

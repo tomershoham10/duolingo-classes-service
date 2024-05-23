@@ -30,7 +30,7 @@ export default class CountryController {
       res.status(500).json({ err: "Internal Server Error" });
       next(error);
     }
-  }
+  } // cached
 
   static async getById(
     req: Express.Request,
@@ -51,7 +51,7 @@ export default class CountryController {
       res.status(500).json({ err: "Internal Server Error" });
       next(error);
     }
-  }
+  } // cached
 
   static async getMany(
     _req: Express.Request,
@@ -68,7 +68,7 @@ export default class CountryController {
       res.status(500).json({ err: "Internal Server Error" });
       next(error);
     }
-  }
+  } // cached
 
   static async update(
     req: Express.Request,
