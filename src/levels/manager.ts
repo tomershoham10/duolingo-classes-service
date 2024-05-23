@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import LevelsRepository from "./repository.js";
 import LessonsManager from "../lessons/manager.js";
+import { getFromCache, resetNamespaceCache, setToCache } from "../utils/cache.js";
 
 export default class LevelsManager {
     static async createLevel(): Promise<LevelsType> {
@@ -11,6 +12,9 @@ export default class LevelsManager {
             console.log("createLevel manager - createdLesson", createdLesson);
 
             const createdLevel = await LevelsRepository.createLevel({ lessons: [createdLesson._id] });
+            await setToCache('levels', createdLevel._id, JSON.stringify(createdLevel), 3600);
+            await resetNamespaceCache('getAllLevels', 'allLevels');
+
             await session.commitTransaction();
             return createdLevel;
         }
@@ -38,7 +42,15 @@ export default class LevelsManager {
 
     static async getsLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
         try {
+            const cachedLesson = await getFromCache('getsLessonsByLevelId', levelId);
+            if (cachedLesson) {
+                console.log("Cache hit: levels manager - getsLessonsByLevelId", levelId);
+                return JSON.parse(cachedLesson); // Parse cached JSON data
+            }
+
             const lessons = await LevelsRepository.getsLessonsByLevelId(levelId);
+            lessons !== null ? await setToCache('getsLessonsByLevelId', levelId, JSON.stringify(lessons), 3600) : null;
+
             console.log("levels manager getsLessonsByLevelId", lessons);
             return lessons;
         }
@@ -50,7 +62,13 @@ export default class LevelsManager {
 
     static async getsUnsuspendedLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
         try {
+            const cachedLesson = await getFromCache('getsUnsuspendedLessonsByLevelId', levelId);
+            if (cachedLesson) {
+                console.log("Cache hit: levels manager - getsUnsuspendedLessonsByLevelId", levelId);
+                return JSON.parse(cachedLesson); // Parse cached JSON data
+            }
             const lessons = await LevelsRepository.getsUnsuspendedLessonsByLevelId(levelId);
+            lessons !== null ? await setToCache('getsUnsuspendedLessonsByLevelId', levelId, JSON.stringify(lessons), 3600) : null;
             console.log("levels manager getsUnsuspendedLessonsByLevelId", lessons);
             return lessons;
         }
@@ -62,7 +80,13 @@ export default class LevelsManager {
 
     static async getNextLessonId(prevLessonId: string): Promise<string | null> {
         try {
+            const cachedLesson = await getFromCache('getNextLessonId', prevLessonId);
+            if (cachedLesson) {
+                console.log("Cache hit: levels manager - getNextLessonId", prevLessonId);
+                return JSON.parse(cachedLesson); // Parse cached JSON data
+            }
             const nextLessonId = await LevelsRepository.getNextLessonId(prevLessonId);
+            await setToCache('getNextLessonId', prevLessonId, JSON.stringify(nextLessonId), 3600)
             console.log("levels manager getNextLessonId", nextLessonId, prevLessonId);
             return nextLessonId;
         }
@@ -74,8 +98,15 @@ export default class LevelsManager {
 
     static async getAllLevels(): Promise<LevelsType[]> {
         try {
+            const cachedLevels = await getFromCache('getAllLevels', 'allLevels');
+            if (cachedLevels) {
+                console.log("Cache hit: levels manager - getAllLevels", cachedLevels);
+                return JSON.parse(cachedLevels); // Parse cached JSON data
+            }
 
             const levels = await LevelsRepository.getAllLevels();
+            await setToCache('getAllLevels', 'allLevels', JSON.stringify(levels), 3600);
+
             return levels;
         }
         catch (error: any) {
@@ -93,6 +124,9 @@ export default class LevelsManager {
                 levelId,
                 filedsToUpdate
             );
+            await setToCache('levels', levelId, JSON.stringify(updatedLevel), 3600);
+            await resetNamespaceCache('getAllLevels', 'allLevels');
+
             return updatedLevel;
         }
         catch (error: any) {
@@ -110,6 +144,9 @@ export default class LevelsManager {
                 levelId,
                 lessonId
             );
+            await setToCache('levels', levelId, JSON.stringify(updatedLevel), 3600);
+            await resetNamespaceCache('getAllLevels', 'allLevels');
+
             return updatedLevel;
         }
         catch (error: any) {
@@ -127,6 +164,9 @@ export default class LevelsManager {
                 levelId,
                 lessonId
             );
+            await setToCache('levels', levelId, JSON.stringify(updatedLevel), 3600);
+            await resetNamespaceCache('getAllLevels', 'allLevels');
+
             return updatedLevel;
         }
         catch (error: any) {
@@ -138,6 +178,9 @@ export default class LevelsManager {
     static async deleteLevel(levelId: string): Promise<LevelsType | null> {
         try {
             const status = await LevelsRepository.deleteLevel(levelId);
+            status ? await resetNamespaceCache('levels', levelId) : null;
+            await resetNamespaceCache('getAllLevels', 'allLevels');
+
             return status;
         }
         catch (error: any) {
