@@ -49,7 +49,7 @@ interface FSAType {
     timeBuffers: TimeBuffersType[];
     description?: string;
     dateCreated: Date;
-    recordKey: string;
+    recordName: string;
 }
 
 /////////////// COUNTRIES ///////////////

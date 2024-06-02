@@ -4,9 +4,9 @@ import FSAManager from "./manager.js";
 export default class FSAController {
     static async create(req: Express.Request, res: Express.Response) {
         try {
-            const { relevant, answersList, acceptableAnswers, timeBuffers, description, recordKey } = req.body as Partial<FSAType>;
+            const { relevant, answersList, acceptableAnswers, timeBuffers, description, recordName } = req.body as Partial<FSAType>;
             let reqExercise: Partial<FSAType> = {
-                recordKey: recordKey,
+                recordName: recordName,
                 answersList: answersList,
                 timeBuffers: timeBuffers,
             }

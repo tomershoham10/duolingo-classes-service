@@ -10,7 +10,7 @@ const authenticateAndAuthorize = async (
     const tokenHeader = req.header("Authorization") as string;
     const token = tokenHeader.split(" ")[1];
 
-    const response = await axios.post("http://localhost:4000/validate-token", {
+    const response = await axios.post("http://authentication-service:4000/validate-token", {
       token,
     });
 

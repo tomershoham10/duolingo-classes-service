@@ -38,7 +38,7 @@ const FSASchema = new Schema<FSAType>({
     type: Date,
     default: Date.now
   },
-  recordKey: {
+  recordName: {
     type: String,
     ref: 'File',
     required: true
