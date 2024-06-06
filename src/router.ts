@@ -4,7 +4,7 @@ import CoursesRouter from "./courses/router.js";
 import UnitsRouter from "./units/router.js";
 import LevelsRouter from "./levels/router.js";
 import LessonsRouter from "./lessons/router.js";
-import FSARouter from "./FSA/router.js";
+import ExercisesRouter from "./exercises/router.js";
 import CountryRouter from "./countries/router.js";
 import TargetRouter from "./targets/router.js";
 import ResultsRouter from "./results/router.js";
@@ -25,7 +25,7 @@ router.use("/api/levels/", LevelsRouter);
 
 router.use("/api/lessons/", LessonsRouter);
 
-router.use("/api/FSA/", FSARouter);
+router.use("/api/exercises/", ExercisesRouter);
 
 router.use("/api/countries/", CountryRouter);
 

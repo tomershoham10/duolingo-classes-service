@@ -1,20 +1,20 @@
 import Express from "express";
-import FSAManager from "./manager.js";
+import ExercisesManager from "./manager.js";
 
-export default class FSAController {
+export default class ExercisesController {
     static async create(req: Express.Request, res: Express.Response) {
         try {
-            const { relevant, answersList, acceptableAnswers, timeBuffers, description, recordName } = req.body as Partial<FSAType>;
-            let reqExercise: Partial<FSAType> = {
-                recordName: recordName,
-                answersList: answersList,
-                timeBuffers: timeBuffers,
-            }
-            relevant ? reqExercise = { ...reqExercise, relevant } : null;
-            acceptableAnswers ? reqExercise = { ...reqExercise, acceptableAnswers } : null;
-            description ? reqExercise = { ...reqExercise, description } : null;
+            // const { relevant, answersList, acceptableAnswers, timeBuffers, description, recordName } = req.body as Partial<FSAType>;
+            // let reqExercise: Partial<FSAType> = {
+            //     recordName: recordName,
+            //     answersList: answersList,
+            //     timeBuffers: timeBuffers,
+            // }
+            // relevant ? reqExercise = { ...reqExercise, relevant } : null;
+            // acceptableAnswers ? reqExercise = { ...reqExercise, acceptableAnswers } : null;
+            // description ? reqExercise = { ...reqExercise, description } : null;
 
-            const newExercise = await FSAManager.createExercise(reqExercise);
+            const newExercise = await ExercisesManager.createExercise(req.body);
             if (!!newExercise) {
                 return res.status(201).json({ message: "Exercise created successfully", newExercise });
             } else {
@@ -26,13 +26,13 @@ export default class FSAController {
         }
     }
 
-    static async getResultByUserAndFSAId(req: Express.Request, res: Express.Response) {
+    static async getResultByUserAndExerciseId(req: Express.Request, res: Express.Response) {
         try {
             const exerciseId: string = req.params.exerciseId;
             const userId: string = req.params.userId;
-            console.log("FSA controller getResultByUserAndFSAId", exerciseId, userId);
-            const result = await FSAManager.getResultByUserAndFSAId(exerciseId, userId);
-            console.log("FSA controller getResultByUserAndFSAId - result", result, result === null);
+            console.log("Exercise controller getResultByUserAndExerciseId", exerciseId, userId);
+            const result = await ExercisesManager.getResultByUserAndExerciseId(exerciseId, userId);
+            console.log("Exercise controller getResultByUserAndExerciseId - result", result, result === null);
             if (!result) {
                 return res.status(404).json({ message: "result not found" });
             }
@@ -44,11 +44,11 @@ export default class FSAController {
         }
     }
 
-    static async getRelevantByFSAId(req: Express.Request, res: Express.Response) {
+    static async getRelevantByExerciseId(req: Express.Request, res: Express.Response) {
         try {
             const exerciseId: string = req.params.exerciseId;
-            console.log("FSA controller getRelevantByFSAId", exerciseId);
-            const relevantTargets = await FSAManager.getRelevantByFSAId(exerciseId);
+            console.log("Exercise controller getRelevantByExerciseId", exerciseId);
+            const relevantTargets = await ExercisesManager.getRelevantByExerciseId(exerciseId);
             if (!relevantTargets) {
                 return res.status(404).json({ message: "relevant not found" });
             }
@@ -60,11 +60,11 @@ export default class FSAController {
         }
     }
 
-    static async getAnswersByFSAId(req: Express.Request, res: Express.Response) {
+    static async getAnswersByExerciseId(req: Express.Request, res: Express.Response) {
         try {
             const exerciseId: string = req.params.exerciseId;
-            console.log("FSA controller getAnswersByFSAId", exerciseId);
-            const answers = await FSAManager.getAnswersByFSAId(exerciseId);
+            console.log("Exercise controller getAnswersByExerciseId", exerciseId);
+            const answers = await ExercisesManager.getAnswersByExerciseId(exerciseId);
             if (!answers) {
                 return res.status(404).json({ message: "targets not found" });
             }
@@ -79,8 +79,8 @@ export default class FSAController {
     static async getByAnswerId(req: Express.Request, res: Express.Response) {
         try {
             const answerId: string = req.params.answerId;
-            console.log("FSA controller getByAnswerId", answerId);
-            const exercises = await FSAManager.getExerciseByAnswerId(answerId);
+            console.log("Exercise controller getByAnswerId", answerId);
+            const exercises = await ExercisesManager.getExerciseByAnswerId(answerId);
             if (!exercises) {
                 return res.status(404).json({ message: "Exercise not found" });
             }
@@ -95,8 +95,8 @@ export default class FSAController {
     static async getById(req: Express.Request, res: Express.Response) {
         try {
             const exerciseId: string = req.params.id;
-            console.log("FSA controller", exerciseId);
-            const exercise = await FSAManager.getExerciseById(exerciseId);
+            console.log("Exercise controller", exerciseId);
+            const exercise = await ExercisesManager.getExerciseById(exerciseId);
             if (!exercise) {
                 return res.status(404).json({ message: "Exercise not found" });
             }
@@ -110,7 +110,7 @@ export default class FSAController {
 
     static async getMany(_req: Express.Request, res: Express.Response) {
         try {
-            const exercises = await FSAManager.getAllExercise();
+            const exercises = await ExercisesManager.getAllExercise();
             console.log(exercises);
             return res.status(200).json({ exercises });
         } catch (error: any) {
@@ -122,9 +122,9 @@ export default class FSAController {
     static async update(req: Express.Request, res: Express.Response) {
         try {
             const exerciseId: string = req.params.id;
-            const fieldsToUpdate: Partial<FSAType> = req.body;
+            const fieldsToUpdate: Partial<ExerciseType> = req.body;
 
-            const updatedExercise = await FSAManager.updateExercise(
+            const updatedExercise = await ExercisesManager.updateExercise(
                 exerciseId,
                 fieldsToUpdate
             );
@@ -143,7 +143,7 @@ export default class FSAController {
     static async delete(req: Express.Request, res: Express.Response) {
         try {
             const exerciseId: string = req.params.id;
-            const status = await FSAManager.deleteExercise(exerciseId);
+            const status = await ExercisesManager.deleteExercise(exerciseId);
 
             if (!status) {
                 return res.status(404).json({ message: "Exercise not found" });

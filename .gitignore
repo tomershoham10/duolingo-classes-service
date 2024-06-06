@@ -1,5 +1,5 @@
 /dist
-/dist/FSA
+/dist/exercises
 /node_modules
 .env
 *.tar

@@ -18,7 +18,7 @@ const ResultsSchema = new Schema<ResultType>({
     },
     exerciseId: {
         type: String,
-        ref: 'FSA',
+        ref: 'Exercises',
         required: true
     },
     answers: [{

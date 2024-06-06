@@ -1,4 +1,4 @@
-import FSAModel from "../FSA/model.js";
+import ExerciseModel from "../exercises/model.js";
 import ResultsModel from "../results/model.js";
 import LessonsModel from "./model.js";
 
@@ -27,15 +27,15 @@ export default class LessonsRepository {
         }
     }
 
-    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[]> {
+    static async getsExercisesByLessonId(lessonId: string): Promise<ExerciseType[]> {
         try {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
-                const FSAIds = lesson.exercises;
+                const exerciseIds = lesson.exercises;
 
-                if (FSAIds) {
-                    const FSADetails = await FSAModel.find({ _id: { $in: FSAIds } });
-                    return FSADetails as FSAType[];
+                if (exerciseIds) {
+                    const exerciseDetails = await ExerciseModel.find({ _id: { $in: exerciseIds } });
+                    return exerciseDetails as ExerciseType[];
                 }
                 else return [];
             }
@@ -46,18 +46,18 @@ export default class LessonsRepository {
         }
     }
 
-    static async getsUnsuspendedExercisesByLessonId(lessonId: string): Promise<FSAType[]> {
+    static async getsUnsuspendedExercisesByLessonId(lessonId: string): Promise<ExerciseType[]> {
         try {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
-                const FSAIds = lesson.exercises;
-                console.log('repo - getsUnsuspendedExercisesByLessonId: FSAIds', FSAIds);
-                const unSuspendFSAsIds = FSAIds.filter(lessonId => !lesson.suspendedExercises.includes(lessonId));
-                console.log('repo - getsUnsuspendedExercisesByLessonId: unSuspendFSAsIds', lesson.suspendedExercises, unSuspendFSAsIds);
-                if (unSuspendFSAsIds.length > 0) {
-                    const FSADetails = await FSAModel.find({ _id: { $in: unSuspendFSAsIds } });
-                    console.log('repo - getsUnsuspendedExercisesByLessonId: FSADetails', FSADetails);
-                    return FSADetails as FSAType[];
+                const exerciseIds = lesson.exercises;
+                console.log('repo - getsUnsuspendedExercisesByLessonId: exerciseIds', exerciseIds);
+                const unSuspendExercisesIds = exerciseIds.filter(lessonId => !lesson.suspendedExercises.includes(lessonId));
+                console.log('repo - getsUnsuspendedExercisesByLessonId: unSuspendExercisesIds', lesson.suspendedExercises, unSuspendExercisesIds);
+                if (unSuspendExercisesIds.length > 0) {
+                    const exerciseDetails = await ExerciseModel.find({ _id: { $in: unSuspendExercisesIds } });
+                    console.log('repo - getsUnsuspendedExercisesByLessonId: exerciseDetails', exerciseDetails);
+                    return exerciseDetails as ExerciseType[];
                 }
                 else return [];
             }
@@ -74,23 +74,23 @@ export default class LessonsRepository {
 
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
-                const FSAIds = lesson.exercises;
+                const exerciseIds = lesson.exercises;
 
 
-                if (FSAIds) {
-                    // const FSADetails: FSAType[] = await FSAModel.find({ _id: { $in: FSAIds } });
-                    console.log(" lessons repo - FSAIds", FSAIds)
+                if (exerciseIds) {
+                    // const exerciseDetails: ExerciseType[] = await ExerciseModel.find({ _id: { $in: exerciseIds } });
+                    console.log(" lessons repo - exerciseIds", exerciseIds)
 
-                    // const FSAsIdInOrder = FSADetails.map((FSA) => { if (FSA !== undefined) { FSA.id } });
+                    // const exercisesIdInOrder = exerciseDetails.map((FSA) => { if (FSA !== undefined) { FSA.id } });
 
-                    const resResults: ResultType[] = await ResultsModel.find({ exerciseId: { $in: FSAIds }, userId: userId });
-                    const FSAsInOrder = resResults.sort((a, b) => {
-                        const aIndex = FSAIds.indexOf(a._id);
-                        const bIndex = FSAIds.indexOf(b._id);
+                    const resResults: ResultType[] = await ResultsModel.find({ exerciseId: { $in: exerciseIds }, userId: userId });
+                    const exercisesInOrder = resResults.sort((a, b) => {
+                        const aIndex = exerciseIds.indexOf(a._id);
+                        const bIndex = exerciseIds.indexOf(b._id);
                         return aIndex - bIndex;
                     });
-                    console.log(" lessons repo - results", { numOfExercises: FSAIds.length, results: FSAsInOrder })
-                    const results = { numOfExercises: FSAIds.length, results: FSAsInOrder }
+                    console.log(" lessons repo - results", { numOfExercises: exerciseIds.length, results: exercisesInOrder })
+                    const results = { numOfExercises: exerciseIds.length, results: exercisesInOrder }
                     return results as { numOfExercises: number, results: ResultType[] };
                 }
                 else return null;

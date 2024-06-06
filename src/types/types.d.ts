@@ -34,22 +34,54 @@ interface LessonsType {
     suspendedExercises: string[];
 }
 
-/////////////// FSA ///////////////////
+/////////////// EXERCISES ///////////////////
+
+//~~~~~~~~~~~ FSA ~~~~~~~~~~~//
 
 interface TimeBuffersType {
     timeBuffer: number;
     grade: number;
 }
 
-interface FSAType {
+enum ExercisesTypes {
+    FSA = "fsa",
+    SPOTRECC = "spotrecc"
+}
+
+// interface FSAType {
+//     _id: string;
+//     relevant?: string[];
+//     answersList: string[]; //may be 2 correct answers
+//     acceptableAnswers?: string[];
+//     timeBuffers: TimeBuffersType[];
+//     description?: string;
+//     dateCreated: Date;
+//     recordName: string;
+// }
+
+// //~~~~~~~~~~~ spotrecc ~~~~~~~~~~~//
+
+// interface SpotreccType {
+//     _id: string;
+//     timeBuffers: TimeBuffersType[];
+//     description?: string;
+//     dateCreated: Date;
+//     fileName: string;
+// }
+
+interface ExerciseType {
     _id: string;
-    relevant?: string[];
+    dateCreated: Date;
+    type: ExercisesTypes;
     answersList: string[]; //may be 2 correct answers
-    acceptableAnswers?: string[];
     timeBuffers: TimeBuffersType[];
     description?: string;
-    dateCreated: Date;
-    recordName: string;
+    fileName: string;
+
+    // fsa
+    relevant?: string[];
+    acceptableAnswers?: string[];
+
 }
 
 /////////////// COUNTRIES ///////////////

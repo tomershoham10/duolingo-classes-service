@@ -4,12 +4,12 @@ const LessonsSchema = new Schema<LessonsType>({
     name: { type: String, required: false },
     exercises: [{
         type: String,
-        ref: 'FSA',
+        ref: 'Exercises',
         required: true
     }],
     suspendedExercises: [{
         type: String,
-        ref: 'FSA',
+        ref: 'Exercises',
         required: true
     }],
 });

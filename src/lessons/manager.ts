@@ -36,7 +36,7 @@ export default class LessonsManager {
         }
     }
 
-    static async getsExercisesByLessonId(lessonId: string): Promise<FSAType[]> {
+    static async getsExercisesByLessonId(lessonId: string): Promise<ExerciseType[]> {
         try {
             const cachedExercises = await getFromCache('getsExercisesByLessonId', lessonId);
             if (cachedExercises) {
@@ -55,7 +55,7 @@ export default class LessonsManager {
         }
     }
 
-    static async getsUnsuspendedExercisesByLessonId(lessonId: string): Promise<FSAType[]> {
+    static async getsUnsuspendedExercisesByLessonId(lessonId: string): Promise<ExerciseType[]> {
         try {
             const cachedExercises = await getFromCache('getsUnsuspendedExercisesByLessonId', lessonId);
             if (cachedExercises) {
