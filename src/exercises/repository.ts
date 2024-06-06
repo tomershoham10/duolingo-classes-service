@@ -37,7 +37,7 @@ export default class ExercisesRepository {
         try {
             const exercise = await ExerciseModel.findById(exerciseId);
             console.log("exercises repo getRelevantByExerciseId - exercise", exercise);
-            if (exercise) {
+            if (exercise && exercise.type === ExercisesTypes.FSA) {
                 const relevantIds = exercise.relevant;
                 if (relevantIds) {
                     const targetsDetails = await TargetModel.find({ _id: { $in: relevantIds }, type: { $eq: "vessel" } });
