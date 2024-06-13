@@ -1,8 +1,8 @@
-import Express from "express";
+import { Request, Response } from "express";
 import SourcesManager from "./manager.js";
 
 export default class SourcesController {
-    static async create(req: Express.Request, res: Express.Response) {
+    static async create(req: Request, res: Response) {
         try {
             const sourceName = req.body.name as string;
 
@@ -21,7 +21,7 @@ export default class SourcesController {
         }
     }
 
-    static async getById(req: Express.Request, res: Express.Response) {
+    static async getById(req: Request, res: Response) {
         try {
             const sourceId: string = req.params.id;
             console.log("sources controller sourceId", sourceId);
@@ -37,7 +37,7 @@ export default class SourcesController {
         }
     }
 
-    static async getMany(_req: Express.Request, res: Express.Response) {
+    static async getMany(_req: Request, res: Response) {
         try {
             const sources = await SourcesManager.getAllSources();
             console.log(sources);
@@ -48,7 +48,7 @@ export default class SourcesController {
         }
     }
 
-    static async update(req: Express.Request, res: Express.Response) {
+    static async update(req: Request, res: Response) {
         try {
             const sourceId: string = req.params.id;
             const fieldsToUpdate: Partial<SourceType> = req.body;
@@ -69,7 +69,7 @@ export default class SourcesController {
         }
     }
 
-    static async delete(req: Express.Request, res: Express.Response) {
+    static async delete(req: Request, res: Response) {
         try {
             const sourceId: string = req.params.id;
             const status = await SourcesManager.deleteSource(sourceId);

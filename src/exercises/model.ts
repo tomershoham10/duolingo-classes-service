@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 enum ExercisesTypes {
     FSA = "fsa",
@@ -65,6 +65,6 @@ exerciseSchema.pre('validate', function (next) {
     next();
 });
 
-const ExerciseModel = mongoose.model<ExerciseType>('Exercises', exerciseSchema);
+const ExerciseModel = model<ExerciseType>('Exercises', exerciseSchema);
 
 export default ExerciseModel;

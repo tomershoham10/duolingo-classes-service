@@ -1,11 +1,11 @@
-import Express, { NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import CountryManager from "./manager.js";
 import CountryModel from "./model.js";
 
 export default class CountryController {
   static async create(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -33,8 +33,8 @@ export default class CountryController {
   } // cached
 
   static async getById(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -54,8 +54,8 @@ export default class CountryController {
   } // cached
 
   static async getMany(
-    _req: Express.Request,
-    res: Express.Response,
+    _req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -71,8 +71,8 @@ export default class CountryController {
   } // cached
 
   static async update(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -97,8 +97,8 @@ export default class CountryController {
   }
 
   static async delete(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {

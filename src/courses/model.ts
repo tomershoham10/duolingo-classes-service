@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { model,Schema } from 'mongoose';
 
 const CoursesSchema = new Schema<CoursesType>({
     name: { type: String, required: true, unique: true },
@@ -14,7 +14,7 @@ const CoursesSchema = new Schema<CoursesType>({
     }]
 });
 
-const CoursesModel = mongoose.model<CoursesType>('Courses', CoursesSchema);
+const CoursesModel = model<CoursesType>('Courses', CoursesSchema);
 
 export default CoursesModel;
 

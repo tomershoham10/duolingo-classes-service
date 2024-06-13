@@ -1,8 +1,8 @@
-import express from "express";
+import { Router } from "express";
 import OptionController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
-const OptionRouter = express.Router();
+const OptionRouter = Router();
 
 OptionRouter
     .get("/:id", asyncHandler(OptionController.getById))

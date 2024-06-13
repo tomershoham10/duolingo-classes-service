@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 enum TypesOfTargets {
   VESSEL = "vessel",
@@ -37,6 +37,6 @@ const TargetSchema: Schema = new Schema({
   },
 });
 
-const TargetModel = mongoose.model<TargetType>("Target", TargetSchema);
+const TargetModel = model<TargetType>("Target", TargetSchema);
 
 export default TargetModel;

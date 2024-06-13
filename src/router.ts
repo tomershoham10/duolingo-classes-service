@@ -1,5 +1,4 @@
-import express, { Router } from "express";
-import Express from "express";
+import { Router, Request, Response } from "express";
 import CoursesRouter from "./courses/router.js";
 import UnitsRouter from "./units/router.js";
 import LevelsRouter from "./levels/router.js";
@@ -10,9 +9,9 @@ import TargetRouter from "./targets/router.js";
 import ResultsRouter from "./results/router.js";
 import SourcesRouter from "./sources/router.js";
 
-const router: Router = express.Router();
+const router: Router = Router();
 
-router.get("/health", (_req: Express.Request, res: Express.Response) => {
+router.get("/health", (_req: Request, res: Response) => {
   console.log("health");
   res.status(200).send("Alive");
 });

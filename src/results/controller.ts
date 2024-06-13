@@ -1,11 +1,11 @@
-import Express, { NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import ResultsManager from "./manager.js";
-import mongoose from "mongoose";
+import { startSession } from "mongoose";
 
 export default class ResultsController {
     static async create(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -39,8 +39,8 @@ export default class ResultsController {
     }
 
     static async getById(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -60,8 +60,8 @@ export default class ResultsController {
     }
 
     static async getResultsByUserId(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -81,8 +81,8 @@ export default class ResultsController {
     }
 
     static async getResultsByLessonAndUser(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -103,8 +103,8 @@ export default class ResultsController {
     }
 
     static async getMany(
-        _req: Express.Request,
-        res: Express.Response,
+        _req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -119,8 +119,8 @@ export default class ResultsController {
     }
 
     static async update(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -146,12 +146,12 @@ export default class ResultsController {
     }
 
     static async submitExercise(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
-            const session = await mongoose.startSession();
+            const session = await startSession();
             session.startTransaction();
 
             const resultId: string = req.params.id;
@@ -182,8 +182,8 @@ export default class ResultsController {
 
 
     static async delete(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {

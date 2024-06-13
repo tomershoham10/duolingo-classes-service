@@ -1,9 +1,9 @@
-import express from "express";
+import { Router } from "express";
 import CoursesController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
 
-const CoursesRouter = express.Router();
+const CoursesRouter = Router();
 
 CoursesRouter
     .get("/getFirstLessonId/:courseId", asyncHandler(CoursesController.getFirstLessonId))
@@ -24,4 +24,3 @@ CoursesRouter
 CoursesRouter.delete("/:id", asyncHandler(CoursesController.delete));
 
 export default CoursesRouter;
-    

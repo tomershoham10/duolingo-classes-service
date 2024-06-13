@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { startSession } from "mongoose";
 import CoursesRepository from "./repository.js";
 import UnitsManager from "../units/manager.js";
 import UnitsRepository from "../units/repository.js";
@@ -7,7 +7,7 @@ import { getFromCache, resetNamespaceCache, setToCache } from "../utils/cache.js
 
 export default class CoursesManager {
     static async createCourse(courseName: string): Promise<CoursesType | undefined> {
-        const session = await mongoose.startSession();
+        const session = await startSession();
         session.startTransaction();
         try {
             const createdUnit = await UnitsManager.createUnit({});

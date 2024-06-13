@@ -1,10 +1,10 @@
-import Express from "express";
+import { Request, Response } from "express";
 import CoursesManager from "./manager.js";
 import CoursesModel from "./model.js";
 import capitalizeWords from "../utils/capitalizeWords.js";
 
 export default class CoursesController {
-    static async create(req: Express.Request, res: Express.Response) {
+    static async create(req: Request, res: Response) {
         try {
             const courseName = req.body.name as string;
             console.log('create course - courseName', courseName);
@@ -26,7 +26,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getById(req: Express.Request, res: Express.Response) {
+    static async getById(req: Request, res: Response) {
         try {
             const courseId: string = req.params.id;
             console.log("courses controller", courseId);
@@ -42,7 +42,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getByName(req: Express.Request, res: Express.Response) {
+    static async getByName(req: Request, res: Response) {
         try {
             const courseName: string = req.params.courseName;
             console.log("courses controller - getByName", courseName);
@@ -58,7 +58,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getUnitsById(req: Express.Request, res: Express.Response) {
+    static async getUnitsById(req: Request, res: Response) {
         try {
             const courseId: string = req.params.id;
             console.log("controller: getUnitsById", courseId);
@@ -73,7 +73,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getUnsuspendedUnitsById(req: Express.Request, res: Express.Response) {
+    static async getUnsuspendedUnitsById(req: Request, res: Response) {
         try {
             const courseId: string = req.params.id;
             console.log("controller: getUnitsById", courseId);
@@ -88,7 +88,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getFirstLessonId(req: Express.Request, res: Express.Response) {
+    static async getFirstLessonId(req: Request, res: Response) {
         try {
             const courseId: string = req.params.id;
             console.log("controller: getFirstLessonId", courseId);
@@ -104,7 +104,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getNextUnitId(req: Express.Request, res: Express.Response) {
+    static async getNextUnitId(req: Request, res: Response) {
         try {
             const prevUnitId: string = req.params.prevUnitId as string;
             console.log("course controller: prevUnitId", prevUnitId);
@@ -119,7 +119,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getMany(_req: Express.Request, res: Express.Response) {
+    static async getMany(_req: Request, res: Response) {
         try {
             const courses = await CoursesManager.getAllCourses();
             console.log("get all courses", courses);
@@ -130,7 +130,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async update(req: Express.Request, res: Express.Response) {
+    static async update(req: Request, res: Response) {
         try {
             const courseId: string = req.params.id;
             const fieldsToUpdate: Partial<CoursesType> = req.body;
@@ -151,7 +151,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async suspendUnit(req: Express.Request, res: Express.Response) {
+    static async suspendUnit(req: Request, res: Response) {
         try {
             const courseId: string = req.params.courseId;
             const unitId: string = req.params.unitId;
@@ -172,7 +172,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async unsuspendUnit(req: Express.Request, res: Express.Response) {
+    static async unsuspendUnit(req: Request, res: Response) {
         try {
             const courseId: string = req.params.courseId;
             const unitId: string = req.params.unitId;
@@ -193,7 +193,7 @@ export default class CoursesController {
         }
     } // cached
 
-    static async delete(req: Express.Request, res: Express.Response) {
+    static async delete(req: Request, res: Response) {
         try {
             const courseId: string = req.params.id;
             const status = await CoursesManager.deleteCourse(courseId);

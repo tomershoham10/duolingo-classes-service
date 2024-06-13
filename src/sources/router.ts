@@ -1,8 +1,8 @@
-import express from "express";
+import { Router } from "express";
 import SourcesController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
-const SourcesRouter = express.Router();
+const SourcesRouter = Router();
 
 SourcesRouter
     .get("/", asyncHandler(SourcesController.getMany));

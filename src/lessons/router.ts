@@ -1,8 +1,8 @@
-import express from "express";
+import { Router } from "express";
 import LessonsController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
-const LessonsRouter = express.Router();
+const LessonsRouter = Router();
 
 LessonsRouter
     .get("/getResultsByLessonAndUser/:lessonId/results/:userId", asyncHandler(LessonsController.getResultsByLessonAndUser))

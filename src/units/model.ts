@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const UnitsSchema = new Schema<UnitsType>({
     levels: [{
@@ -15,6 +15,6 @@ const UnitsSchema = new Schema<UnitsType>({
     description: { type: String, required: false },
 });
 
-const UnitsModel = mongoose.model<UnitsType>('Units', UnitsSchema);
+const UnitsModel = model<UnitsType>('Units', UnitsSchema);
 
 export default UnitsModel;

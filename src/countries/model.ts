@@ -1,9 +1,9 @@
-import mongoose, { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 const countrySchema: Schema = new Schema({
   name: { type: String, required: true, unique: true },
 });
 
-const CountryModel = mongoose.model<CountryType>("Country", countrySchema);
+const CountryModel = model<CountryType>("Country", countrySchema);
 
 export default CountryModel;

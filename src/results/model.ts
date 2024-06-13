@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const ResultsSchema = new Schema<ResultType>({
     userId: {
@@ -31,6 +31,6 @@ const ResultsSchema = new Schema<ResultType>({
 
 ResultsSchema.index({ userId: 1, lessonId: 1, exerciseId: 1 }, { unique: true });
 
-const ResultsModel = mongoose.model<ResultType>('Result', ResultsSchema);
+const ResultsModel = model<ResultType>('Result', ResultsSchema);
 
 export default ResultsModel;

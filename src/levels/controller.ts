@@ -1,7 +1,7 @@
-import Express from "express";
+import { Request, Response } from "express";
 import LevelsManager from "./manager.js";
 export default class LevelsController {
-    static async create(_req: Express.Request, res: Express.Response) {
+    static async create(_req: Request, res: Response) {
         try {
 
             const newLevel = await LevelsManager.createLevel();
@@ -17,7 +17,7 @@ export default class LevelsController {
         }
     }
 
-    static async getById(req: Express.Request, res: Express.Response) {
+    static async getById(req: Request, res: Response) {
         const levelId: string = req.params.id;
         try {
             console.log("levels controller", levelId);
@@ -32,7 +32,7 @@ export default class LevelsController {
         }
     }
 
-    static async getLessonsById(req: Express.Request, res: Express.Response) {
+    static async getLessonsById(req: Request, res: Response) {
         try {
             const levelId: string = req.params.id;
             console.log("controller: getLessonsById", levelId);
@@ -48,7 +48,7 @@ export default class LevelsController {
         }
     }
 
-    static async getsUnsuspendedLessonsById(req: Express.Request, res: Express.Response) {
+    static async getsUnsuspendedLessonsById(req: Request, res: Response) {
         try {
             const levelId: string = req.params.id;
             console.log("controller: getsUnsuspendedLessonsById", levelId);
@@ -64,7 +64,7 @@ export default class LevelsController {
         }
     }
 
-    static async getNextLessonId(req: Express.Request, res: Express.Response) {
+    static async getNextLessonId(req: Request, res: Response) {
         try {
             const prevLessonId: string = req.params.prevLessonId;
             console.log("controller: getNextLessonId", prevLessonId);
@@ -80,7 +80,7 @@ export default class LevelsController {
         }
     }
 
-    static async getMany(_req: Express.Request, res: Express.Response) {
+    static async getMany(_req: Request, res: Response) {
         try {
             const levels = await LevelsManager.getAllLevels();
             console.log(levels);
@@ -91,7 +91,7 @@ export default class LevelsController {
         }
     }
 
-    static async update(req: Express.Request, res: Express.Response) {
+    static async update(req: Request, res: Response) {
         try {
             const levelId: string = req.params.id;
             const fieldsToUpdate: Partial<LevelsType> = req.body;
@@ -112,7 +112,7 @@ export default class LevelsController {
         }
     }
 
-    static async suspendLesson(req: Express.Request, res: Express.Response) {
+    static async suspendLesson(req: Request, res: Response) {
         try {
             const levelId: string = req.params.levelId;
             const lessonId: string = req.params.lessonId;
@@ -133,7 +133,7 @@ export default class LevelsController {
         }
     }
 
-    static async unsuspendLesson(req: Express.Request, res: Express.Response) {
+    static async unsuspendLesson(req: Request, res: Response) {
         try {
             const levelId: string = req.params.levelId;
             const lessonId: string = req.params.lessonId;
@@ -154,7 +154,7 @@ export default class LevelsController {
         }
     }
 
-    static async delete(req: Express.Request, res: Express.Response) {
+    static async delete(req: Request, res: Response) {
         try {
             const levelId: string = req.params.id;
             const status = await LevelsManager.deleteLevel(levelId);

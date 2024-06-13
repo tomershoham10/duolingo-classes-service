@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import { startSession } from "mongoose";
 import LevelsRepository from "./repository.js";
 import LessonsManager from "../lessons/manager.js";
 import { getFromCache, resetNamespaceCache, setToCache } from "../utils/cache.js";
 
 export default class LevelsManager {
     static async createLevel(): Promise<LevelsType> {
-        const session = await mongoose.startSession();
+        const session = await startSession();
         session.startTransaction();
         try {
             const createdLesson = await LessonsManager.createLesson({ name: 'Lesson no.1' });

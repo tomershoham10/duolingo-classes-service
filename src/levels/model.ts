@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import  {model, Schema } from 'mongoose';
 
 const LevelSchema = new Schema<LevelsType>({
     lessons: [{
@@ -13,6 +13,6 @@ const LevelSchema = new Schema<LevelsType>({
     }],
 });
 
-const LevelsModel = mongoose.model<LevelsType>('Levels', LevelSchema);
+const LevelsModel = model<LevelsType>('Levels', LevelSchema);
 
 export default LevelsModel;

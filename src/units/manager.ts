@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { startSession } from "mongoose";
 import UnitsRepository from "./repository.js";
 import LevelsManager from "../levels/manager.js";
 import UnitsModel from "./model.js";
@@ -9,7 +9,7 @@ import { getFromCache, resetNamespaceCache, setToCache } from "../utils/cache.js
 export default class UnitsManager {
     static async createUnit(
         unit: Partial<UnitsType>): Promise<UnitsType> {
-        const session = await mongoose.startSession();
+        const session = await startSession();
         session.startTransaction();
         try {
             const createdLevel = await LevelsManager.createLevel();
@@ -144,7 +144,7 @@ export default class UnitsManager {
 
     static async createNewLevel(unitId: string): Promise<UnitsType | null> {
         try {
-            const session = await mongoose.startSession();
+            const session = await startSession();
             session.startTransaction();
             const unit = await UnitsModel.findById(unitId);
             if (!!!unit) {

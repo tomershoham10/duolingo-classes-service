@@ -1,11 +1,11 @@
-import Express, { NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import TargetManager from "./manager.js";
 import TargetModel from "./model.js";
 
 export default class TargetController {
   static async create(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -35,8 +35,8 @@ export default class TargetController {
   }
 
   static async getById(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -56,8 +56,8 @@ export default class TargetController {
   }
 
   static async getMany(
-    _req: Express.Request,
-    res: Express.Response,
+    _req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -73,8 +73,8 @@ export default class TargetController {
   }
 
   static async update(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {
@@ -99,8 +99,8 @@ export default class TargetController {
   }
 
   static async delete(
-    req: Express.Request,
-    res: Express.Response,
+    req: Request,
+    res: Response,
     next: NextFunction
   ) {
     try {

@@ -1,8 +1,8 @@
-import Express from "express";
+import  {Request,Response} from "express";
 import ExercisesManager from "./manager.js";
 
 export default class ExercisesController {
-    static async create(req: Express.Request, res: Express.Response) {
+    static async create(req: Request, res: Response) {
         try {
             // const { relevant, answersList, acceptableAnswers, timeBuffers, description, recordName } = req.body as Partial<FSAType>;
             // let reqExercise: Partial<FSAType> = {
@@ -26,7 +26,7 @@ export default class ExercisesController {
         }
     }
 
-    static async getResultByUserAndExerciseId(req: Express.Request, res: Express.Response) {
+    static async getResultByUserAndExerciseId(req: Request, res: Response) {
         try {
             const exerciseId: string = req.params.exerciseId;
             const userId: string = req.params.userId;
@@ -44,7 +44,7 @@ export default class ExercisesController {
         }
     }
 
-    static async getRelevantByExerciseId(req: Express.Request, res: Express.Response) {
+    static async getRelevantByExerciseId(req: Request, res: Response) {
         try {
             const exerciseId: string = req.params.exerciseId;
             console.log("Exercise controller getRelevantByExerciseId", exerciseId);
@@ -60,7 +60,7 @@ export default class ExercisesController {
         }
     }
 
-    static async getAnswersByExerciseId(req: Express.Request, res: Express.Response) {
+    static async getAnswersByExerciseId(req: Request, res: Response) {
         try {
             const exerciseId: string = req.params.exerciseId;
             console.log("Exercise controller getAnswersByExerciseId", exerciseId);
@@ -76,7 +76,7 @@ export default class ExercisesController {
         }
     }
 
-    static async getByAnswerId(req: Express.Request, res: Express.Response) {
+    static async getByAnswerId(req: Request, res: Response) {
         try {
             const answerId: string = req.params.answerId;
             console.log("Exercise controller getByAnswerId", answerId);
@@ -92,7 +92,7 @@ export default class ExercisesController {
         }
     }
 
-    static async getById(req: Express.Request, res: Express.Response) {
+    static async getById(req: Request, res: Response) {
         try {
             const exerciseId: string = req.params.id;
             console.log("Exercise controller", exerciseId);
@@ -108,7 +108,7 @@ export default class ExercisesController {
         }
     }
 
-    static async getMany(_req: Express.Request, res: Express.Response) {
+    static async getMany(_req: Request, res: Response) {
         try {
             const exercises = await ExercisesManager.getAllExercise();
             console.log(exercises);
@@ -119,7 +119,7 @@ export default class ExercisesController {
         }
     }
 
-    static async update(req: Express.Request, res: Express.Response) {
+    static async update(req: Request, res: Response) {
         try {
             const exerciseId: string = req.params.id;
             const fieldsToUpdate: Partial<ExerciseType> = req.body;
@@ -140,7 +140,7 @@ export default class ExercisesController {
         }
     }
 
-    static async delete(req: Express.Request, res: Express.Response) {
+    static async delete(req: Request, res: Response) {
         try {
             const exerciseId: string = req.params.id;
             const status = await ExercisesManager.deleteExercise(exerciseId);

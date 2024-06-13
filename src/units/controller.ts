@@ -1,4 +1,4 @@
-import Express from "express";
+import { Request, Response } from "express";
 import UnitsManager from "./manager.js";
 import mongoose from "mongoose";
 import UnitsModel from "./model.js";
@@ -6,7 +6,7 @@ import CoursesModel from "../courses/model.js";
 // import CoursesRepository from "../courses/repository.js";
 
 export default class UnitsController {
-    static async create(req: Express.Request, res: Express.Response) {
+    static async create(req: Request, res: Response) {
         try {
             const { guidebook, description } = req.body as {
                 guidebook?: string,
@@ -36,7 +36,7 @@ export default class UnitsController {
         }
     } // cached
 
-    static async createByCourse(req: Express.Request, res: Express.Response) {
+    static async createByCourse(req: Request, res: Response) {
         const { unitData, courseId } = req.body as { unitData: Partial<UnitsType>, courseId: string };
         try {
             const session = await mongoose.startSession();
@@ -68,7 +68,7 @@ export default class UnitsController {
         }
     } // check this function
 
-    static async getById(req: Express.Request, res: Express.Response) {
+    static async getById(req: Request, res: Response) {
         try {
             const unitId: string = req.params.id;
             console.log("units controller", unitId);
@@ -84,7 +84,7 @@ export default class UnitsController {
         }
     } // cached 
 
-    static async getLevelsById(req: Express.Request, res: Express.Response) {
+    static async getLevelsById(req: Request, res: Response) {
         try {
             const unitId: string = req.params.id;
             console.log("units controller: getLevelsById", unitId);
@@ -100,7 +100,7 @@ export default class UnitsController {
         }
     } // cached - *need to reset the cache if levels data changed!*
 
-    static async getUnsuspendedLevelsById(req: Express.Request, res: Express.Response) {
+    static async getUnsuspendedLevelsById(req: Request, res: Response) {
         try {
             const unitId: string = req.params.id;
             console.log("units controller: getUnsuspendedLevelsById", unitId);
@@ -116,7 +116,7 @@ export default class UnitsController {
         }
     } // cached - *need to reset the cache if levels data changed!*
 
-    static async getNextLevelId(req: Express.Request, res: Express.Response) {
+    static async getNextLevelId(req: Request, res: Response) {
         try {
             const prevLevelId: string = req.params.prevLevelId;
             console.log("units controller: getNextLevelId", prevLevelId);
@@ -132,7 +132,7 @@ export default class UnitsController {
         }
     } // chached
 
-    static async getMany(_req: Express.Request, res: Express.Response) {
+    static async getMany(_req: Request, res: Response) {
         try {
             const units = await UnitsManager.getAllUnits();
             console.log(units);
@@ -143,7 +143,7 @@ export default class UnitsController {
         }
     } // chached
 
-    static async update(req: Express.Request, res: Express.Response) {
+    static async update(req: Request, res: Response) {
         try {
             const unitId: string = req.params.id;
             const fieldsToUpdate: Partial<UnitsType> = req.body;
@@ -164,7 +164,7 @@ export default class UnitsController {
         }
     } // chached
 
-    static async createNewLevel(req: Express.Request, res: Express.Response) {
+    static async createNewLevel(req: Request, res: Response) {
         try {
             const unitId: string = req.params.id;
             console.log("controller - createNewLevel", unitId);
@@ -181,7 +181,7 @@ export default class UnitsController {
         }
     } // chached
 
-    static async suspendLevel(req: Express.Request, res: Express.Response) {
+    static async suspendLevel(req: Request, res: Response) {
         try {
             const unitId: string = req.params.unitId;
             const levelId: string = req.params.levelId;
@@ -202,7 +202,7 @@ export default class UnitsController {
         }
     } // chached
 
-    static async unsuspendLevel(req: Express.Request, res: Express.Response) {
+    static async unsuspendLevel(req: Request, res: Response) {
         try {
             const unitId: string = req.params.unitId;
             const levelId: string = req.params.levelId;
@@ -223,7 +223,7 @@ export default class UnitsController {
         }
     } // chached
 
-    static async delete(req: Express.Request, res: Express.Response) {
+    static async delete(req: Request, res: Response) {
         try {
             const unitId: string = req.params.id;
             const status = await UnitsManager.deleteUnit(unitId);

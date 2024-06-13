@@ -1,8 +1,8 @@
-import express from "express";
+import { Router } from "express";
 import CountryController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
-const CountryRouter = express.Router();
+const CountryRouter = Router();
 
 CountryRouter
     .get("/:id", asyncHandler(CountryController.getById))

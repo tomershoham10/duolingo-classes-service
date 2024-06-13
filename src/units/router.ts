@@ -1,8 +1,8 @@
-import express from "express";
+import { Router } from "express";
 import UnitsController from "./controller.js";
 import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
 
-const UnitsRouter = express.Router();
+const UnitsRouter = Router();
 
 UnitsRouter
     .get("/getNextLevelId/:prevLevelId", asyncHandler(UnitsController.getNextLevelId))

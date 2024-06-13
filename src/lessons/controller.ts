@@ -1,11 +1,11 @@
-import Express, { NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import LessonsManager from "./manager.js";
 import LessonsModel from "./model.js";
 
 export default class LessonsController {
     static async create(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -36,8 +36,8 @@ export default class LessonsController {
     }
 
     static async getById(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -57,8 +57,8 @@ export default class LessonsController {
     }
 
     static async getExercisesById(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -78,8 +78,8 @@ export default class LessonsController {
     }
 
     static async getUnsuspendedExercisesById(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -99,8 +99,8 @@ export default class LessonsController {
     }
 
     static async getResultsByLessonAndUser(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -120,8 +120,8 @@ export default class LessonsController {
     }
 
     static async getMany(
-        _req: Express.Request,
-        res: Express.Response,
+        _req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -136,8 +136,8 @@ export default class LessonsController {
     }
 
     static async update(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
@@ -162,8 +162,8 @@ export default class LessonsController {
     }
 
     static async delete(
-        req: Express.Request,
-        res: Express.Response,
+        req: Request,
+        res: Response,
         next: NextFunction
     ) {
         try {
