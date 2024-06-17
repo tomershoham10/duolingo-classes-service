@@ -84,7 +84,7 @@ interface ExerciseType {
     targetsList?: string[]; //may be 2 correct answers
     timeBuffers: TimeBuffersType[];
     description?: string;
-    fileName: string;
+    filesNames: string[]; // if fsa - length === 1
 
     // fsa
     relevant?: string[];

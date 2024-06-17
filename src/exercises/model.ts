@@ -41,14 +41,15 @@ const exerciseSchema = new Schema({
         }],
         _id: false
     },
+    
     description: {
         type: String,
         required: false,
     },
-    fileName: {
+    filesNames: [{
         type: String,
         ref: 'File'
-    },
+    }],
     dateCreated: {
         type: Date,
         default: Date.now
@@ -57,12 +58,12 @@ const exerciseSchema = new Schema({
 
 exerciseSchema.pre('validate', function (next) {
     if (this.type === ExercisesTypes.FSA) {
-        if (!!this.fileName || !this.targetsList || !this.fileName || !this.timeBuffers) {
+        if (!this.targetsList || !this.timeBuffers || !this.filesNames || this.filesNames.length > 1) {
             next(new Error('Unmached fields for FSA exercise.'));
         }
     }
     if (this.type === ExercisesTypes.SPOTRECC) {
-        if (!!this.relevant || !this.fileName || !this.timeBuffers) {
+        if (!!this.relevant || !this.filesNames || !this.timeBuffers || !(this.targetsList && this.notableFeatures)) {
             next(new Error('Unmached fields for Spotrecc exercise.'));
         }
     }
