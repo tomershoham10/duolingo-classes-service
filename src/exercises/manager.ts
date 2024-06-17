@@ -54,7 +54,7 @@ export default class ExercisesManager {
         }
     }
 
-    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | undefined | null> {
+    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | KeyValueFeatures[] | null> {
         try {
             const cachedTargets = await getFromCache('getAnswersByExerciseId', exerciseId);
             if (cachedTargets) {
@@ -73,20 +73,20 @@ export default class ExercisesManager {
         }
     }
 
-    static async getExerciseByAnswerId(answerId: string): Promise<ExerciseType[] | null> {
+    static async getExerciseByTargetId(targetId: string): Promise<ExerciseType[] | null> {
         try {
-            const cachedExercises = await getFromCache('getExerciseByAnswerId', answerId);
+            const cachedExercises = await getFromCache('getExerciseByTargetId', targetId);
             if (cachedExercises) {
-                console.log("Cache hit: Exercise manager - getExerciseByAnswerId", answerId);
+                console.log("Cache hit: Exercise manager - getExerciseByTargetId", targetId);
                 return JSON.parse(cachedExercises); // Parse cached JSON data
             }
-            const exercises = await ExercisesRepository.getExerciseByAnswerId(answerId);
-            exercises !== null ? await setToCache('getExerciseByAnswerId', answerId, JSON.stringify(exercises), 360) : null;
-            console.log("Exercise manager getExerciseByAnswerId", exercises);
+            const exercises = await ExercisesRepository.getExerciseByTargetId(targetId);
+            exercises !== null ? await setToCache('getExerciseByTargetId', targetId, JSON.stringify(exercises), 360) : null;
+            console.log("Exercise manager getExerciseByTargetId", exercises);
             return exercises;
         } catch (error: any) {
-            console.error('Manager Error [getExerciseByAnswerId]:', error.message);
-            throw new Error('Error in getExerciseByAnswerId');
+            console.error('Manager Error [getExerciseByTargetId]:', error.message);
+            throw new Error('Error in getExerciseByTargetId');
         }
     }
 
@@ -102,8 +102,8 @@ export default class ExercisesManager {
             console.log("Exercise manager", exercise);
             return exercise;
         } catch (error: any) {
-            console.error('Manager Error [getExerciseByAnswerId]:', error.message);
-            throw new Error('Error in getExerciseByAnswerId');
+            console.error('Manager Error [getExerciseById]:', error.message);
+            throw new Error('Error in getExerciseById');
         }
     }
 

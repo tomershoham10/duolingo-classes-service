@@ -55,17 +55,24 @@ export default class ExercisesRepository {
         }
     }
 
-    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | null> {
+    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | KeyValueFeatures[] | null> {
         try {
             const exercise = await ExerciseModel.findById(exerciseId);
             console.log("exercises repo getAnswersByExerciseId - exercise", exercise);
             if (exercise) {
-                const answersIds = exercise.answersList;
-                if (answersIds) {
-                    const answersDetails = await TargetModel.find({ _id: { $in: answersIds } });
-                    return answersDetails;
+                const answersIds = exercise.targetsList;
+                if (exercise.type === ExercisesTypes.FSA) {
+                    if (answersIds) {
+                        const answersDetails = await TargetModel.find({ _id: { $in: answersIds } });
+                        return answersDetails;
+                    }
+                    else return null;
                 }
-                else return null;
+                if (exercise.type === ExercisesTypes.SPOTRECC) {
+                    const answersDetails = await TargetModel.find({ _id: { $in: answersIds } });
+
+                    return answersDetails || exercise.notableFeatures || null;
+                } else return null;
             }
             else return null;
         }
@@ -75,15 +82,15 @@ export default class ExercisesRepository {
         }
     }
 
-    static async getExerciseByAnswerId(answerId: string): Promise<ExerciseType[] | null> {
+    static async getExerciseByTargetId(targetId: string): Promise<ExerciseType[] | null> {
         try {
-            const exercises = await ExerciseModel.find({ answers: answerId });
-            console.log("exercises repo getExerciseByAnswerId", exercises);
+            const exercises = await ExerciseModel.find({ answers: targetId });
+            console.log("exercises repo getExerciseByTargetId", exercises);
             return exercises;
         }
         catch (error: any) {
             console.error('Repository Error:', error.message);
-            throw new Error(`exercises repo - getRelevantByExerciseId: ${error}`);
+            throw new Error(`exercises repo - getExerciseByTargetId: ${error}`);
         }
     }
 

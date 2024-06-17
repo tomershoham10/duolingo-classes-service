@@ -76,11 +76,11 @@ export default class ExercisesController {
         }
     }
 
-    static async getByAnswerId(req: Request, res: Response) {
+    static async getByTargetId(req: Request, res: Response) {
         try {
-            const answerId: string = req.params.answerId;
-            console.log("Exercise controller getByAnswerId", answerId);
-            const exercises = await ExercisesManager.getExerciseByAnswerId(answerId);
+            const targetId: string = req.params.targetId;
+            console.log("Exercise controller getByTargetId", targetId);
+            const exercises = await ExercisesManager.getExerciseByTargetId(targetId);
             if (!exercises) {
                 return res.status(404).json({ message: "Exercise not found" });
             }

@@ -69,19 +69,29 @@ enum ExercisesTypes {
 //     fileName: string;
 // }
 
+enum FeaturesList {
+    NUMBER_OF_BLADES = "numberOfBlades",
+}
+
+interface KeyValueFeatures {
+    [feature: FeaturesList]: number | string
+}
+
 interface ExerciseType {
     _id: string;
     dateCreated: Date;
     type: ExercisesTypes;
-    answersList: string[]; //may be 2 correct answers
+    targetsList?: string[]; //may be 2 correct answers
     timeBuffers: TimeBuffersType[];
     description?: string;
     fileName: string;
 
     // fsa
     relevant?: string[];
-    acceptableAnswers?: string[];
+    acceptableTargets?: string[];
 
+    // spotrecc
+    notableFeatures: KeyValueFeatures[];
 }
 
 /////////////// COUNTRIES ///////////////

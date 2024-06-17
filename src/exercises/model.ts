@@ -15,14 +15,21 @@ const exerciseSchema = new Schema({
         type: String,
         ref: 'Target'
     }],
-    answersList: [{
+
+    targetsList: [{
         type: String,
         ref: 'Target'
     }],
-    acceptableAnswers: [{
+    acceptableTargets: [{
         type: String,
         ref: 'Target'
     }],
+
+    notableFeatures: [{
+        type: Map,
+        of: Schema.Types.Mixed,
+    }],
+
     timeBuffers: {
         type: [{
             timeBuffer: {
@@ -35,30 +42,27 @@ const exerciseSchema = new Schema({
         _id: false
     },
     description: {
-        type: String
-    },
-    dateCreated: {
-        type: Date,
-        default: Date.now
-    },
-    recordName: {
         type: String,
-        ref: 'File'
+        required: false,
     },
     fileName: {
         type: String,
         ref: 'File'
     },
+    dateCreated: {
+        type: Date,
+        default: Date.now
+    },
 });
 
 exerciseSchema.pre('validate', function (next) {
     if (this.type === ExercisesTypes.FSA) {
-        if (!!this.fileName || !this.answersList || !this.recordName || !this.timeBuffers) {
+        if (!!this.fileName || !this.targetsList || !this.fileName || !this.timeBuffers) {
             next(new Error('Unmached fields for FSA exercise.'));
         }
     }
     if (this.type === ExercisesTypes.SPOTRECC) {
-        if (!!this.relevant || !!this.recordName || !this.fileName || !this.timeBuffers) {
+        if (!!this.relevant || !this.fileName || !this.timeBuffers) {
             next(new Error('Unmached fields for Spotrecc exercise.'));
         }
     }

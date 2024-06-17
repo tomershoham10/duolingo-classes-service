@@ -9,7 +9,7 @@ ExercisesRouter
     .get("/getResultByUserAndExerciseId/:exerciseId/:userId", asyncHandler(ExercisesController.getResultByUserAndExerciseId))
     .get("/getRelevantByExerciseId/:exerciseId", asyncHandler(ExercisesController.getRelevantByExerciseId))
     .get("/getAnswersByExerciseId/:exerciseId", asyncHandler(ExercisesController.getAnswersByExerciseId))
-    .get("/answers/:answerId", asyncHandler(ExercisesController.getByAnswerId))
+    .get("/answers/:targetId", asyncHandler(ExercisesController.getByTargetId))
     .get("/:id", asyncHandler(ExercisesController.getById))
     .get("/", asyncHandler(ExercisesController.getMany));
 
