@@ -5,6 +5,15 @@ enum ExercisesTypes {
     SPOTRECC = "spotrecc"
 }
 
+enum BucketsNames {
+    RECORDS = 'records',
+    IMAGES = 'images',
+}
+
+enum FeaturesList {
+    NUMBER_OF_BLADES = "numberOfBlades",
+}
+
 const exerciseSchema = new Schema({
     type: {
         type: String,
@@ -25,10 +34,17 @@ const exerciseSchema = new Schema({
         ref: 'Target'
     }],
 
-    notableFeatures: [{
-        type: Map,
-        of: Schema.Types.Mixed,
-    }],
+    notableFeatures: {
+        type: [{
+            type: {
+                enum: Object.values(FeaturesList),
+            },
+            value: {
+                type: Number || String,
+            },
+        }],
+        _id: false
+    },
 
     timeBuffers: {
         type: [{
@@ -41,15 +57,23 @@ const exerciseSchema = new Schema({
         }],
         _id: false
     },
-    
+
     description: {
         type: String,
         required: false,
     },
-    filesNames: [{
-        type: String,
-        ref: 'File'
-    }],
+    files: {
+        type: [{
+            filName: {
+                type: String,
+                ref: 'File'
+            },
+            bucket: {
+                enum: Object.values(BucketsNames),
+            },
+        }],
+        _id: false
+    },
     dateCreated: {
         type: Date,
         default: Date.now
@@ -58,12 +82,12 @@ const exerciseSchema = new Schema({
 
 exerciseSchema.pre('validate', function (next) {
     if (this.type === ExercisesTypes.FSA) {
-        if (!this.targetsList || !this.timeBuffers || !this.filesNames || this.filesNames.length > 1) {
+        if (!this.targetsList || !this.timeBuffers || !this.files || this.files.length > 1) {
             next(new Error('Unmached fields for FSA exercise.'));
         }
     }
     if (this.type === ExercisesTypes.SPOTRECC) {
-        if (!!this.relevant || !this.filesNames || !this.timeBuffers || !(this.targetsList && this.notableFeatures)) {
+        if (!!this.relevant || !this.files || !this.timeBuffers || !(this.targetsList && this.notableFeatures)) {
             next(new Error('Unmached fields for Spotrecc exercise.'));
         }
     }

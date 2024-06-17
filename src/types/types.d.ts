@@ -73,8 +73,19 @@ enum FeaturesList {
     NUMBER_OF_BLADES = "numberOfBlades",
 }
 
-interface KeyValueFeatures {
-    [feature: FeaturesList]: number | string
+enum BucketsNames {
+    RECORDS = 'records',
+    IMAGES = 'images',
+}
+
+interface FeatureObject {
+    type: FeaturesList,
+    value: number | string
+}
+
+interface FileObject {
+    fileName: string,
+    bucket: BucketsNames
 }
 
 interface ExerciseType {
@@ -84,14 +95,14 @@ interface ExerciseType {
     targetsList?: string[]; //may be 2 correct answers
     timeBuffers: TimeBuffersType[];
     description?: string;
-    filesNames: string[]; // if fsa - length === 1
+    files: FileObject[]; // if fsa - length === 1
 
     // fsa
     relevant?: string[];
     acceptableTargets?: string[];
 
     // spotrecc
-    notableFeatures: KeyValueFeatures[];
+    notableFeatures: FeatureObject[];
 }
 
 /////////////// COUNTRIES ///////////////
