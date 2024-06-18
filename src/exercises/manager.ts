@@ -54,7 +54,7 @@ export default class ExercisesManager {
         }
     }
 
-    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | KeyValueFeatures[] | null> {
+    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | FeatureObject[] | null> {
         try {
             const cachedTargets = await getFromCache('getAnswersByExerciseId', exerciseId);
             if (cachedTargets) {

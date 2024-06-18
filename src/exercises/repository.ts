@@ -55,7 +55,7 @@ export default class ExercisesRepository {
         }
     }
 
-    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | KeyValueFeatures[] | null> {
+    static async getAnswersByExerciseId(exerciseId: string): Promise<TargetType[] | FeatureObject[] | null> {
         try {
             const exercise = await ExerciseModel.findById(exerciseId);
             console.log("exercises repo getAnswersByExerciseId - exercise", exercise);

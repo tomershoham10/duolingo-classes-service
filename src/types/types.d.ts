@@ -48,27 +48,6 @@ enum ExercisesTypes {
     SPOTRECC = "spotrecc"
 }
 
-// interface FSAType {
-//     _id: string;
-//     relevant?: string[];
-//     answersList: string[]; //may be 2 correct answers
-//     acceptableAnswers?: string[];
-//     timeBuffers: TimeBuffersType[];
-//     description?: string;
-//     dateCreated: Date;
-//     recordName: string;
-// }
-
-// //~~~~~~~~~~~ spotrecc ~~~~~~~~~~~//
-
-// interface SpotreccType {
-//     _id: string;
-//     timeBuffers: TimeBuffersType[];
-//     description?: string;
-//     dateCreated: Date;
-//     fileName: string;
-// }
-
 enum FeaturesList {
     NUMBER_OF_BLADES = "numberOfBlades",
 }
@@ -102,7 +81,7 @@ interface ExerciseType {
     acceptableTargets?: string[];
 
     // spotrecc
-    notableFeatures: FeatureObject[];
+    notableFeatures?: FeatureObject[];
 }
 
 /////////////// COUNTRIES ///////////////
