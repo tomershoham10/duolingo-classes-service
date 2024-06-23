@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import UnitsModel from "../units/model.js";
 import CoursesModel from "./model.js";
 
@@ -47,31 +48,104 @@ export default class CoursesRepository {
         }
     }
 
-    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
+    // static async getUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
+    //     try {
+    //         const course = await CoursesModel.findById(courseId);
+    //         console.log("courses repo - getUnitsByCourseId - course", course);
+
+    //         if (course) {
+    //             const unitsIds = course.unitsIds;
+    //             console.log("courses repo - getUnitsByCourseId - unitsIds", unitsIds);
+    //             const unitsDetails = await UnitsModel.find({ _id: { $in: unitsIds } });
+
+    //             const unitsInOrder = unitsDetails.sort((a, b) => {
+    //                 const aIndex = unitsIds.indexOf(a._id);
+    //                 const bIndex = unitsIds.indexOf(b._id);
+    //                 return aIndex - bIndex;
+    //             });
+    //             console.log("courses repo getUnitsById - unitsInOrder", unitsInOrder);
+    //             return unitsInOrder as UnitsType[];
+    //         }
+    //         else return [];
+    //     }
+    //     catch (error: any) {
+    //         console.error('Repository Error:', error.message);
+    //         throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
+    //     }
+    // }
+
+
+    static async getCourseDataById(courseId: string): Promise<any[] | null> {
         try {
             const course = await CoursesModel.findById(courseId);
-            console.log("courses repo - getUnitsByCourseId - course", course);
+            if (!!course) {
+                const objId = new mongoose.Types.ObjectId(courseId);
+                const courseData = await CoursesModel.aggregate([
+                    { $match: { _id: objId } },
+                    {
+                        $lookup: {
+                            from: "units",
+                            let: { unitsIds: "$unitsIds" },
+                            pipeline: [
+                                { $match: { $expr: { $in: ["$_id", { $map: { input: "$$unitsIds", as: "id", in: { $toObjectId: "$$id" } } }] } } },
+                                {
+                                    $lookup: {
+                                        from: "levels",
+                                        let: { levelsIds: "$levelsIds" },
+                                        pipeline: [
+                                            { $match: { $expr: { $in: ["$_id", { $map: { input: "$$levelsIds", as: "id", in: { $toObjectId: "$$id" } } }] } } },
+                                            {
+                                                $lookup: {
+                                                    from: "lessons",
+                                                    let: { lessonsIds: "$lessonsIds" },
+                                                    pipeline: [
+                                                        { $match: { $expr: { $in: ["$_id", { $map: { input: "$$lessonsIds", as: "id", in: { $toObjectId: "$$id" } } }] } } },
+                                                        {
+                                                            $lookup: {
+                                                                from: "exercises",
+                                                                let: { exercisesIds: "$exercisesIds" },
+                                                                pipeline: [
+                                                                    { $match: { $expr: { $in: ["$_id", { $map: { input: "$$exercisesIds", as: "id", in: { $toObjectId: "$$id" } } }] } } }
+                                                                ],
+                                                                as: "exercises"
+                                                            }
+                                                        }
+                                                    ],
+                                                    as: "lessons"
+                                                }
+                                            }
+                                        ],
+                                        as: "levels"
+                                    }
+                                }
+                            ],
+                            as: "units"
+                        }
+                    }
+                ]);
+                // db.courses.aggregate([ { $match: { _id: ObjectId("6671586ac22d39e30de3cbe0") } }, { $lookup: { from: "units", localField: "unitsIds", foreignField: "_id", as: "unitsData" } } ])
 
-            if (course) {
-                const unitsIds = course.units;
-                console.log("courses repo - getUnitsByCourseId - unitsIds", unitsIds);
-                const unitsDetails = await UnitsModel.find({ _id: { $in: unitsIds } });
-
-                const unitsInOrder = unitsDetails.sort((a, b) => {
-                    const aIndex = unitsIds.indexOf(a._id);
-                    const bIndex = unitsIds.indexOf(b._id);
-                    return aIndex - bIndex;
-                });
-                console.log("courses repo getUnitsById - unitsInOrder", unitsInOrder);
-                return unitsInOrder as UnitsType[];
+                // const objId = new mongoose.Types.ObjectId(courseId);
+                // const courseData = await CoursesModel.aggregate().match({ _id: new mongoose.Types.ObjectId("6671586ac22d39e30de3cbe0") }).lookup(
+                //     {
+                //         from: "units",
+                //         localField: "unitsIds",
+                //         foreignField: "_id",
+                //         as: "unitsData"
+                //     }
+                // );
+                console.log('Aggregated course data:', courseData);
+                return courseData;
             }
-            else return [];
+            return null;
         }
         catch (error: any) {
             console.error('Repository Error:', error.message);
-            throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
+            return null;
         }
     }
+
+
 
     static async getUnsuspendedUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
         try {
@@ -79,9 +153,9 @@ export default class CoursesRepository {
             console.log("courses repo - getUnsuspendedUnitsByCourseId - course", course);
 
             if (course) {
-                const unitsIds = course.units;
+                const unitsIds = course.unitsIds;
                 console.log("courses repo - getUnsuspendedUnitsByCourseId - unitsIds", unitsIds);
-                const unsuspendedUnitsIds = unitsIds.filter(unitId => !course.suspendedUnits.includes(unitId));
+                const unsuspendedUnitsIds = unitsIds.filter(unitId => !course.suspendedUnitsIds.includes(unitId));
                 console.log("courses repo - getUnsuspendedUnitsByCourseId - unsuspendedUnitsIds", unsuspendedUnitsIds);
                 const unitsDetails = await UnitsModel.find({ _id: { $in: unsuspendedUnitsIds } });
 
@@ -103,11 +177,11 @@ export default class CoursesRepository {
             const course = await CoursesModel.findOne({ units: { $in: [prevUnitId] } });
             console.log("courses repo - getNextUnitId :", course);
             if (course) {
-                const unitsIds = course.units;
+                const unitsIds = course.unitsIds;
                 const indexOfUnit = unitsIds.indexOf(prevUnitId);
                 if (indexOfUnit !== -1 && indexOfUnit + 1 < unitsIds.length) {
                     const nextUnitId = unitsIds[unitsIds.indexOf(prevUnitId) + 1];
-                    if (course.suspendedUnits.includes(nextUnitId)) {
+                    if (course.suspendedUnitsIds.includes(nextUnitId)) {
                         await this.getNextUnitId(nextUnitId);
                     }
                     return nextUnitId;
@@ -157,7 +231,7 @@ export default class CoursesRepository {
             const course = await CoursesModel.findById(courseId);
             if (!!!course) { return null };
 
-            const suspendedUnits = course.suspendedUnits;
+            const suspendedUnits = course.suspendedUnitsIds;
             if (suspendedUnits.includes(unitId)) { return null };
 
             const updatedCourse = await CoursesModel.findByIdAndUpdate(
@@ -178,12 +252,12 @@ export default class CoursesRepository {
             const course = await CoursesModel.findById(courseId);
             if (!!!course) { return null };
 
-            const suspendedUnits = course.suspendedUnits;
-            if (!suspendedUnits.includes(unitId)) { return null };
+            const suspendedUnitsIds = course.suspendedUnitsIds;
+            if (!suspendedUnitsIds.includes(unitId)) { return null };
 
             const updatedCourse = await CoursesModel.findByIdAndUpdate(
                 courseId,
-                { suspendedUnits: suspendedUnits.filter(unit => unit !== unitId) },
+                { suspendedUnitsIds: suspendedUnitsIds.filter(unit => unit !== unitId) },
                 { new: true }
             );
             return updatedCourse;

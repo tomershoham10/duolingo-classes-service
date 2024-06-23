@@ -58,15 +58,16 @@ export default class CoursesController {
         }
     } // cached
 
-    static async getUnitsById(req: Request, res: Response) {
+    static async getCourseDataById(req: Request, res: Response) {
         try {
             const courseId: string = req.params.id;
             console.log("controller: getUnitsById", courseId);
-            const units = await CoursesManager.getUnitsByCourseId(courseId);
+            const courseData = await CoursesManager.getCourseDataById(courseId);
             return (
-                (units.length <= 0) ?
-                    res.status(404).json({ message: "units not found" }) :
-                    res.status(200).json({ units }));
+                courseData === null ? res.status(500).json({ message: "course not found" }) :
+                    (courseData.length <= 0) ?
+                        res.status(500).json({ message: "course is empty" }) :
+                        res.status(200).json({ courseData }));
         } catch (error: any) {
             console.error('Controller Error:', error.message);
             res.status(500).json({ error: error.message });
