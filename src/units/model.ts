@@ -1,20 +1,20 @@
 import { model, Schema } from 'mongoose';
 
 const UnitsSchema = new Schema<UnitsType>({
-    levels: [{
+    levelsIds: [{
         type: String,
-        ref: 'Levels',
+        ref: 'levels',
         required: true
     }],
-    suspendedLevels: [{
+    suspendedLevelsIds: [{
         type: String,
-        ref: 'Levels',
+        ref: 'levels',
         required: true
     }],
-    guidebook: { type: String, ref: 'Guidebook', required: false },
+    guidebookId: { type: String, ref: 'guidebooks', required: false },
     description: { type: String, required: false },
 });
 
-const UnitsModel = model<UnitsType>('Units', UnitsSchema);
+const UnitsModel = model<UnitsType>('units', UnitsSchema);
 
 export default UnitsModel;

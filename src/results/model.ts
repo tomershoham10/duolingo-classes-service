@@ -3,7 +3,7 @@ import { model, Schema } from 'mongoose';
 const ResultsSchema = new Schema<ResultType>({
     userId: {
         type: String,
-        ref: 'User',
+        ref: 'users',
         required: true
     },
     date: {
@@ -13,17 +13,17 @@ const ResultsSchema = new Schema<ResultType>({
     },
     lessonId: {
         type: String,
-        ref: 'Lessons',
+        ref: 'lessons',
         required: true
     },
     exerciseId: {
         type: String,
-        ref: 'Exercises',
+        ref: 'exercises',
         required: true
     },
     answers: [{
         type: String,
-        ref: 'Target',
+        ref: 'targets',
         required: true
     }],
     score: { type: Number, required: true },
@@ -31,6 +31,6 @@ const ResultsSchema = new Schema<ResultType>({
 
 ResultsSchema.index({ userId: 1, lessonId: 1, exerciseId: 1 }, { unique: true });
 
-const ResultsModel = model<ResultType>('Result', ResultsSchema);
+const ResultsModel = model<ResultType>('results', ResultsSchema);
 
 export default ResultsModel;

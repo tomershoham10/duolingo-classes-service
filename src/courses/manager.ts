@@ -12,7 +12,7 @@ export default class CoursesManager {
         try {
             const createdUnit = await UnitsManager.createUnit({});
             console.log("createCourse manager - createdUnit", createdUnit);
-            const createdCourse = await CoursesRepository.createCourse({ name: courseName, units: [createdUnit._id] });
+            const createdCourse = await CoursesRepository.createCourse({ name: courseName, unitsIds: [createdUnit._id] });
             await setToCache('courses', createdCourse._id, JSON.stringify(createdCourse), 3600);
             await resetNamespaceCache('getAllCourses', 'allCourses');
             await session.commitTransaction();
@@ -61,17 +61,17 @@ export default class CoursesManager {
         }
     }
 
-    static async getUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
+    static async getCourseDataById(courseId: string): Promise<any[] | null> {
         try {
-            const cachedUnits = await getFromCache('getUnitsByCourseId', courseId);
-            if (cachedUnits) {
-                console.log("Cache hit: courses manager - getUnitsByCourseId", courseId);
-                return JSON.parse(cachedUnits); // Parse cached JSON data
+            const cachedCourse = await getFromCache('getCourseDataById', courseId);
+            if (cachedCourse) {
+                console.log("Cache hit: courses manager - getCourseDataById", courseId);
+                return JSON.parse(cachedCourse); // Parse cached JSON data
             }
-            const units = await CoursesRepository.getUnitsByCourseId(courseId);
-            await setToCache('getUnitsByCourseId', courseId, JSON.stringify(units), 3600);
-            console.log("courses manager getUnitsByCourseId", units);
-            return units;
+            const courseData = await CoursesRepository.getCourseDataById(courseId);
+            await setToCache('getUnitsByCourseId', courseId, JSON.stringify(courseData), 3600);
+            console.log("courses manager getCourseDataById", courseData);
+            return courseData;
         } catch (error: any) {
             console.error('Manager Error [getUnitsByCourseId]:', error.message);
             throw new Error('Error in getting units by course id');

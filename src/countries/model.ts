@@ -4,6 +4,6 @@ const countrySchema: Schema = new Schema({
   name: { type: String, required: true, unique: true },
 });
 
-const CountryModel = model<CountryType>("Country", countrySchema);
+const CountryModel = model<CountryType>("countries", countrySchema);
 
 export default CountryModel;

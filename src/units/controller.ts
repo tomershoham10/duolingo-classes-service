@@ -8,16 +8,16 @@ import CoursesModel from "../courses/model.js";
 export default class UnitsController {
     static async create(req: Request, res: Response) {
         try {
-            const { guidebook, description } = req.body as {
-                guidebook?: string,
+            const { guidebookId, description } = req.body as {
+                guidebookId?: string,
                 description?: string
             };
 
 
             const reqUnit: Partial<UnitsType> = {};
 
-            if (guidebook) {
-                reqUnit.guidebook = guidebook;
+            if (guidebookId) {
+                reqUnit.guidebookId = guidebookId;
             }
 
             if (description) {
@@ -53,7 +53,7 @@ export default class UnitsController {
 
             const newUnit = new UnitsModel(unitData);
 
-            course.units ? course.units.push(newUnit._id.toString()) : course.units = [newUnit._id.toString()];
+            course.unitsIds ? course.unitsIds.push(newUnit._id.toString()) : course.unitsIds = [newUnit._id.toString()];
             // const updatedCourse = await CoursesRepository.updateCourse(course._id, { units: course.units })
             await newUnit.save({ session: session });
             await course.save({ session: session });

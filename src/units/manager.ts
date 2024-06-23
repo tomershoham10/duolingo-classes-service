@@ -14,7 +14,7 @@ export default class UnitsManager {
         try {
             const createdLevel = await LevelsManager.createLevel();
             console.log("createUnit manager - createdLevel", createdLevel);
-            const createdUnit = await UnitsRepository.createUnit({ ...unit, levels: [createdLevel._id] });
+            const createdUnit = await UnitsRepository.createUnit({ ...unit, levelsIds: [createdLevel._id] });
             await setToCache('units', createdUnit._id, JSON.stringify(createdUnit), 3600);
             await resetNamespaceCache('getAllUnits', 'allUnits');
             await session.commitTransaction();
@@ -157,7 +157,7 @@ export default class UnitsManager {
 
             const updatedUnit = await UnitsRepository.updateUnit(
                 unitId,
-                { levels: [...unit.levels, newLevel._id] }
+                { levelsIds: [...unit.levelsIds, newLevel._id] }
             );
             console.log('updatedUnit', updatedUnit);
             await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);

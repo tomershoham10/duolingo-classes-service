@@ -1,18 +1,18 @@
 import  {model, Schema } from 'mongoose';
 
 const LevelSchema = new Schema<LevelsType>({
-    lessons: [{
+    lessonsIds: [{
         type: String,
-        ref: 'Lessons',
+        ref: 'lessons',
         required: true
     }],
-    suspendedLessons: [{
+    suspendedLessonsIds: [{
         type: String,
-        ref: 'Lessons',
+        ref: 'lessons',
         required: true
     }],
 });
 
-const LevelsModel = model<LevelsType>('Levels', LevelSchema);
+const LevelsModel = model<LevelsType>('levels', LevelSchema);
 
 export default LevelsModel;

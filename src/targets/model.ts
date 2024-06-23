@@ -24,7 +24,7 @@ enum TypesOfSonars {
 
 const TargetSchema: Schema = new Schema({
   name: { type: String, required: true, unique: true },
-  countryId: { type: String, ref: 'Country', required: true },
+  countryId: { type: String, ref: 'countries', required: true },
   type: {
     type: String,
     enum: Object.values(TypesOfTargets),
@@ -37,6 +37,6 @@ const TargetSchema: Schema = new Schema({
   },
 });
 
-const TargetModel = model<TargetType>("Target", TargetSchema);
+const TargetModel = model<TargetType>("targets", TargetSchema);
 
 export default TargetModel;

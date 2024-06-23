@@ -3,17 +3,17 @@
 interface CoursesType {
     _id: string;
     name: string;
-    units: string[];
-    suspendedUnits: string[];
+    unitsIds: string[];
+    suspendedUnitsIds: string[];
 }
 
 /////////////// UNITS //////////////////
 
 interface UnitsType {
     _id: string;
-    levels: string[];
-    suspendedLevels: string[];
-    guidebook?: string;
+    levelsIds: string[];
+    suspendedLevelsIds: string[];
+    guidebookId?: string;
     description?: string;
 }
 
@@ -21,8 +21,8 @@ interface UnitsType {
 
 interface LevelsType {
     _id: string;
-    lessons: string[];
-    suspendedLessons: string[];
+    lessonsIds: string[];
+    suspendedLessonsIds: string[];
 }
 
 /////////////// LESSONS ///////////////
@@ -30,8 +30,8 @@ interface LevelsType {
 interface LessonsType {
     _id: string;
     name?: string;
-    exercises: string[];
-    suspendedExercises: string[];
+    exercisesIds: string[];
+    suspendedExercisesIds: string[];
 }
 
 /////////////// EXERCISES ///////////////////

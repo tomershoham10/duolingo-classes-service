@@ -11,7 +11,7 @@ export default class LevelsManager {
             const createdLesson = await LessonsManager.createLesson({ name: 'Lesson no.1' });
             console.log("createLevel manager - createdLesson", createdLesson);
 
-            const createdLevel = await LevelsRepository.createLevel({ lessons: [createdLesson._id] });
+            const createdLevel = await LevelsRepository.createLevel({ lessonsIds: [createdLesson._id] });
             await setToCache('levels', createdLevel._id, JSON.stringify(createdLevel), 3600);
             await resetNamespaceCache('getAllLevels', 'allLevels');
 

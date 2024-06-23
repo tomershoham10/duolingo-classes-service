@@ -39,10 +39,10 @@ export default class UnitsRepository {
         try {
             const unit = await UnitsModel.findById(unitId);
             if (unit) {
-                const levelsIds = unit.levels;
+                const levelsIds = unit.levelsIds;
                 console.log('repo - getsLevelsByUnitId: levelsIds', levelsIds)
-                const unSuspendLevelsIds = levelsIds.filter(levelId => !unit.suspendedLevels.includes(levelId));
-                console.log('repo - getsLevelsByUnitId: unSuspendLevelsIds', unit.suspendedLevels, unSuspendLevelsIds)
+                const unSuspendLevelsIds = levelsIds.filter(levelId => !unit.suspendedLevelsIds.includes(levelId));
+                console.log('repo - getsLevelsByUnitId: unSuspendLevelsIds', unit.suspendedLevelsIds, unSuspendLevelsIds)
                 if (unSuspendLevelsIds.length > 0) {
 
                     const levelsDetails = await LevelsModel.find({ _id: { $in: unSuspendLevelsIds } });
@@ -116,10 +116,10 @@ export default class UnitsRepository {
             const unit = await UnitsModel.findById(unitId);
             console.log("courses repo - getUnsuspendedUnitsByCourseId - unit", unit);
             if (unit) {
-                const levelsIds = unit.levels;
+                const levelsIds = unit.levelsIds;
                 console.log('repo - getUnsuspendedUnitsByCourseId: levelsIds', levelsIds)
-                const unSuspendLevelsIds = levelsIds.filter(levelId => !unit.suspendedLevels.includes(levelId));
-                console.log('repo - getUnsuspendedLevelsByUnitId: unSuspendLevelsIds', unit.suspendedLevels, unSuspendLevelsIds)
+                const unSuspendLevelsIds = levelsIds.filter(levelId => !unit.suspendedLevelsIds.includes(levelId));
+                console.log('repo - getUnsuspendedLevelsByUnitId: unSuspendLevelsIds', unit.suspendedLevelsIds, unSuspendLevelsIds)
                 if (unSuspendLevelsIds.length > 0) {
 
                     const levelsDetails = await LevelsModel.find({ _id: { $in: unSuspendLevelsIds } });
@@ -137,15 +137,15 @@ export default class UnitsRepository {
 
     static async getNextLevelId(prevLevelId: string): Promise<string | null> {
         try {
-            const unit = await UnitsModel.findOne({ levels: { $in: [prevLevelId] } });
+            const unit = await UnitsModel.findOne({ levelsIds: { $in: [prevLevelId] } });
             console.log("units repo - getNextLevelId - unit", unit);
             if (unit) {
-                const levelsIds = unit.levels;
+                const levelsIds = unit.levelsIds;
                 if (levelsIds) {
                     const prevLevelIdIndex = levelsIds.indexOf(prevLevelId);
                     if (prevLevelIdIndex !== -1 && prevLevelIdIndex + 1 !== levelsIds.length) {
                         const nextLevelId = levelsIds[levelsIds.indexOf(prevLevelId) + 1];
-                        if (unit.suspendedLevels.includes(nextLevelId)) {
+                        if (unit.suspendedLevelsIds.includes(nextLevelId)) {
                             await this.getNextLevelId(nextLevelId);
                         }
                         return nextLevelId;
@@ -157,9 +157,9 @@ export default class UnitsRepository {
                                 return response;
                             } else {
                                 const nextUnit = await UnitsModel.findById(response);
-                                if (nextUnit && nextUnit.levels) {
-                                    const nextLevelnId = nextUnit.levels[0];
-                                    if (nextUnit.suspendedLevels.includes(nextLevelnId)) {
+                                if (nextUnit && nextUnit.levelsIds) {
+                                    const nextLevelnId = nextUnit.levelsIds[0];
+                                    if (nextUnit.suspendedLevelsIds.includes(nextLevelnId)) {
                                         await this.getNextLevelId(nextLevelnId);
                                     }
                                     return nextLevelnId;
@@ -214,11 +214,11 @@ export default class UnitsRepository {
             const unit = await UnitsModel.findById(unitId);
             if (!!!unit) { return null };
 
-            const suspendedLevels = unit.suspendedLevels;
-            if (suspendedLevels.includes(levelId)) { return null };
+            const suspendedLevelsIds = unit.suspendedLevelsIds;
+            if (suspendedLevelsIds.includes(levelId)) { return null };
             const updatedUnit = await UnitsModel.findByIdAndUpdate(
                 unitId,
-                { suspendedLevels: [...suspendedLevels, levelId] },
+                { suspendedLevelsIds: [...suspendedLevelsIds, levelId] },
                 { new: true }
             );
             return updatedUnit;
@@ -233,11 +233,11 @@ export default class UnitsRepository {
             const unit = await UnitsModel.findById(unitId);
             if (!!!unit) { return null };
 
-            const suspendedLevels = unit.suspendedLevels;
-            if (!suspendedLevels.includes(levelId)) { return null };
+            const suspendedLevelsIds = unit.suspendedLevelsIds;
+            if (!suspendedLevelsIds.includes(levelId)) { return null };
             const updatedUnit = await UnitsModel.findByIdAndUpdate(
                 unitId,
-                { suspendedLevels: suspendedLevels.filter(level => level !== levelId) },
+                { suspendedLevelsIds: suspendedLevelsIds.filter(level => level !== levelId) },
                 { new: true }
             );
             return updatedUnit;

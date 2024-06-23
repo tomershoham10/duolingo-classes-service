@@ -29,7 +29,7 @@ export default class LevelsRepository {
         try {
             const level = await LevelsModel.findById(levelId);
             if (level) {
-                const lessonsIds = level.lessons;
+                const lessonsIds = level.lessonsIds;
                 if (lessonsIds.length > 0) {
                     const lessonsDetails = await LessonsModel.find({ _id: { $in: lessonsIds } });
                     const lessonsInOrder = lessonsDetails.sort((a, b) => {
@@ -54,8 +54,8 @@ export default class LevelsRepository {
         try {
             const level = await LevelsModel.findById(levelId);
             if (level) {
-                const lessonsIds = level.lessons;
-                const unSuspendLessonsIds = lessonsIds.filter(lessonId => !level.suspendedLessons.includes(lessonId));
+                const lessonsIds = level.lessonsIds;
+                const unSuspendLessonsIds = lessonsIds.filter(lessonId => !level.suspendedLessonsIds.includes(lessonId));
 
 
                 if (unSuspendLessonsIds.length > 0) {
@@ -79,12 +79,12 @@ export default class LevelsRepository {
             const level = await LevelsModel.findOne({ lessons: { $in: [prevLessonId] } });
             console.log("getNextLessonId repo - level", level);
             if (level) {
-                const lessonsIds = level.lessons;
+                const lessonsIds = level.lessonsIds;
                 if (lessonsIds) {
                     const prevLessonIdIndex = lessonsIds.indexOf(prevLessonId);
                     if (prevLessonIdIndex !== -1 && prevLessonIdIndex + 1 !== lessonsIds.length) {
                         const nextLessonId = lessonsIds[lessonsIds.indexOf(prevLessonId) + 1];
-                        if (level.suspendedLessons.includes(nextLessonId)) {
+                        if (level.suspendedLessonsIds.includes(nextLessonId)) {
                             await this.getNextLessonId(nextLessonId);
                         }
                         return nextLessonId;
@@ -98,8 +98,8 @@ export default class LevelsRepository {
                             }
                             const nextLevel = await LevelsModel.findById(response);
                             if (nextLevel) {
-                                const nextLessonId = nextLevel.lessons[0];
-                                if (nextLevel.suspendedLessons.includes(nextLessonId)) {
+                                const nextLessonId = nextLevel.lessonsIds[0];
+                                if (nextLevel.suspendedLessonsIds.includes(nextLessonId)) {
                                     await this.getNextLessonId(nextLessonId);
                                 }
                                 return nextLessonId;
@@ -152,12 +152,12 @@ export default class LevelsRepository {
             const level = await LevelsModel.findById(levelId);
             if (!!!level) { return null };
 
-            const suspendedLessons = level.suspendedLessons;
-            if (suspendedLessons.includes(lessonId)) { return null };
+            const suspendedLessonsIds = level.suspendedLessonsIds;
+            if (suspendedLessonsIds.includes(lessonId)) { return null };
 
             const updatedLevel = await LevelsModel.findByIdAndUpdate(
                 levelId,
-                { suspendedLessons: [...suspendedLessons, lessonId] },
+                { suspendedLessonsIds: [...suspendedLessonsIds, lessonId] },
                 { new: true }
             );
             console.log("lessons repo suspendLessonById", updatedLevel);
@@ -176,12 +176,12 @@ export default class LevelsRepository {
             const level = await LevelsModel.findById(levelId);
             if (!!!level) { return null };
 
-            const suspendedLessons = level.suspendedLessons;
-            if (!suspendedLessons.includes(lessonId)) { return null };
+            const suspendedLessonsIds = level.suspendedLessonsIds;
+            if (!suspendedLessonsIds.includes(lessonId)) { return null };
 
             const updatedLevel = await LevelsModel.findByIdAndUpdate(
                 levelId,
-                { suspendedLessons: suspendedLessons.filter(lesson => lesson !== lessonId) },
+                { suspendedLessonsIds: suspendedLessonsIds.filter(lesson => lesson !== lessonId) },
                 { new: true }
             );
             console.log("lessons repo unsuspendLessonById", updatedLevel);

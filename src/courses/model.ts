@@ -2,19 +2,20 @@ import { model,Schema } from 'mongoose';
 
 const CoursesSchema = new Schema<CoursesType>({
     name: { type: String, required: true, unique: true },
-    units: [{
+    unitsIds: [{
         type: String,
-        ref: 'Units',
+        ref: 'units',
         required: true
     }],
-    suspendedUnits: [{
+    suspendedUnitsIds: [{
         type: String,
-        ref: 'Units',
+        ref: 'units',
         required: true
     }]
 });
 
-const CoursesModel = model<CoursesType>('Courses', CoursesSchema);
+const CoursesModel = model<CoursesType>('courses', CoursesSchema);
 
 export default CoursesModel;
 
+    

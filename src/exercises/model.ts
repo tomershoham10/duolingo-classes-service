@@ -94,6 +94,6 @@ exerciseSchema.pre('validate', function (next) {
     next();
 });
 
-const ExerciseModel = model<ExerciseType>('Exercises', exerciseSchema);
+const ExerciseModel = model<ExerciseType>('exercises', exerciseSchema);
 
 export default ExerciseModel;

@@ -31,7 +31,7 @@ export default class LessonsRepository {
         try {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
-                const exerciseIds = lesson.exercises;
+                const exerciseIds = lesson.exercisesIds;
 
                 if (exerciseIds) {
                     const exerciseDetails = await ExerciseModel.find({ _id: { $in: exerciseIds } });
@@ -50,10 +50,10 @@ export default class LessonsRepository {
         try {
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
-                const exerciseIds = lesson.exercises;
+                const exerciseIds = lesson.exercisesIds;
                 console.log('repo - getsUnsuspendedExercisesByLessonId: exerciseIds', exerciseIds);
-                const unSuspendExercisesIds = exerciseIds.filter(lessonId => !lesson.suspendedExercises.includes(lessonId));
-                console.log('repo - getsUnsuspendedExercisesByLessonId: unSuspendExercisesIds', lesson.suspendedExercises, unSuspendExercisesIds);
+                const unSuspendExercisesIds = exerciseIds.filter(lessonId => !lesson.suspendedExercisesIds.includes(lessonId));
+                console.log('repo - getsUnsuspendedExercisesByLessonId: unSuspendExercisesIds', lesson.suspendedExercisesIds, unSuspendExercisesIds);
                 if (unSuspendExercisesIds.length > 0) {
                     const exerciseDetails = await ExerciseModel.find({ _id: { $in: unSuspendExercisesIds } });
                     console.log('repo - getsUnsuspendedExercisesByLessonId: exerciseDetails', exerciseDetails);
@@ -74,7 +74,7 @@ export default class LessonsRepository {
 
             const lesson = await LessonsModel.findById(lessonId);
             if (lesson) {
-                const exerciseIds = lesson.exercises;
+                const exerciseIds = lesson.exercisesIds;
 
 
                 if (exerciseIds) {

@@ -2,18 +2,18 @@ import { model, Schema } from 'mongoose';
 
 const LessonsSchema = new Schema<LessonsType>({
     name: { type: String, required: false },
-    exercises: [{
+    exercisesIds: [{
         type: String,
-        ref: 'Exercises',
+        ref: 'exercises',
         required: true
     }],
-    suspendedExercises: [{
+    suspendedExercisesIds: [{
         type: String,
-        ref: 'Exercises',
+        ref: 'exercises',
         required: true
     }],
 });
 
-const LessonsModel = model<LessonsType>('Lessons', LessonsSchema);
+const LessonsModel = model<LessonsType>('lessons', LessonsSchema);
 
 export default LessonsModel;
