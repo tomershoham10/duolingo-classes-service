@@ -79,9 +79,11 @@ export default class CoursesRepository {
         try {
             const course = await CoursesModel.findById(courseId);
             if (!!course) {
-                const objId = new mongoose.Types.ObjectId(courseId);
+                const courseObjectId = new mongoose.Types.ObjectId(courseId);
                 const courseData = await CoursesModel.aggregate([
-                    { $match: { _id: objId } },
+                    // Match the specific course
+                    { $match: { _id: courseObjectId } },
+                    // Lookup units from unitsIds
                     {
                         $lookup: {
                             from: "units",
@@ -123,17 +125,9 @@ export default class CoursesRepository {
                         }
                     }
                 ]);
-                // db.courses.aggregate([ { $match: { _id: ObjectId("6671586ac22d39e30de3cbe0") } }, { $lookup: { from: "units", localField: "unitsIds", foreignField: "_id", as: "unitsData" } } ])
 
-                // const objId = new mongoose.Types.ObjectId(courseId);
-                // const courseData = await CoursesModel.aggregate().match({ _id: new mongoose.Types.ObjectId("6671586ac22d39e30de3cbe0") }).lookup(
-                //     {
-                //         from: "units",
-                //         localField: "unitsIds",
-                //         foreignField: "_id",
-                //         as: "unitsData"
-                //     }
-                // );
+
+
                 console.log('Aggregated course data:', courseData);
                 return courseData;
             }
