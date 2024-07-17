@@ -1,5 +1,6 @@
 /dist
 /dist/exercises
 /node_modules
+/.vscode
 .env
 *.tar
