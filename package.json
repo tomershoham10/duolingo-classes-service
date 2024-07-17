@@ -9,7 +9,7 @@
     "build:w": "tsc -w",
     "start": "nodemon ./dist/index.js",
     "dev": "concurrently  \"npm:build:w\" \"npm:start\"",
-    "lint": "eslint ."
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
