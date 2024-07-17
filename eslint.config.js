@@ -11,6 +11,7 @@ const config = new ESLint({
     extends: [
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended",
+      'plugin:prettier/recommended',
       "airbnb-base",
     ],
     parser: "@typescript-eslint/parser",
