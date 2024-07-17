@@ -1,11 +1,11 @@
-import TargetModel from "./model.js";
+import TargetModel from './model.js';
 
 export default class TargetRepository {
   static async createTarget(target: Partial<TargetType>): Promise<TargetType> {
     try {
       const existingTarget = await TargetModel.findOne({ name: target.name });
       if (existingTarget) {
-        throw new Error("Target already exists");
+        throw new Error('Target already exists');
       }
 
       const newTarget = await TargetModel.create(target);
@@ -17,13 +17,11 @@ export default class TargetRepository {
 
   static async getTargetById(targetId: string): Promise<TargetType | null> {
     try {
-
       const target = await TargetModel.findById(targetId);
-      console.log("repo", target);
+      console.log('repo', target);
       return target;
     } catch (error) {
       throw new Error(`targets repo getTargetById: ${error}`);
-
     }
   }
 
@@ -33,7 +31,6 @@ export default class TargetRepository {
       return targets;
     } catch (error) {
       throw new Error(`targets repo getAllTarget: ${error}`);
-
     }
   }
 
@@ -57,8 +54,7 @@ export default class TargetRepository {
     try {
       const status = await TargetModel.findOneAndDelete({ _id: targetId });
       return status;
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error(`targets repo deleteTarget: ${error}`);
     }
   }

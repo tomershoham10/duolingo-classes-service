@@ -1,23 +1,24 @@
-import { Request, Response, NextFunction } from "express";
-import TargetManager from "./manager.js";
-import TargetModel from "./model.js";
+import { Request, Response, NextFunction } from 'express';
+import TargetManager from './manager.js';
+import TargetModel from './model.js';
 
 export default class TargetController {
-  static async create(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, countryId, type, subType } = req.body as { name: string; countryId: string; type: TypesOfTargets, subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars };
+      const { name, countryId, type, subType } = req.body as {
+        name: string;
+        countryId: string;
+        type: TypesOfTargets;
+        subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars;
+      };
 
       const reqTarget: {
-        name: string,
-        countryId: string,
-        type: TypesOfTargets,
-        subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars
+        name: string;
+        countryId: string;
+        type: TypesOfTargets;
+        subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars;
       } = { name: name, countryId: countryId, type: type, subType: subType };
-      console.log("TargetController create - reqTarget", reqTarget);
+      console.log('TargetController create - reqTarget', reqTarget);
       const isExisted = await TargetModel.findOne({ name: name });
       if (isExisted) {
         console.error('Target already existed');
@@ -26,57 +27,45 @@ export default class TargetController {
       const newTarget = await TargetManager.createTarget(reqTarget);
       res
         .status(201)
-        .json({ message: "Target registered successfully", newTarget });
+        .json({ message: 'Target registered successfully', newTarget });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ err: "Internal Server Error" });
+      res.status(500).json({ err: 'Internal Server Error' });
       next(error);
     }
   }
 
-  static async getById(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const targetId: string = req.params.id;
-      console.log("controller", targetId);
+      console.log('controller', targetId);
       const target = await TargetManager.getTargetById(targetId);
       if (!target) {
-        return res.status(404).json({ message: "Target not found" });
+        return res.status(404).json({ message: 'Target not found' });
       }
 
       res.status(200).json({ target });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ err: "Internal Server Error" });
+      res.status(500).json({ err: 'Internal Server Error' });
       next(error);
     }
   }
 
-  static async getMany(
-    _req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  static async getMany(_req: Request, res: Response, next: NextFunction) {
     try {
-      console.log("target controller getAll");
+      console.log('target controller getAll');
       const targets = await TargetManager.getAllTarget();
       console.log(targets);
       res.status(200).json({ targets });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ err: "Internal Server Error" });
+      res.status(500).json({ err: 'Internal Server Error' });
       next(error);
     }
   }
 
-  static async update(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const targetId: string = req.params.id;
       const fieldsToUpdate: Partial<TargetType> = req.body;
@@ -87,34 +76,30 @@ export default class TargetController {
       );
 
       if (!updatedTarget) {
-        return res.status(404).json({ message: "Target not found" });
+        return res.status(404).json({ message: 'Target not found' });
       }
 
       res.status(200).json({ updatedTarget });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ err: "Internal Server Error" });
+      res.status(500).json({ err: 'Internal Server Error' });
       next(error);
     }
   }
 
-  static async delete(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const targetId: string = req.params.id;
       const deletedTarget = await TargetManager.deleteTarget(targetId);
 
       if (!deletedTarget) {
-        return res.status(404).json({ message: "Target not found" });
+        return res.status(404).json({ message: 'Target not found' });
       }
 
       res.status(200).json({ deletedTarget });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ err: "Internal Server Error" });
+      res.status(500).json({ err: 'Internal Server Error' });
       next(error);
     }
   }

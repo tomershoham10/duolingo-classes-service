@@ -1,11 +1,15 @@
-import CountryModel from "./model.js";
+import CountryModel from './model.js';
 
 export default class CountryRepository {
-  static async createCountry(country: Partial<CountryType>): Promise<CountryType> {
+  static async createCountry(
+    country: Partial<CountryType>
+  ): Promise<CountryType> {
     try {
-      const existingCountry = await CountryModel.findOne({ name: country.name });
+      const existingCountry = await CountryModel.findOne({
+        name: country.name,
+      });
       if (existingCountry) {
-        throw new Error("Country already exists");
+        throw new Error('Country already exists');
       }
 
       const newCountry = await CountryModel.create(country);
@@ -18,7 +22,7 @@ export default class CountryRepository {
   static async getCountryById(countryId: string): Promise<CountryType | null> {
     try {
       const country = await CountryModel.findById(countryId);
-      console.log("repo", country);
+      console.log('repo', country);
       return country;
     } catch (error) {
       throw new Error(`countries repo createCountry: ${error}`);

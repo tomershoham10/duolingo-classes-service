@@ -1,14 +1,23 @@
-import { getFromCache, resetNamespaceCache, setToCache } from "../utils/cache.js";
-import TargetRepository from "./repository.js";
+import {
+  getFromCache,
+  resetNamespaceCache,
+  setToCache,
+} from '../utils/cache.js';
+import TargetRepository from './repository.js';
 
 export default class TargetManager {
   static async createTarget(target: Partial<TargetType>): Promise<TargetType> {
     try {
       const response = await TargetRepository.createTarget(target);
-      await setToCache('targets', response._id, JSON.stringify(response), 36000);
+      await setToCache(
+        'targets',
+        response._id,
+        JSON.stringify(response),
+        36000
+      );
       await resetNamespaceCache('getAllTarget', 'allTarget');
 
-      return response
+      return response;
     } catch (error) {
       throw new Error(`targets manager createTarget: ${error}`);
     }
@@ -18,13 +27,15 @@ export default class TargetManager {
     try {
       const cachedTarget = await getFromCache('targets', targetId);
       if (cachedTarget) {
-        console.log("Cache hit: targets manager - getTargetById", targetId);
+        console.log('Cache hit: targets manager - getTargetById', targetId);
         return JSON.parse(cachedTarget); // Parse cached JSON data
       }
       const target = await TargetRepository.getTargetById(targetId);
-      target !== null ? await setToCache('targets', targetId, JSON.stringify(target), 3600) : null;
+      target !== null
+        ? await setToCache('targets', targetId, JSON.stringify(target), 3600)
+        : null;
 
-      console.log("manager", target);
+      console.log('manager', target);
       return target;
     } catch (error) {
       throw new Error(`targets manager getTargetById: ${error}`);
@@ -35,11 +46,16 @@ export default class TargetManager {
     try {
       const cachedTargets = await getFromCache('getAllTarget', 'allTarget');
       if (cachedTargets) {
-        console.log("Cache hit: targets manager - getAllTarget", cachedTargets);
+        console.log('Cache hit: targets manager - getAllTarget', cachedTargets);
         return JSON.parse(cachedTargets); // Parse cached JSON data
       }
       const targets = await TargetRepository.getAllTarget();
-      await setToCache('getAllTarget', 'allTarget', JSON.stringify(targets), 3600);
+      await setToCache(
+        'getAllTarget',
+        'allTarget',
+        JSON.stringify(targets),
+        3600
+      );
 
       return targets;
     } catch (error) {
@@ -56,7 +72,12 @@ export default class TargetManager {
         targetId,
         filedsToUpdate
       );
-      await setToCache('targets', targetId, JSON.stringify(updatedTarget), 3600);
+      await setToCache(
+        'targets',
+        targetId,
+        JSON.stringify(updatedTarget),
+        3600
+      );
       await resetNamespaceCache('getAllTarget', 'allTarget');
 
       return updatedTarget;

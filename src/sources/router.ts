@@ -1,17 +1,15 @@
-import { Router } from "express";
-import SourcesController from "./controller.js";
-import { asyncHandler } from "../middleware/errorHandling/asyncHandler.js";
+import { Router } from 'express';
+import SourcesController from './controller.js';
+import { asyncHandler } from '../middleware/errorHandling/asyncHandler.js';
 
 const SourcesRouter = Router();
 
-SourcesRouter
-    .get("/", asyncHandler(SourcesController.getMany));
+SourcesRouter.get('/', asyncHandler(SourcesController.getMany));
 
-SourcesRouter
-    .post("/", asyncHandler(SourcesController.create));
+SourcesRouter.post('/', asyncHandler(SourcesController.create));
 
-SourcesRouter.put("/:id", asyncHandler(SourcesController.update));
+SourcesRouter.put('/:id', asyncHandler(SourcesController.update));
 
-SourcesRouter.delete("/:id", asyncHandler(SourcesController.delete));
+SourcesRouter.delete('/:id', asyncHandler(SourcesController.delete));
 
 export default SourcesRouter;
