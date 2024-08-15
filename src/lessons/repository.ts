@@ -1,4 +1,4 @@
-import ExerciseModel from '../exercises/model.js';
+import ExerciseModel from '../exercises/fsa/model.js';
 import ResultsModel from '../results/model.js';
 import LessonsModel from './model.js';
 

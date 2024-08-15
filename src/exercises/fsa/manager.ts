@@ -2,13 +2,13 @@ import {
   getFromCache,
   resetNamespaceCache,
   setToCache,
-} from '../utils/cache.js';
+} from '../../utils/cache.js';
 import ExercisesRepository from './repository.js';
 
 export default class ExercisesManager {
   static async createExercise(
-    exercise: Partial<ExerciseType>
-  ): Promise<ExerciseType> {
+    exercise: Partial<FsaType>
+  ): Promise<FsaType> {
     try {
       const response = await ExercisesRepository.createExercise(exercise);
       await setToCache(
@@ -154,7 +154,7 @@ export default class ExercisesManager {
 
   static async getExerciseByTargetId(
     targetId: string
-  ): Promise<ExerciseType[] | null> {
+  ): Promise<FsaType[] | null> {
     try {
       const cachedExercises = await getFromCache(
         'getExerciseByTargetId',
@@ -187,7 +187,7 @@ export default class ExercisesManager {
 
   static async getExerciseById(
     exerciseId: string
-  ): Promise<ExerciseType | null> {
+  ): Promise<FsaType | null> {
     try {
       const cachedExercise = await getFromCache('getExerciseById', exerciseId);
       if (cachedExercise) {
@@ -214,7 +214,7 @@ export default class ExercisesManager {
     }
   }
 
-  static async getAllExercise(): Promise<ExerciseType[]> {
+  static async getAllExercise(): Promise<FsaType[]> {
     try {
       const cachedExercises = await getFromCache(
         'getAllExercise',
@@ -243,8 +243,8 @@ export default class ExercisesManager {
 
   static async updateExercise(
     exerciseId: string,
-    filedsToUpdate: Partial<ExerciseType>
-  ): Promise<ExerciseType | null> {
+    filedsToUpdate: Partial<FsaType>
+  ): Promise<FsaType | null> {
     try {
       const updatedExercise = await ExercisesRepository.updateExercise(
         exerciseId,
@@ -267,7 +267,7 @@ export default class ExercisesManager {
 
   static async deleteExercise(
     exerciseId: string
-  ): Promise<ExerciseType | null> {
+  ): Promise<FsaType | null> {
     try {
       const status = await ExercisesRepository.deleteExercise(exerciseId);
       status ? await resetNamespaceCache('exercises', exerciseId) : null;

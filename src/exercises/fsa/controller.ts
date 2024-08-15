@@ -4,16 +4,6 @@ import ExercisesManager from './manager.js';
 export default class ExercisesController {
   static async create(req: Request, res: Response) {
     try {
-      // const { relevant, answersList, acceptableAnswers, timeBuffers, description, recordName } = req.body as Partial<FSAType>;
-      // let reqExercise: Partial<FSAType> = {
-      //     recordName: recordName,
-      //     answersList: answersList,
-      //     timeBuffers: timeBuffers,
-      // }
-      // relevant ? reqExercise = { ...reqExercise, relevant } : null;
-      // acceptableAnswers ? reqExercise = { ...reqExercise, acceptableAnswers } : null;
-      // description ? reqExercise = { ...reqExercise, description } : null;
-
       const newExercise = await ExercisesManager.createExercise(req.body);
       if (newExercise) {
         return res
@@ -136,7 +126,7 @@ export default class ExercisesController {
   static async update(req: Request, res: Response) {
     try {
       const exerciseId: string = req.params.id;
-      const fieldsToUpdate: Partial<ExerciseType> = req.body;
+      const fieldsToUpdate: Partial<FsaType> = req.body;
 
       const updatedExercise = await ExercisesManager.updateExercise(
         exerciseId,

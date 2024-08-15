@@ -1,14 +1,12 @@
-import TargetModel from '../targets/model.js';
-import ResultsModel from '../results/model.js';
-import ExerciseModel from './model.js';
+import TargetModel from '../../targets/model.js';
+import ResultsModel from '../../results/model.js';
+import FsaModel from './model.js';
 
 export default class ExercisesRepository {
-  static async createExercise(
-    exercise: Partial<ExerciseType>
-  ): Promise<ExerciseType> {
+  static async createExercise(exercise: Partial<FsaType>): Promise<FsaType> {
     try {
       console.log('exercises repo create: ', exercise);
-      const newExercise = await ExerciseModel.create(exercise);
+      const newExercise = await FsaModel.create(exercise);
       return newExercise;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
@@ -21,7 +19,7 @@ export default class ExercisesRepository {
     userId: string
   ): Promise<ResultType | null> {
     try {
-      const exercise = await ExerciseModel.findById(exerciseId);
+      const exercise = await FsaModel.findById(exerciseId);
       console.log(
         'exercises repo getResultByUserAndExerciseId - exercise',
         exercise
@@ -49,12 +47,12 @@ export default class ExercisesRepository {
     exerciseId: string
   ): Promise<TargetType[] | null> {
     try {
-      const exercise = await ExerciseModel.findById(exerciseId);
+      const exercise = await FsaModel.findById(exerciseId);
       console.log(
         'exercises repo getRelevantByExerciseId - exercise',
         exercise
       );
-      if (exercise && exercise.type === ExercisesTypes.FSA) {
+      if (exercise) {
         const relevantIds = exercise.relevant;
         if (relevantIds) {
           const targetsDetails = await TargetModel.find({
@@ -79,24 +77,15 @@ export default class ExercisesRepository {
     exerciseId: string
   ): Promise<TargetType[] | FeatureObject[] | null> {
     try {
-      const exercise = await ExerciseModel.findById(exerciseId);
+      const exercise = await FsaModel.findById(exerciseId);
       console.log('exercises repo getAnswersByExerciseId - exercise', exercise);
       if (exercise) {
         const answersIds = exercise.targetsList;
-        if (exercise.type === ExercisesTypes.FSA) {
-          if (answersIds) {
-            const answersDetails = await TargetModel.find({
-              _id: { $in: answersIds },
-            });
-            return answersDetails;
-          } else return null;
-        }
-        if (exercise.type === ExercisesTypes.SPOTRECC) {
+        if (answersIds) {
           const answersDetails = await TargetModel.find({
             _id: { $in: answersIds },
           });
-
-          return answersDetails || exercise.notableFeatures || null;
+          return answersDetails;
         } else return null;
       } else return null;
     } catch (error: any) {
@@ -107,9 +96,9 @@ export default class ExercisesRepository {
 
   static async getExerciseByTargetId(
     targetId: string
-  ): Promise<ExerciseType[] | null> {
+  ): Promise<FsaType[] | null> {
     try {
-      const exercises = await ExerciseModel.find({ answers: targetId });
+      const exercises = await FsaModel.find({ answers: targetId });
       console.log('exercises repo getExerciseByTargetId', exercises);
       return exercises;
     } catch (error: any) {
@@ -118,11 +107,9 @@ export default class ExercisesRepository {
     }
   }
 
-  static async getExerciseById(
-    exerciseId: string
-  ): Promise<ExerciseType | null> {
+  static async getExerciseById(exerciseId: string): Promise<FsaType | null> {
     try {
-      const exercise = await ExerciseModel.findById(exerciseId);
+      const exercise = await FsaModel.findById(exerciseId);
       console.log('exercises repo', exerciseId);
       return exercise;
     } catch (error) {
@@ -130,9 +117,9 @@ export default class ExercisesRepository {
     }
   }
 
-  static async getAllExercises(): Promise<ExerciseType[]> {
+  static async getAllExercises(): Promise<FsaType[]> {
     try {
-      const exercises = await ExerciseModel.find({});
+      const exercises = await FsaModel.find({});
       return exercises;
     } catch (error) {
       throw new Error(`exercises repo getAllExercises: ${error}`);
@@ -141,10 +128,10 @@ export default class ExercisesRepository {
 
   static async updateExercise(
     exerciseId: string,
-    fieldsToUpdate: Partial<ExerciseType>
-  ): Promise<ExerciseType | null> {
+    fieldsToUpdate: Partial<FsaType>
+  ): Promise<FsaType | null> {
     try {
-      const updatedExercise = await ExerciseModel.findByIdAndUpdate(
+      const updatedExercise = await FsaModel.findByIdAndUpdate(
         exerciseId,
         fieldsToUpdate,
         { new: true }
@@ -156,11 +143,9 @@ export default class ExercisesRepository {
     }
   }
 
-  static async deleteExercise(
-    exerciseId: string
-  ): Promise<ExerciseType | null> {
+  static async deleteExercise(exerciseId: string): Promise<FsaType | null> {
     try {
-      const status = await ExerciseModel.findOneAndDelete({ _id: exerciseId });
+      const status = await FsaModel.findOneAndDelete({ _id: exerciseId });
       return status;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
