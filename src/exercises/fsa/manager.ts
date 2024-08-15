@@ -3,14 +3,14 @@ import {
   resetNamespaceCache,
   setToCache,
 } from '../../utils/cache.js';
-import ExercisesRepository from './repository.js';
+import FsaRepository from './repository.js';
 
-export default class ExercisesManager {
+export default class FsaManager {
   static async createExercise(
     exercise: Partial<FsaType>
   ): Promise<FsaType> {
     try {
-      const response = await ExercisesRepository.createExercise(exercise);
+      const response = await FsaRepository.createExercise(exercise);
       await setToCache(
         'exercises',
         response._id,
@@ -23,53 +23,6 @@ export default class ExercisesManager {
     } catch (error: any) {
       console.error('Manager Error [createExercise]:', error.message);
       throw new Error('Error in createExercise');
-    }
-  }
-
-  static async getResultByUserAndExerciseId(
-    exerciseId: string,
-    useId: string
-  ): Promise<ResultType | undefined | null> {
-    try {
-      const cachedResult = await getFromCache(
-        'getResultByUserAndExerciseId',
-        exerciseId + useId
-      );
-      if (cachedResult) {
-        console.log(
-          'Cache hit: exercises manager - getResultByUserAndExerciseId',
-          exerciseId,
-          useId
-        );
-        return JSON.parse(cachedResult); // Parse cached JSON data
-      }
-      console.log(
-        'exercises manager getResultByUserAndExerciseId - exerciseId',
-        exerciseId
-      );
-      const result = await ExercisesRepository.getResultByUserAndExerciseId(
-        exerciseId,
-        useId
-      );
-      result !== null
-        ? await setToCache(
-            'getResultByUserAndExerciseId',
-            exerciseId + useId,
-            JSON.stringify(result),
-            36000
-          )
-        : null;
-      console.log(
-        'exercises manager getResultByUserAndExerciseId - result',
-        result
-      );
-      return result;
-    } catch (error: any) {
-      console.error(
-        'Manager Error [getResultByUserAndExerciseId]:',
-        error.message
-      );
-      throw new Error('Error in getResultByUserAndExerciseId');
     }
   }
 
@@ -93,7 +46,7 @@ export default class ExercisesManager {
         exerciseId
       );
       const relevant =
-        await ExercisesRepository.getRelevantByExerciseId(exerciseId);
+        await FsaRepository.getRelevantByExerciseId(exerciseId);
       relevant !== null
         ? await setToCache(
             'getRelevantByExerciseId',
@@ -134,7 +87,7 @@ export default class ExercisesManager {
         exerciseId
       );
       const targets =
-        await ExercisesRepository.getAnswersByExerciseId(exerciseId);
+        await FsaRepository.getAnswersByExerciseId(exerciseId);
       targets !== null
         ? await setToCache(
             'getAnswersByExerciseId',
@@ -168,7 +121,7 @@ export default class ExercisesManager {
         return JSON.parse(cachedExercises); // Parse cached JSON data
       }
       const exercises =
-        await ExercisesRepository.getExerciseByTargetId(targetId);
+        await FsaRepository.getExerciseByTargetId(targetId);
       exercises !== null
         ? await setToCache(
             'getExerciseByTargetId',
@@ -197,7 +150,7 @@ export default class ExercisesManager {
         );
         return JSON.parse(cachedExercise); // Parse cached JSON data
       }
-      const exercise = await ExercisesRepository.getExerciseById(exerciseId);
+      const exercise = await FsaRepository.getExerciseById(exerciseId);
       exercise !== null
         ? await setToCache(
             'getExerciseById',
@@ -227,7 +180,7 @@ export default class ExercisesManager {
         );
         return JSON.parse(cachedExercises); // Parse cached JSON data
       }
-      const exercises = await ExercisesRepository.getAllExercises();
+      const exercises = await FsaRepository.getAllExercises();
       await setToCache(
         'getAllExercise',
         'allExercises',
@@ -246,7 +199,7 @@ export default class ExercisesManager {
     filedsToUpdate: Partial<FsaType>
   ): Promise<FsaType | null> {
     try {
-      const updatedExercise = await ExercisesRepository.updateExercise(
+      const updatedExercise = await FsaRepository.updateExercise(
         exerciseId,
         filedsToUpdate
       );
@@ -269,7 +222,7 @@ export default class ExercisesManager {
     exerciseId: string
   ): Promise<FsaType | null> {
     try {
-      const status = await ExercisesRepository.deleteExercise(exerciseId);
+      const status = await FsaRepository.deleteExercise(exerciseId);
       status ? await resetNamespaceCache('exercises', exerciseId) : null;
       await resetNamespaceCache('getAllExercise', 'allExercises');
 

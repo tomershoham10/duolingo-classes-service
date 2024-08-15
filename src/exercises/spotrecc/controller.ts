@@ -18,12 +18,5 @@ export default class SpotreccController {
     }
   }
 
-  static async check(_req: Request, res: Response) {
-    try {
-      console.log('check');
-      return res.status(200).json({ message: 'check' });
-    } catch (error: any) {
-      console.error('Controller Error:', error.message);
-    }
-  }
+
 }

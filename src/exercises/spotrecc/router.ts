@@ -4,8 +4,7 @@ import SpotreccController from './controller.js';
 
 const SpotreccRouter = Router();
 
-SpotreccRouter.get('/', asyncHandler(SpotreccController.check));
-
+SpotreccRouter
 //   .get(
 //     '/getRelevantByExerciseId/:exerciseId',
 //     asyncHandler(SpotreccController.getRelevantByExerciseId)

@@ -1,8 +1,7 @@
 import TargetModel from '../../targets/model.js';
-import ResultsModel from '../../results/model.js';
 import FsaModel from './model.js';
 
-export default class ExercisesRepository {
+export default class FsaRepository {
   static async createExercise(exercise: Partial<FsaType>): Promise<FsaType> {
     try {
       console.log('exercises repo create: ', exercise);
@@ -11,35 +10,6 @@ export default class ExercisesRepository {
     } catch (error: any) {
       console.error('Repository Error:', error.message);
       throw new Error(`exercises repo - createExercise: ${error}`);
-    }
-  }
-
-  static async getResultByUserAndExerciseId(
-    exerciseId: string,
-    userId: string
-  ): Promise<ResultType | null> {
-    try {
-      const exercise = await FsaModel.findById(exerciseId);
-      console.log(
-        'exercises repo getResultByUserAndExerciseId - exercise',
-        exercise
-      );
-      if (exercise && userId) {
-        const result = await ResultsModel.findOne({
-          exerciseId: { $eq: exerciseId },
-          userId: { $eq: userId },
-        });
-        console.log(
-          'exercises repo getResultByUserAndExerciseId - result',
-          result
-        );
-        return result;
-      } else return null;
-    } catch (error: any) {
-      console.error('Repository Error:', error.message);
-      throw new Error(
-        `exercises repo - getResultByUserAndExerciseId: ${error}`
-      );
     }
   }
 

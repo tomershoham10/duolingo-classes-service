@@ -4,10 +4,11 @@ import { asyncHandler } from '../../middleware/errorHandling/asyncHandler.js';
 
 const FsaRouter = Router();
 
-FsaRouter.get(
-  '/getResultByUserAndExerciseId/:exerciseId/:userId',
-  asyncHandler(ExercisesController.getResultByUserAndExerciseId)
-)
+FsaRouter
+  // .get(
+  //   '/getResultByUserAndExerciseId/:exerciseId/:userId',
+  //   asyncHandler(ExercisesController.getResultByUserAndExerciseId)
+  // )
   .get(
     '/getRelevantByExerciseId/:exerciseId',
     asyncHandler(ExercisesController.getRelevantByExerciseId)
