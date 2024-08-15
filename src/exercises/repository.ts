@@ -1,7 +1,79 @@
 import ResultsModel from '../results/model.js';
+import FsaModel from './fsa/model.js';
 import ExerciseModel from './model.js';
+import SpotreccModel from './spotrecc/model.js';
 
 export default class ExercisesRepository {
+  static async createExercise(
+    exercise: Partial<ExerciseType>
+  ): Promise<FsaType | SpotreccType | null> {
+    try {
+      console.log('exercises repo create: ', exercise);
+      if (exercise.type === ExercisesTypes.FSA) {
+        const newExercise = await FsaModel.create(exercise);
+        return newExercise;
+      }
+      if (exercise.type === ExercisesTypes.SPOTRECC) {
+        const newExercise = await SpotreccModel.create(exercise);
+        return newExercise;
+      } else return null;
+    } catch (error: any) {
+      console.error('Repository Error:', error.message);
+      throw new Error(`exercises repo - createExercise: ${error}`);
+    }
+  }
+
+  static async getExerciseById(
+    exerciseId: string
+  ): Promise<ExerciseType | null> {
+    try {
+      const exercise = await ExerciseModel.findById(exerciseId);
+      console.log('exercises repo', exerciseId);
+      return exercise;
+    } catch (error) {
+      throw new Error(`exercises repo getExerciseById: ${error}`);
+    }
+  }
+
+  static async getAllExercises(): Promise<(FsaType | SpotreccType)[]> {
+    try {
+      const exercises = (await ExerciseModel.find({})) as (
+        | FsaType
+        | SpotreccType
+      )[];
+      return exercises;
+    } catch (error) {
+      throw new Error(`exercises repo getAllExercises: ${error}`);
+    }
+  }
+
+  static async updateExercise(
+    exerciseId: string,
+    fieldsToUpdate: Partial<FsaType> | Partial<SpotreccType>
+  ): Promise<FsaType | SpotreccType> {
+    try {
+      const updatedExercise = (await ExerciseModel.findByIdAndUpdate(
+        exerciseId,
+        fieldsToUpdate,
+        { new: true }
+      )) as FsaType | SpotreccType;
+      return updatedExercise;
+    } catch (error: any) {
+      console.error('Repository Error:', error.message);
+      throw new Error(`exercises repo - updateExercise: ${error}`);
+    }
+  }
+
+  static async deleteExercise(exerciseId: string): Promise<ExerciseType | null> {
+    try {
+      const status = await ExerciseModel.findOneAndDelete({ _id: exerciseId });
+      return status;
+    } catch (error: any) {
+      console.error('Repository Error:', error.message);
+      throw new Error(`exercises repo - deleteExercise: ${error}`);
+    }
+  }
+
   static async getResultByUserAndExerciseId(
     exerciseId: string,
     userId: string

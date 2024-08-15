@@ -2,17 +2,6 @@ import TargetModel from '../../targets/model.js';
 import FsaModel from './model.js';
 
 export default class FsaRepository {
-  static async createExercise(exercise: Partial<FsaType>): Promise<FsaType> {
-    try {
-      console.log('exercises repo create: ', exercise);
-      const newExercise = await FsaModel.create(exercise);
-      return newExercise;
-    } catch (error: any) {
-      console.error('Repository Error:', error.message);
-      throw new Error(`exercises repo - createExercise: ${error}`);
-    }
-  }
-
   static async getRelevantByExerciseId(
     exerciseId: string
   ): Promise<TargetType[] | null> {
@@ -74,52 +63,6 @@ export default class FsaRepository {
     } catch (error: any) {
       console.error('Repository Error:', error.message);
       throw new Error(`exercises repo - getExerciseByTargetId: ${error}`);
-    }
-  }
-
-  static async getExerciseById(exerciseId: string): Promise<FsaType | null> {
-    try {
-      const exercise = await FsaModel.findById(exerciseId);
-      console.log('exercises repo', exerciseId);
-      return exercise;
-    } catch (error) {
-      throw new Error(`exercises repo getExerciseById: ${error}`);
-    }
-  }
-
-  static async getAllExercises(): Promise<FsaType[]> {
-    try {
-      const exercises = await FsaModel.find({});
-      return exercises;
-    } catch (error) {
-      throw new Error(`exercises repo getAllExercises: ${error}`);
-    }
-  }
-
-  static async updateExercise(
-    exerciseId: string,
-    fieldsToUpdate: Partial<FsaType>
-  ): Promise<FsaType | null> {
-    try {
-      const updatedExercise = await FsaModel.findByIdAndUpdate(
-        exerciseId,
-        fieldsToUpdate,
-        { new: true }
-      );
-      return updatedExercise;
-    } catch (error: any) {
-      console.error('Repository Error:', error.message);
-      throw new Error(`exercises repo - updateExercise: ${error}`);
-    }
-  }
-
-  static async deleteExercise(exerciseId: string): Promise<FsaType | null> {
-    try {
-      const status = await FsaModel.findOneAndDelete({ _id: exerciseId });
-      return status;
-    } catch (error: any) {
-      console.error('Repository Error:', error.message);
-      throw new Error(`exercises repo - deleteExercise: ${error}`);
     }
   }
 }

@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { asyncHandler } from '../../middleware/errorHandling/asyncHandler.js';
-import SpotreccController from './controller.js';
+// import { asyncHandler } from '../../middleware/errorHandling/asyncHandler.js';
+// import SpotreccController from './controller.js';
 
 const SpotreccRouter = Router();
 
-SpotreccRouter
+// SpotreccRouter
 //   .get(
 //     '/getRelevantByExerciseId/:exerciseId',
 //     asyncHandler(SpotreccController.getRelevantByExerciseId)
@@ -17,7 +17,7 @@ SpotreccRouter
 //   .get('/:id', asyncHandler(SpotreccController.getById))
 //   .get('/', asyncHandler(SpotreccController.getMany));
 
-SpotreccRouter.post('/', asyncHandler(SpotreccController.create));
+// SpotreccRouter.post('/', asyncHandler(SpotreccController.create));
 
 // SpotreccRouter.put('/:id', asyncHandler(SpotreccController.update));
 
