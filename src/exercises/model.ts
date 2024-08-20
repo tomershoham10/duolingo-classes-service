@@ -11,6 +11,11 @@ const exerciseSchema = new Schema({
     required: true,
     enum: Object.values(ExercisesTypes),
   },
+  dateCreated: {
+    type: Date,
+    default: Date.now,
+    required: true,
+  },
 });
 
 const ExerciseModel = model<ExerciseType>('Exercise', exerciseSchema);
