@@ -95,7 +95,7 @@ export default class CoursesController {
 
   static async getFirstLessonId(req: Request, res: Response) {
     try {
-      const courseId: string = req.params.id;
+      const courseId: string = req.params.courseId;
       console.log('controller: getFirstLessonId', courseId);
       const lessonId = await CoursesManager.getFirstLessonId(courseId);
       if (!lessonId) {
