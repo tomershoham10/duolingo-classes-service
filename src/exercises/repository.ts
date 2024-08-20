@@ -3,6 +3,11 @@ import FsaModel from './fsa/model.js';
 import ExerciseModel from './model.js';
 import SpotreccModel from './spotrecc/model.js';
 
+enum ExercisesTypes {
+  FSA = 'fsa',
+  SPOTRECC = 'spotrecc',
+}
+
 export default class ExercisesRepository {
   static async createExercise(
     exercise: Partial<ExerciseType>
@@ -64,7 +69,9 @@ export default class ExercisesRepository {
     }
   }
 
-  static async deleteExercise(exerciseId: string): Promise<ExerciseType | null> {
+  static async deleteExercise(
+    exerciseId: string
+  ): Promise<ExerciseType | null> {
     try {
       const status = await ExerciseModel.findOneAndDelete({ _id: exerciseId });
       return status;
