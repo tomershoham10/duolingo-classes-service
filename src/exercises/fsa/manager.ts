@@ -44,7 +44,7 @@ export default class FsaManager {
 
   static async getAnswersByExerciseId(
     exerciseId: string
-  ): Promise<TargetType[] | FeatureObject[] | null> {
+  ): Promise<TargetType[] | null> {
     try {
       const cachedTargets = await getFromCache(
         'getAnswersByExerciseId',

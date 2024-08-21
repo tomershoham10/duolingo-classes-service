@@ -34,7 +34,7 @@ export default class FsaRepository {
 
   static async getAnswersByExerciseId(
     exerciseId: string
-  ): Promise<TargetType[] | FeatureObject[] | null> {
+  ): Promise<TargetType[] | null> {
     try {
       const exercise = await FsaModel.findById(exerciseId);
       console.log('exercises repo getAnswersByExerciseId - exercise', exercise);

@@ -43,7 +43,7 @@ export default class LessonsManager {
 
   static async getsExercisesByLessonId(
     lessonId: string
-  ): Promise<ExerciseType[]> {
+  ): Promise<(FsaType | SpotreccType)[]> {
     try {
       const cachedExercises = await getFromCache(
         'getsExercisesByLessonId',
