@@ -56,12 +56,12 @@ export default class LessonsController {
     try {
       const lessonId: string = req.params.id;
       console.log('lessons controller: getExercisesById', lessonId);
-      const exercises = await LessonsManager.getsExercisesByLessonId(lessonId);
-      if (exercises.length <= 0) {
+      const data = await LessonsManager.getsExercisesByLessonId(lessonId);
+      if (data.length <= 0) {
         return res.status(404).json({ message: 'Exercises not found' });
       }
 
-      res.status(200).json({ exercises });
+      res.status(200).json({ data });
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: 'Internal Server Error' });
