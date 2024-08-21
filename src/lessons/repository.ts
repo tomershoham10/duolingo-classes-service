@@ -28,17 +28,57 @@ export default class LessonsRepository {
 
   static async getsExercisesByLessonId(
     lessonId: string
-  ): Promise<ExerciseType[]> {
+  ): Promise<(FsaType | SpotreccType)[]> {
     try {
       const lesson = await LessonsModel.findById(lessonId);
+      console.log('repo - getsExercisesByLessonId - lesson', lesson);
       if (lesson) {
-        const exerciseIds = lesson.exercisesIds;
+        const exercisesIds = lesson.exercisesIds;
+        console.log(
+          'repo - getsExercisesByLessonId - exercisesIds',
+          exercisesIds
+        );
 
-        if (exerciseIds) {
-          const exerciseDetails = await ExerciseModel.find({
-            _id: { $in: exerciseIds },
-          });
-          return exerciseDetails as ExerciseType[];
+        if (exercisesIds) {
+          const exercisesDetails = await LessonsModel.aggregate([
+            {
+              $match: {
+                _id: lesson._id,
+              },
+            },
+            {
+              $lookup: {
+                from: 'exercises',
+                let: { exercisesIds: '$exercisesIds' },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $in: [
+                          '$_id',
+                          {
+                            $map: {
+                              input: '$$exercisesIds',
+                              as: 'id',
+                              in: { $toObjectId: '$$id' },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+                as: 'exercises',
+              },
+            },
+          ]);
+
+          console.log(
+            'repo - getsExercisesByLessonId - exercisesDetails',
+            exercisesIds,
+            exercisesDetails
+          );
+          return exercisesDetails as (FsaType | SpotreccType)[];
         } else return [];
       } else return [];
     } catch (error: any) {
@@ -53,12 +93,12 @@ export default class LessonsRepository {
     try {
       const lesson = await LessonsModel.findById(lessonId);
       if (lesson) {
-        const exerciseIds = lesson.exercisesIds;
+        const exercisesIds = lesson.exercisesIds;
         console.log(
-          'repo - getsUnsuspendedExercisesByLessonId: exerciseIds',
-          exerciseIds
+          'repo - getsUnsuspendedExercisesByLessonId: exercisesIds',
+          exercisesIds
         );
-        const unSuspendExercisesIds = exerciseIds.filter(
+        const unSuspendExercisesIds = exercisesIds.filter(
           (lessonId) => !lesson.suspendedExercisesIds.includes(lessonId)
         );
         console.log(
@@ -98,29 +138,29 @@ export default class LessonsRepository {
 
       const lesson = await LessonsModel.findById(lessonId);
       if (lesson) {
-        const exerciseIds = lesson.exercisesIds;
+        const exercisesIds = lesson.exercisesIds;
 
-        if (exerciseIds) {
-          // const exerciseDetails: ExerciseType[] = await ExerciseModel.find({ _id: { $in: exerciseIds } });
-          console.log(' lessons repo - exerciseIds', exerciseIds);
+        if (exercisesIds) {
+          // const exerciseDetails: ExerciseType[] = await ExerciseModel.find({ _id: { $in: exercisesIds } });
+          console.log(' lessons repo - exercisesIds', exercisesIds);
 
           // const exercisesIdInOrder = exerciseDetails.map((FSA) => { if (FSA !== undefined) { FSA.id } });
 
           const resResults: ResultType[] = await ResultsModel.find({
-            exerciseId: { $in: exerciseIds },
+            exerciseId: { $in: exercisesIds },
             userId: userId,
           });
           const exercisesInOrder = resResults.sort((a, b) => {
-            const aIndex = exerciseIds.indexOf(a._id);
-            const bIndex = exerciseIds.indexOf(b._id);
+            const aIndex = exercisesIds.indexOf(a._id);
+            const bIndex = exercisesIds.indexOf(b._id);
             return aIndex - bIndex;
           });
           console.log(' lessons repo - results', {
-            numOfExercises: exerciseIds.length,
+            numOfExercises: exercisesIds.length,
             results: exercisesInOrder,
           });
           const results = {
-            numOfExercises: exerciseIds.length,
+            numOfExercises: exercisesIds.length,
             results: exercisesInOrder,
           };
           return results as { numOfExercises: number; results: ResultType[] };
