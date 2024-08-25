@@ -13,7 +13,11 @@ const SpotreccSchema = new Schema<SpotreccType>({
           type: String,
           required: true,
         },
-        time: {
+        exerciseTime: {
+          type: Number,
+          required: true,
+        },
+        bufferTime: {
           type: Number,
           required: true,
         },

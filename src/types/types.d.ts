@@ -81,15 +81,14 @@ interface FsaType extends ExerciseType {
 
   relevant?: string[];
   acceptableTargets?: string[];
-
-  subExercises?: any[];
 }
 
 //~~~~~~~~~~~ SPOTRECC ~~~~~~~~~~~//
 interface SpotreccSubExercise {
   description?: string;
   fileName: string;
-  time: number; // in seconds
+  exerciseTime: number; // in seconds
+  bufferTime: number; // in seconds
 }
 
 interface SpotreccType extends ExerciseType {
