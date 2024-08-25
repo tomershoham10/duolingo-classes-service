@@ -34,15 +34,17 @@ const FsaSchema = new Schema<FsaType>({
       },
     ],
     _id: false,
+    required: true,
   },
 
   description: {
     type: String,
     required: false,
   },
-  file: {
+  fileName: {
     type: String,
     ref: 'File',
+    required: true,
   },
 });
 
