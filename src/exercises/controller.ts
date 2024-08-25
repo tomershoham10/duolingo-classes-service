@@ -4,7 +4,9 @@ import ExercisesManager from './manager.js';
 export default class ExercisesController {
   static async create(req: Request, res: Response) {
     try {
-      const newExercise = await ExercisesManager.createExercise(req.body);
+      const reqBody = req.body;
+      console.log('controller - create exercise - reqBody', reqBody);
+      const newExercise = await ExercisesManager.createExercise(reqBody);
       if (newExercise) {
         return res
           .status(201)
