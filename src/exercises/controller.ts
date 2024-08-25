@@ -38,7 +38,7 @@ export default class ExercisesController {
 
   static async getMany(_req: Request, res: Response) {
     try {
-      const exercises = await ExercisesManager.getAllExercise();
+      const exercises = await ExercisesManager.getAllExercises();
       console.log(exercises);
       return res.status(200).json({ exercises });
     } catch (error: any) {

@@ -56,10 +56,10 @@ export default class ExercisesManager {
     }
   }
 
-  static async getAllExercise(): Promise<ExerciseType[]> {
+  static async getAllExercises(): Promise<ExerciseType[]> {
     try {
       const cachedExercises = await getFromCache(
-        'getAllExercise',
+        'getAllExercises',
         'allExercises'
       );
       if (cachedExercises) {
@@ -71,15 +71,15 @@ export default class ExercisesManager {
       }
       const exercises = await ExercisesRepository.getAllExercises();
       await setToCache(
-        'getAllExercise',
+        'getAllExercises',
         'allExercises',
         JSON.stringify(exercises),
         3600
       );
       return exercises;
     } catch (error: any) {
-      console.error('Manager Error [getAllExercise]:', error.message);
-      throw new Error('Error in getAllExercise');
+      console.error('Manager Error [getAllExercises]:', error.message);
+      throw new Error('Error in getAllExercises');
     }
   }
 
