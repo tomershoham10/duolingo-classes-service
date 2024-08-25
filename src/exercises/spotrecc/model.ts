@@ -7,12 +7,15 @@ const SpotreccSchema = new Schema<SpotreccType>({
       {
         description: {
           type: String,
+          required: false,
         },
-        file: {
+        fileName: {
           type: String,
+          required: true,
         },
         time: {
           type: Number,
+          required: true,
         },
       },
     ],
