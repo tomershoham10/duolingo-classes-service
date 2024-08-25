@@ -77,7 +77,7 @@ interface FsaType extends ExerciseType {
   targetsList?: string[]; //may be 2 correct answers
   timeBuffers: TimeBuffersType[];
   description?: string;
-  file: string;
+  fileName: string;
 
   relevant?: string[];
   acceptableTargets?: string[];
@@ -88,7 +88,7 @@ interface FsaType extends ExerciseType {
 //~~~~~~~~~~~ SPOTRECC ~~~~~~~~~~~//
 interface SpotreccSubExercise {
   description?: string;
-  file: string;
+  fileName: string;
   time: number; // in seconds
 }
 
