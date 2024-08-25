@@ -86,7 +86,7 @@ export default class ExercisesManager {
   static async updateExercise(
     exerciseId: string,
     filedsToUpdate: Partial<FsaType> | Partial<SpotreccType>
-  ): Promise<FsaType | Partial<SpotreccType>> {
+  ): Promise<FsaType | SpotreccType | null> {
     try {
       const updatedExercise = await ExercisesRepository.updateExercise(
         exerciseId,
