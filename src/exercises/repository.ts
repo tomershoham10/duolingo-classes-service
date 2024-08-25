@@ -16,10 +16,14 @@ export default class ExercisesRepository {
       console.log('exercises repo create: ', exercise);
       if (exercise.type === ExercisesTypes.FSA) {
         const newExercise = await FsaModel.create(exercise);
+        console.log('FSA newExercise: ', newExercise);
+
         return newExercise;
       }
       if (exercise.type === ExercisesTypes.SPOTRECC) {
         const newExercise = await SpotreccModel.create(exercise);
+        console.log('SPOTRECC newExercise: ', newExercise);
+
         return newExercise;
       } else return null;
     } catch (error: any) {
@@ -55,14 +59,38 @@ export default class ExercisesRepository {
   static async updateExercise(
     exerciseId: string,
     fieldsToUpdate: Partial<FsaType> | Partial<SpotreccType>
-  ): Promise<FsaType | SpotreccType> {
+  ): Promise<FsaType | SpotreccType | null> {
     try {
-      const updatedExercise = (await ExerciseModel.findByIdAndUpdate(
+      console.log('exercises repo - updateExercise:', {
         exerciseId,
-        fieldsToUpdate,
-        { new: true }
-      )) as FsaType | SpotreccType;
-      return updatedExercise;
+        ...fieldsToUpdate,
+      });
+      const exercise = await ExerciseModel.findById(exerciseId);
+      if (!exercise) return null;
+      if (exercise.type === ExercisesTypes.FSA) {
+        const updatedExercise = await FsaModel.findByIdAndUpdate(
+          exerciseId,
+          fieldsToUpdate,
+          { new: true }
+        );
+        console.log(
+          'exercises repo - updateExercise - updatedExercise',
+          updatedExercise
+        );
+        return updatedExercise;
+      }
+      if (exercise.type === ExercisesTypes.SPOTRECC) {
+        const updatedExercise = await SpotreccModel.findByIdAndUpdate(
+          exerciseId,
+          fieldsToUpdate,
+          { new: true }
+        );
+        console.log(
+          'exercises repo - updateExercise - updatedExercise',
+          updatedExercise
+        );
+        return updatedExercise;
+      } else return null;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
       throw new Error(`exercises repo - updateExercise: ${error}`);
