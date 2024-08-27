@@ -5,14 +5,9 @@ export default class CountryRepository {
     country: Partial<CountryType>
   ): Promise<CountryType> {
     try {
-      const existingCountry = await CountryModel.findOne({
-        name: country.name,
-      });
-      if (existingCountry) {
-        throw new Error('Country already exists');
-      }
-
+      console.log('createCountry repo - country req: ', country);
       const newCountry = await CountryModel.create(country);
+      console.log('createCountry repo - newCountry: ', newCountry);
       return newCountry;
     } catch (error) {
       throw new Error(`countries repo createCountry: ${error}`);
@@ -25,16 +20,16 @@ export default class CountryRepository {
       console.log('repo', country);
       return country;
     } catch (error) {
-      throw new Error(`countries repo createCountry: ${error}`);
+      throw new Error(`countries repo getCountryById: ${error}`);
     }
   }
 
-  static async getAllCountry(): Promise<CountryType[]> {
+  static async getAllCountries(): Promise<CountryType[]> {
     try {
       const countries = await CountryModel.find({});
       return countries;
     } catch (error) {
-      throw new Error(`countries repo createCountry: ${error}`);
+      throw new Error(`countries repo getAllCountries: ${error}`);
     }
   }
 
@@ -50,7 +45,7 @@ export default class CountryRepository {
       );
       return updatedCountry;
     } catch (error) {
-      throw new Error(`countries repo createCountry: ${error}`);
+      throw new Error(`countries repo updateCountry: ${error}`);
     }
   }
 
@@ -59,7 +54,7 @@ export default class CountryRepository {
       const status = await CountryModel.findOneAndDelete({ _id: countryId });
       return status;
     } catch (error) {
-      throw new Error(`countries repo createCountry: ${error}`);
+      throw new Error(`countries repo deleteCountry: ${error}`);
     }
   }
 }

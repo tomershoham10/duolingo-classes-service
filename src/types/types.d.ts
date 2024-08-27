@@ -95,43 +95,57 @@ interface SpotreccType extends ExerciseType {
   subExercises: SpotreccSubExercise[];
 }
 
+/////////////// ORGANIZATION ///////////////
+
+interface OrganizationType {
+  _id: string;
+  organization_name: string;
+  country: string;
+}
+
 /////////////// COUNTRIES ///////////////
 
 interface CountryType {
   _id: string;
-  name: string;
+  country_name: string;
 }
 
 /////////////// TARGETS ///////////////
 
-enum TypesOfTargets {
-  VESSEL = 'vessel',
-  SONAR = 'sonar',
-  TORPEDO = 'torpedo',
-}
+// enum TypesOfTargets {
+//   VESSEL = 'vessel',
+//   SONAR = 'sonar',
+//   TORPEDO = 'torpedo',
+// }
 
-enum TypesOfVessels {
-  FRIGATE = 'frigate',
-  SUBMARINE = 'submarine',
-  COASTPATROL = 'coastPatrol',
-  CARGO = 'cargo',
-  TUGBOAT = 'tugboat',
-}
+// enum TypesOfVessels {
+//   FRIGATE = 'frigate',
+//   SUBMARINE = 'submarine',
+//   COASTPATROL = 'coastPatrol',
+//   CARGO = 'cargo',
+//   TUGBOAT = 'tugboat',
+// }
 
-enum TypesOfTorpedos {
-  ELECTRIC = 'electric',
-}
+// enum TypesOfTorpedos {
+//   ELECTRIC = 'electric',
+// }
 
-enum TypesOfSonars {
-  REGULAR = 'regular',
-}
+// enum TypesOfSonars {
+//   REGULAR = 'regular',
+// }
 
 interface TargetType {
+  // as in posi
   _id: string;
   name: string;
-  countryId: string;
-  type: TypesOfTargets;
-  subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars;
+  organization: string[];
+  children: string[];
+  level: number;
+  created: Date;
+  updated: Date;
+  // countryId: string;
+  // type: TypesOfTargets;
+  // subType: TypesOfVessels | TypesOfTorpedos | TypesOfSonars;
 }
 
 /////////////// SOURCES ///////////////

@@ -5,18 +5,20 @@ import CountryModel from './model.js';
 export default class CountryController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name } = req.body as { name: string };
+      const reqCountry = req.body.country_name as string;
 
-      const reqCountry: { name: string } = { name: name };
-
-      const isExisted = await CountryModel.findOne({ name: name });
+      const isExisted = await CountryModel.findOne({
+        country_name: reqCountry,
+      });
       if (isExisted) {
         console.error('country already existed');
         return res.status(403).json({ error: 'country already existed' });
       }
 
       console.log('CountryController create - reqCountry', reqCountry);
-      const newCountry = await CountryManager.createCountry(reqCountry);
+      const newCountry = await CountryManager.createCountry({
+        country_name: reqCountry,
+      });
       res
         .status(201)
         .json({ message: 'Country registered successfully', newCountry });
@@ -47,7 +49,7 @@ export default class CountryController {
   static async getMany(_req: Request, res: Response, next: NextFunction) {
     try {
       console.log('country controller getAll');
-      const countries = await CountryManager.getAllCountry();
+      const countries = await CountryManager.getAllCountries();
       console.log(countries);
       res.status(200).json({ countries });
     } catch (error) {

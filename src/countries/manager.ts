@@ -49,7 +49,7 @@ export default class CountryManager {
     }
   }
 
-  static async getAllCountry(): Promise<CountryType[]> {
+  static async getAllCountries(): Promise<CountryType[]> {
     try {
       const cachedCountries = await getFromCache(
         'getAllCountries',
@@ -62,7 +62,7 @@ export default class CountryManager {
         );
         return JSON.parse(cachedCountries);
       }
-      const countries = await CountryRepository.getAllCountry();
+      const countries = await CountryRepository.getAllCountries();
       await setToCache(
         'getAllCountries',
         'allCountries',
