@@ -139,6 +139,7 @@ interface TargetType {
   _id: string;
   name: string;
   organization: string[];
+  father: string;
   children: string[];
   level: number;
   created: Date;
