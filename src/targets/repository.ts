@@ -8,6 +8,8 @@ export default class TargetRepository {
         throw new Error('Target already exists');
       }
 
+      console.log('repo - createTarget', target);
+
       const newTarget = await TargetModel.create(target);
       return newTarget;
     } catch (error) {
@@ -29,6 +31,55 @@ export default class TargetRepository {
     try {
       const targets = await TargetModel.find({});
       return targets;
+    } catch (error) {
+      throw new Error(`targets repo getAllTarget: ${error}`);
+    }
+  }
+
+  static async getTargetAncestors(targetId: string): Promise<TargetType[]> {
+    try {
+      const result = await TargetModel.aggregate([
+        {
+          $match: { _id: targetId },
+        },
+        {
+          $lookup: {
+            from: 'targets',
+            localField: 'father',
+            foreignField: '_id',
+            as: 'fatherInfo',
+          },
+        },
+        {
+          $unwind: '$fatherInfo',
+        },
+        {
+          $lookup: {
+            from: 'targets',
+            localField: 'fatherInfo.father',
+            foreignField: '_id',
+            as: 'grandfatherInfo',
+          },
+        },
+        {
+          $unwind: {
+            path: '$grandfatherInfo',
+            preserveNullAndEmptyArrays: true, // This ensures that if there's no grandfather, it won't fail
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            targetId: '$_id',
+            fatherId: '$fatherInfo._id',
+            grandfatherId: '$grandfatherInfo._id',
+          },
+        },
+      ]);
+
+      console.log('getTargetAncestors repo: ', result);
+
+      return result.length > 0 ? result[0] : null;
     } catch (error) {
       throw new Error(`targets repo getAllTarget: ${error}`);
     }

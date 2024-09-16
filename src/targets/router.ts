@@ -4,10 +4,10 @@ import { asyncHandler } from '../middleware/errorHandling/asyncHandler.js';
 
 const OptionRouter = Router();
 
-OptionRouter.get('/:id', asyncHandler(OptionController.getById)).get(
-  '/',
-  asyncHandler(OptionController.getMany)
-);
+OptionRouter
+.get('/getTargetAncestors/:id',asyncHandler(OptionController.getTargetAncestors))
+  .get('/:id', asyncHandler(OptionController.getById))
+  .get('/', asyncHandler(OptionController.getMany));
 
 OptionRouter.post('/', asyncHandler(OptionController.create));
 

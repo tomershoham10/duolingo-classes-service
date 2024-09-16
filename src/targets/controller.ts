@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import TargetManager from './manager.js';
 // import TargetModel from './model.js';
 
 export default class TargetController {
-  static async create(req: Request, res: Response, next: NextFunction) {
+  static async create(req: Request, res: Response) {
     try {
       const reqTarget = req.body as TargetType;
 
@@ -20,11 +20,10 @@ export default class TargetController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: 'Internal Server Error' });
-      next(error);
     }
   }
 
-  static async getById(req: Request, res: Response, next: NextFunction) {
+  static async getById(req: Request, res: Response) {
     try {
       const targetId: string = req.params.id;
       console.log('controller', targetId);
@@ -37,11 +36,10 @@ export default class TargetController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: 'Internal Server Error' });
-      next(error);
     }
   }
 
-  static async getMany(_req: Request, res: Response, next: NextFunction) {
+  static async getMany(_req: Request, res: Response) {
     try {
       console.log('target controller getAll');
       const targets = await TargetManager.getAllTarget();
@@ -50,11 +48,23 @@ export default class TargetController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: 'Internal Server Error' });
-      next(error);
     }
   }
 
-  static async update(req: Request, res: Response, next: NextFunction) {
+  static async getTargetAncestors(req: Request, res: Response) {
+    try {
+      console.log('target controller getTargetAncestors');
+      const targetId: string = req.params.id;
+      const ancestors = await TargetManager.getTargetAncestors(targetId);
+      console.log(ancestors);
+      res.status(200).json({ ancestors });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ err: 'Internal Server Error' });
+    }
+  }
+
+  static async update(req: Request, res: Response) {
     try {
       const targetId: string = req.params.id;
       const fieldsToUpdate: Partial<TargetType> = req.body;
@@ -72,11 +82,10 @@ export default class TargetController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: 'Internal Server Error' });
-      next(error);
     }
   }
 
-  static async delete(req: Request, res: Response, next: NextFunction) {
+  static async delete(req: Request, res: Response) {
     try {
       const targetId: string = req.params.id;
       const deletedTarget = await TargetManager.deleteTarget(targetId);
@@ -89,7 +98,6 @@ export default class TargetController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ err: 'Internal Server Error' });
-      next(error);
     }
   }
 }

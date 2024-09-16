@@ -63,6 +63,30 @@ export default class TargetManager {
     }
   }
 
+  static async getTargetAncestors(targetId: string): Promise<TargetType[]> {
+    try {
+      const cachedAncestors = await getFromCache('targetAncestors', targetId);
+      if (cachedAncestors) {
+        console.log(
+          'Cache hit: targets manager - targetAncestors',
+          cachedAncestors
+        );
+        return JSON.parse(cachedAncestors);
+      }
+      const ancestors = await TargetRepository.getTargetAncestors(targetId);
+      await setToCache(
+        'targetAncestors',
+        targetId,
+        JSON.stringify(ancestors),
+        3600
+      );
+
+      return ancestors;
+    } catch (error) {
+      throw new Error(`targets manager getTargetAncestors: ${error}`);
+    }
+  }
+
   static async updateTarget(
     targetId: string,
     filedsToUpdate: Partial<TargetType>
