@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import ExerciseModel from '../model.js';
+import ExerciseModel, { FileTypes } from '../model.js';
 
 const FsaSchema = new Schema<FsaType>({
   relevant: [
@@ -45,7 +45,7 @@ const FsaSchema = new Schema<FsaType>({
     mainId: { type: String, required: true },
     subTypeId: { type: String, required: true },
     modelId: { type: String, required: true },
-    fileType: { type: FileTypes, required: true },
+    fileType: { type: String, required: true, enum: Object.values(FileTypes) },
     objectName: { type: String, required: true },
   },
 });

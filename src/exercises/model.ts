@@ -5,6 +5,11 @@ enum ExercisesTypes {
   SPOTRECC = 'spotrecc',
 }
 
+export enum FileTypes {
+  RECORDS = 'records',
+  IMAGES = 'images',
+}
+
 const exerciseSchema = new Schema<ExerciseType>({
   type: {
     type: String,
