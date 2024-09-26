@@ -5,7 +5,7 @@ enum ExercisesTypes {
   SPOTRECC = 'spotrecc',
 }
 
-const exerciseSchema = new Schema({
+const exerciseSchema = new Schema<ExerciseType>({
   type: {
     type: String,
     required: true,

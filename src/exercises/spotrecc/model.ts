@@ -9,9 +9,12 @@ const SpotreccSchema = new Schema<SpotreccType>({
           type: String,
           required: false,
         },
-        fileName: {
-          type: String,
-          required: true,
+        fileRoute: {
+          mainId: { type: String, required: true },
+          subTypeId: { type: String, required: true },
+          modelId: { type: String, required: true },
+          fileType: { type: FileTypes, required: true },
+          objectName: { type: String, required: true },
         },
         exerciseTime: {
           type: Number,

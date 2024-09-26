@@ -36,6 +36,24 @@ interface LessonsType {
 
 /////////////// EXERCISES ///////////////////
 
+enum ExercisesTypes {
+  FSA = 'fsa',
+  SPOTRECC = 'spotrecc',
+}
+
+enum FileTypes {
+  RECORDS = 'records',
+  IMAGES = 'images',
+}
+
+interface FileRoute {
+  mainId: string;
+  subTypeId: string;
+  modelId: string;
+  fileType: FileTypes;
+  objectName: string;
+}
+
 interface ExerciseType {
   _id: string;
   dateCreated: Date;
@@ -49,44 +67,18 @@ interface TimeBuffersType {
   grade: number;
 }
 
-enum ExercisesTypes {
-  FSA = 'fsa',
-  SPOTRECC = 'spotrecc',
-}
-
-enum FeaturesList {
-  NUMBER_OF_BLADES = 'numberOfBlades',
-}
-
-enum BucketsNames {
-  RECORDS = 'records',
-  IMAGES = 'images',
-}
-
-interface FeatureObject {
-  type: FeaturesList;
-  value: number | string;
-}
-
-interface FileObject {
-  fileName: string;
-  bucket: BucketsNames;
-}
-
 interface FsaType extends ExerciseType {
-  targetsList?: string[]; //may be 2 correct answers
   timeBuffers: TimeBuffersType[];
   description?: string;
-  fileName: string;
+  fileRoute: FileRoute;
 
   relevant?: string[];
-  acceptableTargets?: string[];
 }
 
 //~~~~~~~~~~~ SPOTRECC ~~~~~~~~~~~//
 interface SpotreccSubExercise {
   description?: string;
-  fileName: string;
+  fileRoute: FileRoute;
   exerciseTime: number; // in seconds
   bufferTime: number; // in seconds
 }
