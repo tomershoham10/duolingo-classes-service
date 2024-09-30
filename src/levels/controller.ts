@@ -14,7 +14,7 @@ export default class LevelsController {
       }
     } catch (error: any) {
       console.error('Controller Error:', error.message);
-      res.status(400).json({ error: error.message });
+      res.status(500).json({ error: error.message });
     }
   }
 
