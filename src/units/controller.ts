@@ -66,7 +66,7 @@ export default class UnitsController {
       await session.commitTransaction();
       session.endSession();
       res
-        .status(200)
+        .status(201)
         .json({ message: 'New unit created and course updated successfully' });
     } catch (error: any) {
       console.error('Controller Error:', error.message);
@@ -176,11 +176,11 @@ export default class UnitsController {
         return res.status(404).json({ message: 'unit not found' });
       }
       res
-        .status(200)
+        .status(201)
         .json({ message: 'level created successfully', updatedUnit });
     } catch (error: any) {
       console.error('Controller Error:', error.message);
-      res.status(400).json({ error: error.message });
+      res.status(500).json({ error: error.message });
     }
   } // chached
 
