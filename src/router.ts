@@ -7,6 +7,7 @@ import ExercisesRouter from './exercises/router.js';
 import CountryRouter from './countries/router.js';
 import OrganizationRouter from './organizations/router.js';
 import TargetRouter from './targets/router.js';
+import RelevantRouter from './relevant/router.js';
 import ResultsRouter from './results/router.js';
 import SourcesRouter from './sources/router.js';
 
@@ -32,6 +33,8 @@ router.use('/api/countries/', CountryRouter);
 router.use('/api/organizations/', OrganizationRouter);
 
 router.use('/api/targets/', TargetRouter);
+
+router.use('/api/relevant/', RelevantRouter);
 
 router.use('/api/results/', ResultsRouter);
 
