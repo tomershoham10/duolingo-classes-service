@@ -16,6 +16,6 @@ const TargetSchema: Schema = new Schema<TargetType>({
   updated: { type: Date, default: Date.now, required: true },
 });
 
-const TargetModel = model<TargetType>('targets', TargetSchema);
+const TargetsModel = model<TargetType>('targets', TargetSchema);
 
-export default TargetModel;
+export default TargetsModel;

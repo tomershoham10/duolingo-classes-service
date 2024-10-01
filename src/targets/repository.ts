@@ -1,16 +1,11 @@
-import TargetModel from './model.js';
+import TargetsModel from './model.js';
 
-export default class TargetRepository {
+export default class TargetsRepository {
   static async createTarget(target: Partial<TargetType>): Promise<TargetType> {
     try {
-      const existingTarget = await TargetModel.findOne({ name: target.name });
-      if (existingTarget) {
-        throw new Error('Target already exists');
-      }
-
       console.log('repo - createTarget', target);
 
-      const newTarget = await TargetModel.create(target);
+      const newTarget = await TargetsModel.create(target);
       return newTarget;
     } catch (error) {
       throw new Error(`targets repo createTarget: ${error}`);
@@ -19,7 +14,7 @@ export default class TargetRepository {
 
   static async getTargetById(targetId: string): Promise<TargetType | null> {
     try {
-      const target = await TargetModel.findById(targetId);
+      const target = await TargetsModel.findById(targetId);
       console.log('repo', target);
       return target;
     } catch (error) {
@@ -29,7 +24,7 @@ export default class TargetRepository {
 
   static async getAllTarget(): Promise<TargetType[]> {
     try {
-      const targets = await TargetModel.find({});
+      const targets = await TargetsModel.find({});
       return targets;
     } catch (error) {
       throw new Error(`targets repo getAllTarget: ${error}`);
@@ -38,7 +33,7 @@ export default class TargetRepository {
 
   static async getTargetAncestors(targetId: string): Promise<TargetType[]> {
     try {
-      const result = await TargetModel.aggregate([
+      const result = await TargetsModel.aggregate([
         {
           $match: { _id: targetId },
         },
@@ -90,7 +85,7 @@ export default class TargetRepository {
     fieldsToUpdate: Partial<TargetType>
   ): Promise<TargetType | null> {
     try {
-      const updatedTarget = await TargetModel.findByIdAndUpdate(
+      const updatedTarget = await TargetsModel.findByIdAndUpdate(
         targetId,
         fieldsToUpdate,
         { new: true }
@@ -103,7 +98,7 @@ export default class TargetRepository {
 
   static async deleteTarget(targetId: string): Promise<TargetType | null> {
     try {
-      const status = await TargetModel.findOneAndDelete({ _id: targetId });
+      const status = await TargetsModel.findOneAndDelete({ _id: targetId });
       return status;
     } catch (error) {
       throw new Error(`targets repo deleteTarget: ${error}`);
