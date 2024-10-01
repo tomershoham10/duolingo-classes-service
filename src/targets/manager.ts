@@ -3,12 +3,12 @@ import {
   resetNamespaceCache,
   setToCache,
 } from '../utils/cache.js';
-import TargetRepository from './repository.js';
+import TargetsRepository from './repository.js';
 
-export default class TargetManager {
+export default class TargetsManager {
   static async createTarget(target: Partial<TargetType>): Promise<TargetType> {
     try {
-      const response = await TargetRepository.createTarget(target);
+      const response = await TargetsRepository.createTarget(target);
       await setToCache(
         'targets',
         response._id,
@@ -30,7 +30,7 @@ export default class TargetManager {
         console.log('Cache hit: targets manager - getTargetById', targetId);
         return JSON.parse(cachedTarget); // Parse cached JSON data
       }
-      const target = await TargetRepository.getTargetById(targetId);
+      const target = await TargetsRepository.getTargetById(targetId);
       target !== null
         ? await setToCache('targets', targetId, JSON.stringify(target), 3600)
         : null;
@@ -49,7 +49,7 @@ export default class TargetManager {
         console.log('Cache hit: targets manager - getAllTarget', cachedTargets);
         return JSON.parse(cachedTargets); // Parse cached JSON data
       }
-      const targets = await TargetRepository.getAllTarget();
+      const targets = await TargetsRepository.getAllTarget();
       await setToCache(
         'getAllTarget',
         'allTarget',
@@ -73,7 +73,7 @@ export default class TargetManager {
         );
         return JSON.parse(cachedAncestors);
       }
-      const ancestors = await TargetRepository.getTargetAncestors(targetId);
+      const ancestors = await TargetsRepository.getTargetAncestors(targetId);
       await setToCache(
         'targetAncestors',
         targetId,
@@ -92,7 +92,7 @@ export default class TargetManager {
     filedsToUpdate: Partial<TargetType>
   ): Promise<TargetType | null> {
     try {
-      const updatedTarget = await TargetRepository.updateTarget(
+      const updatedTarget = await TargetsRepository.updateTarget(
         targetId,
         filedsToUpdate
       );
@@ -112,7 +112,7 @@ export default class TargetManager {
 
   static async deleteTarget(targetId: string): Promise<TargetType | null> {
     try {
-      const status = await TargetRepository.deleteTarget(targetId);
+      const status = await TargetsRepository.deleteTarget(targetId);
       status ? await resetNamespaceCache('targets', targetId) : null;
       await resetNamespaceCache('getAllTarget', 'allTarget');
 
