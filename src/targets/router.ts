@@ -1,18 +1,18 @@
 import { Router } from 'express';
-import OptionController from './controller.js';
+import TargetsController from './controller.js';
 import { asyncHandler } from '../middleware/errorHandling/asyncHandler.js';
 
-const OptionRouter = Router();
+const TargetsRouter = Router();
 
-OptionRouter
-.get('/getTargetAncestors/:id',asyncHandler(OptionController.getTargetAncestors))
-  .get('/:id', asyncHandler(OptionController.getById))
-  .get('/', asyncHandler(OptionController.getMany));
+TargetsRouter
+.get('/getTargetAncestors/:id',asyncHandler(TargetsController.getTargetAncestors))
+  .get('/:id', asyncHandler(TargetsController.getById))
+  .get('/', asyncHandler(TargetsController.getMany));
 
-OptionRouter.post('/', asyncHandler(OptionController.create));
+TargetsRouter.post('/', asyncHandler(TargetsController.create));
 
-OptionRouter.put('/:id', asyncHandler(OptionController.update));
+TargetsRouter.put('/:id', asyncHandler(TargetsController.update));
 
-OptionRouter.delete('/:id', asyncHandler(OptionController.delete));
+TargetsRouter.delete('/:id', asyncHandler(TargetsController.delete));
 
-export default OptionRouter;
+export default TargetsRouter;
