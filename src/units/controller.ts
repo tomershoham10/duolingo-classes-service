@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import UnitsManager from './manager.js';
 import mongoose from 'mongoose';
-import UnitsModel from './model.js';
+// import UnitsModel from './model.js';
 import CoursesModel from '../courses/model.js';
 // import CoursesRepository from "../courses/repository.js";
 
@@ -13,7 +13,7 @@ export default class UnitsController {
         description?: string;
       };
 
-      const reqUnit: Partial<UnitsType> = {};
+      const reqUnit: Partial<UnitsType> = Object.create({});
 
       if (guidebookId) {
         reqUnit.guidebookId = guidebookId;
@@ -55,13 +55,13 @@ export default class UnitsController {
         return res.status(404).json({ message: 'Course not found' });
       }
 
-      const newUnit = new UnitsModel(unitData);
+      const newUnit = await UnitsManager.createUnit(Object.create({}));
 
       course.unitsIds
         ? course.unitsIds.push(newUnit._id.toString())
         : (course.unitsIds = [newUnit._id.toString()]);
       // const updatedCourse = await CoursesRepository.updateCourse(course._id, { units: course.units })
-      await newUnit.save({ session: session });
+      // await newUnit.save({ session: session });
       await course.save({ session: session });
       await session.commitTransaction();
       session.endSession();
@@ -72,7 +72,7 @@ export default class UnitsController {
       console.error('Controller Error:', error.message);
       res.status(400).json({ error: error.message });
     }
-  } // check this function
+  }
 
   static async getById(req: Request, res: Response) {
     try {
