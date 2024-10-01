@@ -20,7 +20,10 @@ LessonsRouter.get(
   .get('/:id', asyncHandler(LessonsController.getById))
   .get('/', asyncHandler(LessonsController.getMany));
 
-LessonsRouter.post('/', asyncHandler(LessonsController.create));
+LessonsRouter.post(
+  '/createByLevel/:levelId',
+  asyncHandler(LessonsController.createByLevel)
+).post('/', asyncHandler(LessonsController.create));
 
 LessonsRouter.put('/:id', asyncHandler(LessonsController.update));
 

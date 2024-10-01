@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import LessonsManager from './manager.js';
 import LessonsModel from './model.js';
+import mongoose from 'mongoose';
+import LevelsModel from '../levels/model.js';
 
 export default class LessonsController {
   static async create(req: Request, res: Response, next: NextFunction) {
@@ -28,6 +30,42 @@ export default class LessonsController {
       console.error(error);
       res.status(500).json({ err: 'Internal Server Error' });
       next(error);
+    }
+  }
+
+  static async createByLevel(req: Request, res: Response) {
+    try {
+      const levelId = req.params.levelId;
+
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      console.log('controller - createByLevel: levelId ', levelId);
+      const level = await LevelsModel.findById(levelId);
+      console.log('controller - createByLevel: level ', level);
+      if (!level) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(404).json({ message: 'level not found' });
+      }
+
+      const newLesson = await LessonsManager.createLesson({
+        exercisesIds: [],
+        suspendedExercisesIds: [],
+      });
+
+      level.lessonsIds
+        ? level.lessonsIds.push(newLesson._id.toString())
+        : (level.lessonsIds = [newLesson._id.toString()]);
+      await level.save({ session: session });
+      await session.commitTransaction();
+      session.endSession();
+      res
+        .status(201)
+        .json({ message: 'New lesson created and level updated successfully' });
+    } catch (error: any) {
+      console.error('Controller Error:', error.message);
+      res.status(400).json({ error: error.message });
     }
   }
 
