@@ -16,7 +16,10 @@ LevelsRouter.get(
   .get('/:id', asyncHandler(LevelsController.getById))
   .get('/', asyncHandler(LevelsController.getMany));
 
-LevelsRouter.post('/', asyncHandler(LevelsController.create));
+LevelsRouter.post(
+  '/createByUnit/:unitId',
+  asyncHandler(LevelsController.createByUnit)
+).post('/', asyncHandler(LevelsController.create));
 
 LevelsRouter.put(
   '/suspendLesson/:levelId/:lessonId',

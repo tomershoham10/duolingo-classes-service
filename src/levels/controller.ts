@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import LevelsManager from './manager.js';
+import mongoose from 'mongoose';
+import UnitsModel from '../units/model.js';
 export default class LevelsController {
   static async create(_req: Request, res: Response) {
     try {
@@ -15,6 +17,39 @@ export default class LevelsController {
     } catch (error: any) {
       console.error('Controller Error:', error.message);
       res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async createByUnit(req: Request, res: Response) {
+    try {
+      const unitId = req.params.unitId;
+
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      console.log('controller - createByUnit: unitId ', unitId);
+      const unit = await UnitsModel.findById(unitId);
+      console.log('controller - createByUnit: unit ', unit);
+      if (!unit) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(404).json({ message: 'Unit not found' });
+      }
+
+      const newLevel = await LevelsManager.createLevel();
+
+      unit.levelsIds
+        ? unit.levelsIds.push(newLevel._id.toString())
+        : (unit.levelsIds = [newLevel._id.toString()]);
+      await unit.save({ session: session });
+      await session.commitTransaction();
+      session.endSession();
+      res
+        .status(201)
+        .json({ message: 'New level created and unit updated successfully' });
+    } catch (error: any) {
+      console.error('Controller Error:', error.message);
+      res.status(400).json({ error: error.message });
     }
   }
 
