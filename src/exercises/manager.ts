@@ -56,6 +56,29 @@ export default class ExercisesManager {
     }
   }
 
+  static async getExercisesByModelId(modelId: string): Promise<ExerciseType[] | null> {
+    try {
+      const cachedExercises = await getFromCache('getByModelId', modelId);
+      if (cachedExercises) {
+        console.log('Cache hit: Exercise manager - getByModelId', modelId);
+        return JSON.parse(cachedExercises); // Parse cached JSON data
+      }
+      const exercises = await ExercisesRepository.getExercisesByModelId(modelId);
+      exercises !== null &&
+        (await setToCache(
+          'getByModelId',
+          modelId,
+          JSON.stringify(exercises),
+          36000
+        ));
+      console.log('Exercise manager - getByModelId', exercises);
+      return exercises;
+    } catch (error: any) {
+      console.error('Manager Error [getExerciseById]:', error.message);
+      throw new Error('Error in getExerciseById');
+    }
+  }
+
   static async getAllExercises(): Promise<ExerciseType[]> {
     try {
       const cachedExercises = await getFromCache(

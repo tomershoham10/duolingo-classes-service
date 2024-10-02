@@ -36,6 +36,22 @@ export default class ExercisesController {
     }
   }
 
+  static async getExercisesByModelId(req: Request, res: Response) {
+    try {
+      const modelId: string = req.params.modelId;
+      console.log('Exercise getByModelId controller', modelId);
+      const exercises = await ExercisesManager.getExercisesByModelId(modelId);
+      if (!exercises) {
+        return res.status(404).json({ message: 'Exercises not found' });
+      }
+
+      return res.status(200).json({ exercises });
+    } catch (error: any) {
+      console.error('Controller Error:', error.message);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   static async getMany(_req: Request, res: Response) {
     try {
       const exercises = await ExercisesManager.getAllExercises();

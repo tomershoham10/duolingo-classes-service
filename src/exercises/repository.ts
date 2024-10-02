@@ -44,6 +44,23 @@ export default class ExercisesRepository {
     }
   }
 
+  static async getExercisesByModelId(
+    modelId: string
+  ): Promise<ExerciseType[] | null> {
+    try {
+      const exercises = await ExerciseModel.find({
+        $or: [
+          { 'fileRoute.modelId': modelId },
+          { 'subExercises.fileRoute.modelId': modelId },
+        ],
+      });
+      console.log('exercises repo - getExercisesByModelId', modelId, exercises);
+      return exercises;
+    } catch (error) {
+      throw new Error(`exercises repo getExercisesByModelId: ${error}`);
+    }
+  }
+
   static async getAllExercises(): Promise<(FsaType | SpotreccType)[]> {
     try {
       const exercises = (await ExerciseModel.find({})) as (

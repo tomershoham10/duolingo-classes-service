@@ -10,6 +10,7 @@ ExercisesRouter.get(
   '/getResultByUserAndExerciseId/:exerciseId/:userId',
   asyncHandler(ExercisesController.getResultByUserAndExerciseId)
 )
+  .get('/getExercisesByModelId/:modelId', asyncHandler(ExercisesController.getExercisesByModelId))
   .get('/:id', asyncHandler(ExercisesController.getById))
   .get('/', asyncHandler(ExercisesController.getMany));
 
