@@ -58,6 +58,7 @@ interface ExerciseType {
   _id: string;
   dateCreated: Date;
   type: ExercisesTypes;
+  adminComments?: string;
 }
 
 //~~~~~~~~~~~ FSA ~~~~~~~~~~~//
