@@ -21,6 +21,10 @@ const exerciseSchema = new Schema<ExerciseType>({
     default: Date.now,
     required: true,
   },
+  adminComments: {
+    type: String,
+    required: false,
+  },
 });
 
 const ExerciseModel = model<ExerciseType>('Exercise', exerciseSchema);
