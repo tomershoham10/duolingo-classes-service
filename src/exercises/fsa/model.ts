@@ -2,23 +2,18 @@ import { Schema } from 'mongoose';
 import ExerciseModel, { FileTypes } from '../model.js';
 
 const FsaSchema = new Schema<FsaType>({
-  relevant: [
-    {
-      type: String,
-      ref: 'Target',
-    },
-  ],
+  relevant: { type: String, ref: 'relevant' },
 
   // targetsList: [
   //   {
   //     type: String,
-  //     ref: 'Target',
+  //     ref: 'targets',
   //   },
   // ],
   // acceptableTargets: [
   //   {
   //     type: String,
-  //     ref: 'Target',
+  //     ref: 'targets',
   //   },
   // ],
 
