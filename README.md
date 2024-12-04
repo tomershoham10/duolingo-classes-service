@@ -2,8 +2,6 @@
 
 The **Classes Service** is the main backend service for the Duolingo-inspired sonar training platform. Built as a microservice, it handles the majority of data storage and retrieval operations, supporting core application functionality.
 
-⚠️ **Note**: This project is still under development and is not yet the final version. Some features may be incomplete or subject to change.
-
 ---
 
 ## 🚀 Features
