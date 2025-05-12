@@ -15,6 +15,7 @@ interface UnitsType {
   suspendedLevelsIds: string[];
   guidebookId?: string;
   description?: string;
+  name?: string;
 }
 
 /////////////// LEVELS ///////////////

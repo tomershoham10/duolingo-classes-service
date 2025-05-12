@@ -17,6 +17,7 @@ const UnitsSchema = new Schema<UnitsType>({
   ],
   guidebookId: { type: String, ref: 'guidebooks', required: false },
   description: { type: String, required: false },
+  name: { type: String, required: false },
 });
 
 const UnitsModel = model<UnitsType>('units', UnitsSchema);
