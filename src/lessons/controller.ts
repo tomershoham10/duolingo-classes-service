@@ -50,6 +50,7 @@ export default class LessonsController {
       }
 
       const newLesson = await LessonsManager.createLesson({
+        name: 'New Lesson',
         exercisesIds: [],
         suspendedExercisesIds: [],
       });

@@ -13,7 +13,7 @@ export default class LevelsManager {
     session.startTransaction();
     try {
       const createdLesson = await LessonsManager.createLesson({
-        name: 'Lesson no.1',
+        name: 'New Lesson',
       });
       console.log('createLevel manager - createdLesson', createdLesson);
 
