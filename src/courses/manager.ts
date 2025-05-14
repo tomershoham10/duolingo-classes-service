@@ -11,7 +11,8 @@ import {
 
 export default class CoursesManager {
   static async createCourse(
-    courseName: string
+    courseName: string,
+    description: string
   ): Promise<CoursesType | undefined> {
     const session = await startSession();
     session.startTransaction();
@@ -20,6 +21,7 @@ export default class CoursesManager {
       console.log('createCourse manager - createdUnit', createdUnit);
       const createdCourse = await CoursesRepository.createCourse({
         name: courseName,
+        description: description,
         unitsIds: [createdUnit._id],
       });
       await setToCache(

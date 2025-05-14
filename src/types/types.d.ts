@@ -3,6 +3,7 @@
 interface CoursesType {
   _id: string;
   name: string;
+  description: string;
   unitsIds: string[];
   suspendedUnitsIds: string[];
 }

@@ -7,6 +7,7 @@ export default class CoursesController {
   static async create(req: Request, res: Response) {
     try {
       const courseName = req.body.name as string;
+      const description = req.body.description as string;
       console.log('create course - courseName', courseName);
       const isExisted = await CoursesModel.findOne({ name: courseName });
       if (isExisted) {
@@ -14,7 +15,7 @@ export default class CoursesController {
         return res.status(403).json({ error: 'course already existed' });
       }
 
-      const newCourse = await CoursesManager.createCourse(courseName);
+      const newCourse = await CoursesManager.createCourse(courseName, description);
       if (newCourse) {
         return res
           .status(201)
