@@ -17,8 +17,8 @@ LevelsRouter.get(
   .get('/', asyncHandler(LevelsController.getMany));
 
 LevelsRouter.post(
-  '/createByUnit/:unitId',
-  asyncHandler(LevelsController.createByUnit)
+  '/createByCourse/:courseId',
+  asyncHandler(LevelsController.createByCourse)
 ).post('/', asyncHandler(LevelsController.create));
 
 LevelsRouter.put(

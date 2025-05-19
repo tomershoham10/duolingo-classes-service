@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import UnitsModel from '../units/model.js';
 import CoursesModel from './model.js';
+import LevelsModel from '../levels/model.js';
 
 export default class CoursesRepository {
   static async createCourse(
@@ -38,7 +38,10 @@ export default class CoursesRepository {
     courseName: string
   ): Promise<CoursesType | null> {
     try {
-      const course = await CoursesModel.findOne({ name: courseName });
+      // Use case-insensitive regex search instead of exact match
+      const course = await CoursesModel.findOne({ 
+        name: { $regex: new RegExp('^' + courseName + '$', 'i') } 
+      });
       console.log('courses repo', courseName, course);
       return course;
     } catch (error: any) {
@@ -47,31 +50,7 @@ export default class CoursesRepository {
     }
   }
 
-  // static async getUnitsByCourseId(courseId: string): Promise<UnitsType[]> {
-  //     try {
-  //         const course = await CoursesModel.findById(courseId);
-  //         console.log("courses repo - getUnitsByCourseId - course", course);
 
-  //         if (course) {
-  //             const unitsIds = course.unitsIds;
-  //             console.log("courses repo - getUnitsByCourseId - unitsIds", unitsIds);
-  //             const unitsDetails = await UnitsModel.find({ _id: { $in: unitsIds } });
-
-  //             const unitsInOrder = unitsDetails.sort((a, b) => {
-  //                 const aIndex = unitsIds.indexOf(a._id);
-  //                 const bIndex = unitsIds.indexOf(b._id);
-  //                 return aIndex - bIndex;
-  //             });
-  //             console.log("courses repo getUnitsById - unitsInOrder", unitsInOrder);
-  //             return unitsInOrder as UnitsType[];
-  //         }
-  //         else return [];
-  //     }
-  //     catch (error: any) {
-  //         console.error('Repository Error:', error.message);
-  //         throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
-  //     }
-  // }
 
   static async getCourseDataById(courseId: string): Promise<any[] | null> {
     try {
@@ -81,11 +60,11 @@ export default class CoursesRepository {
         const courseData = await CoursesModel.aggregate([
           // Match the specific course
           { $match: { _id: courseObjectId } },
-          // Lookup units from unitsIds
+          // Lookup levels directly from levelsIds
           {
             $lookup: {
-              from: 'units',
-              let: { unitsIds: '$unitsIds' },
+              from: 'levels',
+              let: { levelsIds: '$levelsIds', suspendedLevelsIds: '$suspendedLevelsIds' },
               pipeline: [
                 {
                   $match: {
@@ -94,7 +73,7 @@ export default class CoursesRepository {
                         '$_id',
                         {
                           $map: {
-                            input: '$$unitsIds',
+                            input: '$$levelsIds',
                             as: 'id',
                             in: { $toObjectId: '$$id' },
                           },
@@ -103,10 +82,21 @@ export default class CoursesRepository {
                     },
                   },
                 },
+                // Add a field to indicate if the level is suspended
+                {
+                  $addFields: {
+                    isSuspended: {
+                      $in: [
+                        { $toString: '$_id' },
+                        '$$suspendedLevelsIds'
+                      ]
+                    }
+                  }
+                },
                 {
                   $lookup: {
-                    from: 'levels',
-                    let: { levelsIds: '$levelsIds' },
+                    from: 'lessons',
+                    let: { lessonsIds: '$lessonsIds', suspendedLessonsIds: '$suspendedLessonsIds' },
                     pipeline: [
                       {
                         $match: {
@@ -115,7 +105,7 @@ export default class CoursesRepository {
                               '$_id',
                               {
                                 $map: {
-                                  input: '$$levelsIds',
+                                  input: '$$lessonsIds',
                                   as: 'id',
                                   in: { $toObjectId: '$$id' },
                                 },
@@ -124,10 +114,21 @@ export default class CoursesRepository {
                           },
                         },
                       },
+                      // Add a field to indicate if the lesson is suspended
+                      {
+                        $addFields: {
+                          isSuspended: {
+                            $in: [
+                              { $toString: '$_id' },
+                              '$$suspendedLessonsIds'
+                            ]
+                          }
+                        }
+                      },
                       {
                         $lookup: {
-                          from: 'lessons',
-                          let: { lessonsIds: '$lessonsIds' },
+                          from: 'exercises',
+                          let: { exercisesIds: '$exercisesIds', suspendedExercisesIds: '$suspendedExercisesIds' },
                           pipeline: [
                             {
                               $match: {
@@ -136,7 +137,7 @@ export default class CoursesRepository {
                                     '$_id',
                                     {
                                       $map: {
-                                        input: '$$lessonsIds',
+                                        input: '$$exercisesIds',
                                         as: 'id',
                                         in: { $toObjectId: '$$id' },
                                       },
@@ -145,41 +146,27 @@ export default class CoursesRepository {
                                 },
                               },
                             },
+                            // Add a field to indicate if the exercise is suspended
                             {
-                              $lookup: {
-                                from: 'exercises',
-                                let: { exercisesIds: '$exercisesIds' },
-                                pipeline: [
-                                  {
-                                    $match: {
-                                      $expr: {
-                                        $in: [
-                                          '$_id',
-                                          {
-                                            $map: {
-                                              input: '$$exercisesIds',
-                                              as: 'id',
-                                              in: { $toObjectId: '$$id' },
-                                            },
-                                          },
-                                        ],
-                                      },
-                                    },
-                                  },
-                                ],
-                                as: 'exercises',
-                              },
+                              $addFields: {
+                                isSuspended: {
+                                  $in: [
+                                    { $toString: '$_id' },
+                                    '$$suspendedExercisesIds'
+                                  ]
+                                }
+                              }
                             },
                           ],
-                          as: 'lessons',
+                          as: 'exercises',
                         },
                       },
                     ],
-                    as: 'levels',
+                    as: 'lessons',
                   },
                 },
               ],
-              as: 'units',
+              as: 'levels',
             },
           },
         ]);
@@ -190,73 +177,71 @@ export default class CoursesRepository {
       return null;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      return null;
+      throw new Error(`Course repo - getCourseDataById: ${error}`);
     }
   }
 
-  static async getUnsuspendedUnitsByCourseId(
+  static async getUnsuspendedLevelsByCourseId(
     courseId: string
-  ): Promise<UnitsType[]> {
+  ): Promise<LevelsType[]> {
     try {
       const course = await CoursesModel.findById(courseId);
       console.log(
-        'courses repo - getUnsuspendedUnitsByCourseId - course',
+        'courses repo - getUnsuspendedLevelsByCourseId - course',
         course
       );
 
       if (course) {
-        const unitsIds = course.unitsIds;
+        const levelsIds = course.levelsIds;
         console.log(
-          'courses repo - getUnsuspendedUnitsByCourseId - unitsIds',
-          unitsIds
+          'courses repo - getUnsuspendedLevelsByCourseId - levelsIds',
+          levelsIds
         );
-        const unsuspendedUnitsIds = unitsIds.filter(
-          (unitId) => !course.suspendedUnitsIds.includes(unitId)
+        const unsuspendedLevelsIds = levelsIds.filter(
+          (levelId) => !course.suspendedLevelsIds.includes(levelId)
         );
         console.log(
-          'courses repo - getUnsuspendedUnitsByCourseId - unsuspendedUnitsIds',
-          unsuspendedUnitsIds
+          'courses repo - getUnsuspendedLevelsByCourseId - unsuspendedLevelsIds',
+          unsuspendedLevelsIds
         );
-        const unitsDetails = await UnitsModel.find({
-          _id: { $in: unsuspendedUnitsIds },
+        const levelsDetails = await LevelsModel.find({
+          _id: { $in: unsuspendedLevelsIds },
         });
 
-        // const unitsInOrder = unitsIds.map(id => unitsDetails.find(unit => unit._id === id));
-
         console.log(
-          'courses repo getUnsuspendedUnitsByCourseId - unitsDetails',
-          unitsDetails
+          'courses repo getUnsuspendedLevelsByCourseId - levelsDetails',
+          levelsDetails
         );
-        return unitsDetails as UnitsType[];
+        return levelsDetails as LevelsType[];
       } else return [];
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Course repo - getUnitsByCourseId: ${error}`);
+      throw new Error(`Course repo - getLevelsByCourseId: ${error}`);
     }
   }
 
-  static async getNextUnitId(prevUnitId: string): Promise<string | null> {
+  static async getNextLevelId(prevLevelId: string): Promise<string | null> {
     try {
       const course = await CoursesModel.findOne({
-        units: { $in: [prevUnitId] },
+        levelsIds: { $in: [prevLevelId] },
       });
-      console.log('courses repo - getNextUnitId :', course);
+      console.log('courses repo - getNextLevelId :', course);
       if (course) {
-        const unitsIds = course.unitsIds;
-        const indexOfUnit = unitsIds.indexOf(prevUnitId);
-        if (indexOfUnit !== -1 && indexOfUnit + 1 < unitsIds.length) {
-          const nextUnitId = unitsIds[unitsIds.indexOf(prevUnitId) + 1];
-          if (course.suspendedUnitsIds.includes(nextUnitId)) {
-            await this.getNextUnitId(nextUnitId);
+        const levelsIds = course.levelsIds;
+        const indexOfLevel = levelsIds.indexOf(prevLevelId);
+        if (indexOfLevel !== -1 && indexOfLevel + 1 < levelsIds.length) {
+          const nextLevelId = levelsIds[indexOfLevel + 1];
+          if (course.suspendedLevelsIds.includes(nextLevelId)) {
+            await this.getNextLevelId(nextLevelId);
           }
-          return nextUnitId;
+          return nextLevelId;
         } else return 'finished';
       } else {
         return null;
       }
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Course repo - getNextUnitId: ${error}`);
+      throw new Error(`Course repo - getNextLevelId: ${error}`);
     }
   }
 
@@ -287,9 +272,9 @@ export default class CoursesRepository {
     }
   }
 
-  static async suspendUnitByCourseId(
+  static async suspendLevelByCourseId(
     courseId: string,
-    unitId: string
+    levelId: string
   ): Promise<CoursesType | null> {
     try {
       const course = await CoursesModel.findById(courseId);
@@ -297,26 +282,26 @@ export default class CoursesRepository {
         return null;
       }
 
-      const suspendedUnits = course.suspendedUnitsIds;
-      if (suspendedUnits.includes(unitId)) {
+      const suspendedLevels = course.suspendedLevelsIds;
+      if (suspendedLevels.includes(levelId)) {
         return null;
       }
 
       const updatedCourse = await CoursesModel.findByIdAndUpdate(
         courseId,
-        { suspendedUnits: [...suspendedUnits, unitId] },
+        { suspendedLevelsIds: [...suspendedLevels, levelId] },
         { new: true }
       );
       return updatedCourse;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Course repo - suspendUnitByCourseId: ${error}`);
+      throw new Error(`Course repo - suspendLevelByCourseId: ${error}`);
     }
   }
 
-  static async unsuspendUnitByCourseId(
+  static async unsuspendLevelByCourseId(
     courseId: string,
-    unitId: string
+    levelId: string
   ): Promise<CoursesType | null> {
     try {
       const course = await CoursesModel.findById(courseId);
@@ -324,16 +309,16 @@ export default class CoursesRepository {
         return null;
       }
 
-      const suspendedUnitsIds = course.suspendedUnitsIds;
-      if (!suspendedUnitsIds.includes(unitId)) {
+      const suspendedLevelsIds = course.suspendedLevelsIds;
+      if (!suspendedLevelsIds.includes(levelId)) {
         return null;
       }
 
       const updatedCourse = await CoursesModel.findByIdAndUpdate(
         courseId,
         {
-          suspendedUnitsIds: suspendedUnitsIds.filter(
-            (unit) => unit !== unitId
+          suspendedLevelsIds: suspendedLevelsIds.filter(
+            (level) => level !== levelId
           ),
         },
         { new: true }
@@ -341,7 +326,7 @@ export default class CoursesRepository {
       return updatedCourse;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Course repo - unsuspendUnitByCourseId: ${error}`);
+      throw new Error(`Course repo - unsuspendLevelByCourseId: ${error}`);
     }
   }
 

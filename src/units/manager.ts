@@ -1,295 +1,295 @@
-import { startSession } from 'mongoose';
-import UnitsRepository from './repository.js';
-import LevelsManager from '../levels/manager.js';
-import UnitsModel from './model.js';
-import LessonsModel from '../lessons/model.js';
-import LevelsModel from '../levels/model.js';
-import {
-  getFromCache,
-  resetNamespaceCache,
-  setToCache,
-} from '../utils/cache.js';
+// import { startSession } from 'mongoose';
+// import UnitsRepository from './repository.js';
+// import LevelsManager from '../levels/manager.js';
+// import UnitsModel from './model.js';
+// import LessonsModel from '../lessons/model.js';
+// import LevelsModel from '../levels/model.js';
+// import {
+//   getFromCache,
+//   resetNamespaceCache,
+//   setToCache,
+// } from '../utils/cache.js';
 
-export default class UnitsManager {
-  static async createUnit(unit: Partial<UnitsType>): Promise<UnitsType> {
-    const session = await startSession();
-    session.startTransaction();
-    try {
-      const createdLevel = await LevelsManager.createLevel();
-      console.log('createUnit manager - createdLevel', createdLevel);
-      const createdUnit = await UnitsRepository.createUnit({
-        ...unit,
-        levelsIds: [createdLevel._id],
-      });
-      await setToCache(
-        'units',
-        createdUnit._id,
-        JSON.stringify(createdUnit),
-        3600
-      );
-      await resetNamespaceCache('getAllUnits', 'allUnits');
-      await session.commitTransaction();
-      return createdUnit;
-    } catch (error: any) {
-      await session.abortTransaction();
-      console.error('Manager Error [createUnit]:', error.message);
-      throw new Error('Error in unit creation process');
-    } finally {
-      session.endSession();
-    }
-  }
+// export default class UnitsManager {
+//   static async createUnit(unit: Partial<UnitsType>): Promise<UnitsType> {
+//     const session = await startSession();
+//     session.startTransaction();
+//     try {
+//       const createdLevel = await LevelsManager.createLevel();
+//       console.log('createUnit manager - createdLevel', createdLevel);
+//       const createdUnit = await UnitsRepository.createUnit({
+//         ...unit,
+//         levelsIds: [createdLevel._id],
+//       });
+//       await setToCache(
+//         'units',
+//         createdUnit._id,
+//         JSON.stringify(createdUnit),
+//         3600
+//       );
+//       await resetNamespaceCache('getAllUnits', 'allUnits');
+//       await session.commitTransaction();
+//       return createdUnit;
+//     } catch (error: any) {
+//       await session.abortTransaction();
+//       console.error('Manager Error [createUnit]:', error.message);
+//       throw new Error('Error in unit creation process');
+//     } finally {
+//       session.endSession();
+//     }
+//   }
 
-  static async getUnitById(
-    unitId: string
-  ): Promise<UnitsType | null | undefined> {
-    try {
-      const cachedUnit = await getFromCache('units', unitId);
-      if (cachedUnit) {
-        console.log('Cache hit: units manager - getUnitById', unitId);
-        return JSON.parse(cachedUnit); // Parse cached JSON data
-      }
+//   static async getUnitById(
+//     unitId: string
+//   ): Promise<UnitsType | null | undefined> {
+//     try {
+//       const cachedUnit = await getFromCache('units', unitId);
+//       if (cachedUnit) {
+//         console.log('Cache hit: units manager - getUnitById', unitId);
+//         return JSON.parse(cachedUnit); // Parse cached JSON data
+//       }
 
-      const unit = await UnitsRepository.getUnitById(unitId);
-      unit !== null
-        ? await setToCache('units', unitId, JSON.stringify(unit), 3600)
-        : null;
-      console.log('units manager', unit);
-      return unit;
-    } catch (error: any) {
-      console.error('Manager Error [getUnitById]:', error.message);
-      throw new Error('Error in getUnitById');
-    }
-  }
+//       const unit = await UnitsRepository.getUnitById(unitId);
+//       unit !== null
+//         ? await setToCache('units', unitId, JSON.stringify(unit), 3600)
+//         : null;
+//       console.log('units manager', unit);
+//       return unit;
+//     } catch (error: any) {
+//       console.error('Manager Error [getUnitById]:', error.message);
+//       throw new Error('Error in getUnitById');
+//     }
+//   }
 
-  static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[]> {
-    try {
-      const cachedLevels = await getFromCache('getsLevelsByUnitId', unitId);
-      if (cachedLevels) {
-        console.log('Cache hit: units manager - getsLevelsByUnitId', unitId);
-        return JSON.parse(cachedLevels); // Parse cached JSON data
-      }
-      const levels = await UnitsRepository.getsLevelsByUnitId(unitId);
-      await setToCache(
-        'getsLevelsByUnitId',
-        unitId,
-        JSON.stringify(levels),
-        3600
-      );
-      console.log('units manager getsLevelsByUnitId', levels);
-      return levels;
-    } catch (error: any) {
-      console.error('Manager Error [getsLevelsByUnitId]:', error.message);
-      throw new Error('Error in getsLevelsByUnitId');
-    }
-  }
+//   static async getsLevelsByUnitId(unitId: string): Promise<LevelsType[]> {
+//     try {
+//       const cachedLevels = await getFromCache('getsLevelsByUnitId', unitId);
+//       if (cachedLevels) {
+//         console.log('Cache hit: units manager - getsLevelsByUnitId', unitId);
+//         return JSON.parse(cachedLevels); // Parse cached JSON data
+//       }
+//       const levels = await UnitsRepository.getsLevelsByUnitId(unitId);
+//       await setToCache(
+//         'getsLevelsByUnitId',
+//         unitId,
+//         JSON.stringify(levels),
+//         3600
+//       );
+//       console.log('units manager getsLevelsByUnitId', levels);
+//       return levels;
+//     } catch (error: any) {
+//       console.error('Manager Error [getsLevelsByUnitId]:', error.message);
+//       throw new Error('Error in getsLevelsByUnitId');
+//     }
+//   }
 
-  static async getUnsuspendedLevelsByUnitId(
-    unitId: string
-  ): Promise<LevelsType[]> {
-    try {
-      const cachedLevels = await getFromCache(
-        'getUnsuspendedLevelsByUnitId',
-        unitId
-      );
-      if (cachedLevels) {
-        console.log(
-          'Cache hit: units manager - getUnsuspendedLevelsByUnitId',
-          unitId
-        );
-        return JSON.parse(cachedLevels); // Parse cached JSON data
-      }
-      const levels = await UnitsRepository.getUnsuspendedLevelsByUnitId(unitId);
-      await setToCache(
-        'getUnsuspendedLevelsByUnitId',
-        unitId,
-        JSON.stringify(levels),
-        3600
-      );
-      console.log('units manager getUnsuspendedLevelsByUnitId', levels);
-      return levels;
-    } catch (error: any) {
-      console.error(
-        'Manager Error [getUnsuspendedLevelsByUnitId]:',
-        error.message
-      );
-      throw new Error('Error in getUnsuspendedLevelsByUnitId');
-    }
-  }
+//   static async getUnsuspendedLevelsByUnitId(
+//     unitId: string
+//   ): Promise<LevelsType[]> {
+//     try {
+//       const cachedLevels = await getFromCache(
+//         'getUnsuspendedLevelsByUnitId',
+//         unitId
+//       );
+//       if (cachedLevels) {
+//         console.log(
+//           'Cache hit: units manager - getUnsuspendedLevelsByUnitId',
+//           unitId
+//         );
+//         return JSON.parse(cachedLevels); // Parse cached JSON data
+//       }
+//       const levels = await UnitsRepository.getUnsuspendedLevelsByUnitId(unitId);
+//       await setToCache(
+//         'getUnsuspendedLevelsByUnitId',
+//         unitId,
+//         JSON.stringify(levels),
+//         3600
+//       );
+//       console.log('units manager getUnsuspendedLevelsByUnitId', levels);
+//       return levels;
+//     } catch (error: any) {
+//       console.error(
+//         'Manager Error [getUnsuspendedLevelsByUnitId]:',
+//         error.message
+//       );
+//       throw new Error('Error in getUnsuspendedLevelsByUnitId');
+//     }
+//   }
 
-  static async getNextLevelId(prevLevelId: string): Promise<string | null> {
-    try {
-      const cachedNextLevelId = await getFromCache(
-        'getNextLevelId',
-        prevLevelId
-      );
-      if (cachedNextLevelId) {
-        console.log(
-          'Cache hit: units manager - getNextLevelId',
-          cachedNextLevelId
-        );
-        return JSON.parse(cachedNextLevelId); // Parse cached JSON data
-      }
+//   static async getNextLevelId(prevLevelId: string): Promise<string | null> {
+//     try {
+//       const cachedNextLevelId = await getFromCache(
+//         'getNextLevelId',
+//         prevLevelId
+//       );
+//       if (cachedNextLevelId) {
+//         console.log(
+//           'Cache hit: units manager - getNextLevelId',
+//           cachedNextLevelId
+//         );
+//         return JSON.parse(cachedNextLevelId); // Parse cached JSON data
+//       }
 
-      const nextLevelId = await UnitsRepository.getNextLevelId(prevLevelId);
-      await setToCache(
-        'getNextLevelId',
-        prevLevelId,
-        JSON.stringify(nextLevelId),
-        3600
-      );
-      console.log('units manager getNextLevelId', nextLevelId);
-      return nextLevelId;
-    } catch (error: any) {
-      console.error('Manager Error [getNextLevelId]:', error.message);
-      throw new Error('Error in getNextLevelId');
-    }
-  }
+//       const nextLevelId = await UnitsRepository.getNextLevelId(prevLevelId);
+//       await setToCache(
+//         'getNextLevelId',
+//         prevLevelId,
+//         JSON.stringify(nextLevelId),
+//         3600
+//       );
+//       console.log('units manager getNextLevelId', nextLevelId);
+//       return nextLevelId;
+//     } catch (error: any) {
+//       console.error('Manager Error [getNextLevelId]:', error.message);
+//       throw new Error('Error in getNextLevelId');
+//     }
+//   }
 
-  static async getAllUnits(): Promise<UnitsType[]> {
-    try {
-      const cachedUnits = await getFromCache('getAllUnits', 'allUnits');
-      if (cachedUnits) {
-        console.log('Cache hit: units manager - getAllUnits', cachedUnits);
-        return JSON.parse(cachedUnits); // Parse cached JSON data
-      }
-      const units = await UnitsRepository.getAllUnits();
-      await setToCache('getAllUnits', 'allUnits', JSON.stringify(units), 3600);
-      return units;
-    } catch (error: any) {
-      console.error('Manager Error [getAllUnits]:', error.message);
-      throw new Error('Error in getAllUnits');
-    }
-  }
+//   static async getAllUnits(): Promise<UnitsType[]> {
+//     try {
+//       const cachedUnits = await getFromCache('getAllUnits', 'allUnits');
+//       if (cachedUnits) {
+//         console.log('Cache hit: units manager - getAllUnits', cachedUnits);
+//         return JSON.parse(cachedUnits); // Parse cached JSON data
+//       }
+//       const units = await UnitsRepository.getAllUnits();
+//       await setToCache('getAllUnits', 'allUnits', JSON.stringify(units), 3600);
+//       return units;
+//     } catch (error: any) {
+//       console.error('Manager Error [getAllUnits]:', error.message);
+//       throw new Error('Error in getAllUnits');
+//     }
+//   }
 
-  static async updateUnit(
-    unitId: string,
-    filedsToUpdate: Partial<UnitsType>
-  ): Promise<UnitsType | null> {
-    try {
-      const updatedUnit = await UnitsRepository.updateUnit(
-        unitId,
-        filedsToUpdate
-      );
-      await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
-      await resetNamespaceCache('getAllUnits', 'allUnits');
-      return updatedUnit;
-    } catch (error: any) {
-      console.error('Manager Error [updateUnit]:', error.message);
-      throw new Error('Error in updateUnit');
-    }
-  }
+//   static async updateUnit(
+//     unitId: string,
+//     filedsToUpdate: Partial<UnitsType>
+//   ): Promise<UnitsType | null> {
+//     try {
+//       const updatedUnit = await UnitsRepository.updateUnit(
+//         unitId,
+//         filedsToUpdate
+//       );
+//       await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+//       await resetNamespaceCache('getAllUnits', 'allUnits');
+//       return updatedUnit;
+//     } catch (error: any) {
+//       console.error('Manager Error [updateUnit]:', error.message);
+//       throw new Error('Error in updateUnit');
+//     }
+//   }
 
-  static async createNewLevel(unitId: string): Promise<UnitsType | null> {
-    try {
-      const session = await startSession();
-      session.startTransaction();
-      const unit = await UnitsModel.findById(unitId);
-      if (!unit) {
-        await session.abortTransaction();
-        session.endSession();
-        return null;
-      }
-      const newLesson = await LessonsModel.create({ exercises: [] });
-      const newLevel = await LevelsModel.create({ lessons: [newLesson._id] });
+//   static async createNewLevel(unitId: string): Promise<UnitsType | null> {
+//     try {
+//       const session = await startSession();
+//       session.startTransaction();
+//       const unit = await UnitsModel.findById(unitId);
+//       if (!unit) {
+//         await session.abortTransaction();
+//         session.endSession();
+//         return null;
+//       }
+//       const newLesson = await LessonsModel.create({ exercises: [] });
+//       const newLevel = await LevelsModel.create({ lessons: [newLesson._id] });
 
-      const updatedUnit = await UnitsRepository.updateUnit(unitId, {
-        levelsIds: [...unit.levelsIds, newLevel._id],
-      });
-      console.log('updatedUnit', updatedUnit);
-      await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
-      await resetNamespaceCache('getAllUnits', 'allUnits');
+//       const updatedUnit = await UnitsRepository.updateUnit(unitId, {
+//         levelsIds: [...unit.levelsIds, newLevel._id],
+//       });
+//       console.log('updatedUnit', updatedUnit);
+//       await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+//       await resetNamespaceCache('getAllUnits', 'allUnits');
 
-      await newLesson.save({ session: session });
-      await newLevel.save({ session: session });
-      await session.commitTransaction();
-      session.endSession();
-      console.log('end session');
-      return updatedUnit;
-    } catch (error: any) {
-      console.error('Manager Error [updateUnit]:', error.message);
-      throw new Error('Error in updateUnit');
-    }
-  }
+//       await newLesson.save({ session: session });
+//       await newLevel.save({ session: session });
+//       await session.commitTransaction();
+//       session.endSession();
+//       console.log('end session');
+//       return updatedUnit;
+//     } catch (error: any) {
+//       console.error('Manager Error [updateUnit]:', error.message);
+//       throw new Error('Error in updateUnit');
+//     }
+//   }
 
-  // static async createNewLevel2(unitId: string): Promise<UnitsType | null> {
-  //     let session: ClientSession | null = null;
-  //     try {
-  //         session = await mongoose.startSession();
-  //         session.startTransaction();
+//   // static async createNewLevel2(unitId: string): Promise<UnitsType | null> {
+//   //     let session: ClientSession | null = null;
+//   //     try {
+//   //         session = await mongoose.startSession();
+//   //         session.startTransaction();
 
-  //         const unit = await UnitsModel.findById(unitId).session(session);
-  //         if (!unit) {
-  //             throw new Error('Unit not found');
-  //         }
+//   //         const unit = await UnitsModel.findById(unitId).session(session);
+//   //         if (!unit) {
+//   //             throw new Error('Unit not found');
+//   //         }
 
-  //         const newLesson = await LessonsRepository.createLesson({ exercises: [] });
-  //         const newLevel = await LevelsRepository.createLevel({ lessons: [newLesson._id] });
+//   //         const newLesson = await LessonsRepository.createLesson({ exercises: [] });
+//   //         const newLevel = await LevelsRepository.createLevel({ lessons: [newLesson._id] });
 
-  //         const updatedUnit = await UnitsRepository.updateUnit(
-  //             unitId,
-  //             { levels: [...unit.levels, newLevel._id] }
-  //         );
+//   //         const updatedUnit = await UnitsRepository.updateUnit(
+//   //             unitId,
+//   //             { levels: [...unit.levels, newLevel._id] }
+//   //         );
 
-  //         await session.commitTransaction();
-  //         return updatedUnit;
-  //     } catch (error:any) {
-  //         if (session) {
-  //             await session.abortTransaction();
-  //         }
-  //         console.error('Error in createNewLevel:', error.message);
-  //         throw new Error('Error in createNewLevel');
-  //     } finally {
-  //         if (session) {
-  //             session.endSession();
-  //         }
-  //     }
-  // }
+//   //         await session.commitTransaction();
+//   //         return updatedUnit;
+//   //     } catch (error:any) {
+//   //         if (session) {
+//   //             await session.abortTransaction();
+//   //         }
+//   //         console.error('Error in createNewLevel:', error.message);
+//   //         throw new Error('Error in createNewLevel');
+//   //     } finally {
+//   //         if (session) {
+//   //             session.endSession();
+//   //         }
+//   //     }
+//   // }
 
-  static async suspendLevelByUnitId(
-    unitId: string,
-    levelId: string
-  ): Promise<UnitsType | null> {
-    try {
-      const updatedUnit = await UnitsRepository.suspendLevelByUnitId(
-        unitId,
-        levelId
-      );
-      await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
-      await resetNamespaceCache('getAllUnits', 'allUnits');
-      return updatedUnit;
-    } catch (error: any) {
-      console.error('Manager Error [suspendLevelByUnitId]:', error.message);
-      throw new Error('Error in suspendLevelByUnitId');
-    }
-  }
+//   static async suspendLevelByUnitId(
+//     unitId: string,
+//     levelId: string
+//   ): Promise<UnitsType | null> {
+//     try {
+//       const updatedUnit = await UnitsRepository.suspendLevelByUnitId(
+//         unitId,
+//         levelId
+//       );
+//       await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+//       await resetNamespaceCache('getAllUnits', 'allUnits');
+//       return updatedUnit;
+//     } catch (error: any) {
+//       console.error('Manager Error [suspendLevelByUnitId]:', error.message);
+//       throw new Error('Error in suspendLevelByUnitId');
+//     }
+//   }
 
-  static async unsuspendLevelByUnitId(
-    unitId: string,
-    levelId: string
-  ): Promise<UnitsType | null> {
-    try {
-      const updatedUnit = await UnitsRepository.unsuspendLevelByUnitId(
-        unitId,
-        levelId
-      );
-      await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
-      await resetNamespaceCache('getAllUnits', 'allUnits');
-      return updatedUnit;
-    } catch (error: any) {
-      console.error('Manager Error [unsuspendLevelByUnitId]:', error.message);
-      throw new Error('Error in unsuspendLevelByUnitId');
-    }
-  }
+//   static async unsuspendLevelByUnitId(
+//     unitId: string,
+//     levelId: string
+//   ): Promise<UnitsType | null> {
+//     try {
+//       const updatedUnit = await UnitsRepository.unsuspendLevelByUnitId(
+//         unitId,
+//         levelId
+//       );
+//       await setToCache('units', unitId, JSON.stringify(updatedUnit), 3600);
+//       await resetNamespaceCache('getAllUnits', 'allUnits');
+//       return updatedUnit;
+//     } catch (error: any) {
+//       console.error('Manager Error [unsuspendLevelByUnitId]:', error.message);
+//       throw new Error('Error in unsuspendLevelByUnitId');
+//     }
+//   }
 
-  static async deleteUnit(unitId: string): Promise<UnitsType | null> {
-    try {
-      const status = await UnitsRepository.deleteUnit(unitId);
-      status ? await resetNamespaceCache('units', unitId) : null;
-      await resetNamespaceCache('getAllUnits', 'allUnits');
-      return status;
-    } catch (error: any) {
-      console.error('Manager Error [deleteUnit]:', error.message);
-      throw new Error('Error in deleteUnit');
-    }
-  }
-}
+//   static async deleteUnit(unitId: string): Promise<UnitsType | null> {
+//     try {
+//       const status = await UnitsRepository.deleteUnit(unitId);
+//       status ? await resetNamespaceCache('units', unitId) : null;
+//       await resetNamespaceCache('getAllUnits', 'allUnits');
+//       return status;
+//     } catch (error: any) {
+//       console.error('Manager Error [deleteUnit]:', error.message);
+//       throw new Error('Error in deleteUnit');
+//     }
+//   }
+// }

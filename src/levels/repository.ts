@@ -1,6 +1,6 @@
 import LessonsModel from '../lessons/model.js';
-// import UnitsController from "../units/controller.js";
-import UnitsManager from '../units/manager.js';
+// import CoursesController from "../courses/controller.js";
+import CoursesManager from '../courses/manager.js';
 import LevelsModel from './model.js';
 
 export default class LevelsRepository {
@@ -98,7 +98,7 @@ export default class LevelsRepository {
             }
             return nextLessonId;
           } else {
-            const response = await UnitsManager.getNextLevelId(level._id);
+            const response = await CoursesManager.getNextLevelId(level._id);
             //returns the next level's id
 
             if (response) {

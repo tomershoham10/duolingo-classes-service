@@ -38,7 +38,16 @@ export default class CoursesController {
         return res.status(404).json({ message: 'course not found' });
       }
 
-      res.status(200).json({ course });
+      // Transform the response to maintain backward compatibility
+      // Handle both Mongoose documents and plain objects
+      const courseObj = typeof course.toObject === 'function' ? course.toObject() : course;
+      const transformedCourse = {
+        ...courseObj,
+        unitsIds: course.levelsIds,
+        suspendedUnitsIds: course.suspendedLevelsIds
+      };
+
+      res.status(200).json({ course: transformedCourse });
     } catch (error: any) {
       console.error('Controller Error:', error.message);
       res.status(500).json({ error: error.message });
@@ -50,13 +59,22 @@ export default class CoursesController {
       const courseName: string = req.params.courseName;
       console.log('courses controller - getByName', courseName);
       const course = await CoursesManager.getCourseByName(
-        capitalizeWords(courseName)
+        courseName // Remove capitalization to make search case-insensitive
       );
       if (!course) {
         return res.status(404).json({ message: 'course not found' });
       }
 
-      res.status(200).json({ course });
+      // Transform the response to maintain backward compatibility
+      // Handle both Mongoose documents and plain objects
+      const courseObj = typeof course.toObject === 'function' ? course.toObject() : course;
+      const transformedCourse = {
+        ...courseObj,
+        unitsIds: course.levelsIds,
+        suspendedUnitsIds: course.suspendedLevelsIds
+      };
+
+      res.status(200).json({ course: transformedCourse });
     } catch (error: any) {
       console.error('Controller Error:', error.message);
       res.status(500).json({ error: error.message });
@@ -84,7 +102,7 @@ export default class CoursesController {
       const courseId: string = req.params.id;
       console.log('controller: getUnitsById', courseId);
       const units =
-        await CoursesManager.getUnsuspendedUnitsByCourseId(courseId);
+        await CoursesManager.getUnsuspendedLevelsByCourseId(courseId);
       return units.length <= 0
         ? res.status(404).json({ message: 'units not found' })
         : res.status(200).json({ units });
@@ -112,9 +130,9 @@ export default class CoursesController {
 
   static async getNextUnitId(req: Request, res: Response) {
     try {
-      const prevUnitId: string = req.params.prevUnitId as string;
-      console.log('course controller: prevUnitId', prevUnitId);
-      const nextUnitId = await CoursesManager.getNextUnitId(prevUnitId);
+      const prevLevelId: string = req.params.prevUnitId as string;
+      console.log('course controller: prevUnitId', prevLevelId);
+      const nextUnitId = await CoursesManager.getNextLevelId(prevLevelId);
       if (!nextUnitId) {
         return res.status(404).json({ message: 'nextUnitId not found' });
       }
@@ -129,7 +147,19 @@ export default class CoursesController {
     try {
       const courses = await CoursesManager.getAllCourses();
       console.log('get all courses', courses);
-      res.status(200).json({ courses });
+      
+      // Transform the response to maintain backward compatibility
+      // Handle both Mongoose documents and plain objects
+      const transformedCourses = courses.map(course => {
+        const courseObj = typeof course.toObject === 'function' ? course.toObject() : course;
+        return {
+          ...courseObj,
+          unitsIds: course.levelsIds,
+          suspendedUnitsIds: course.suspendedLevelsIds
+        };
+      });
+      
+      res.status(200).json({ courses: transformedCourses });
     } catch (error: any) {
       console.error('Controller Error:', error.message);
       res.status(500).json({ error: error.message });
@@ -159,14 +189,14 @@ export default class CoursesController {
     }
   } // cached
 
-  static async suspendUnit(req: Request, res: Response) {
+  static async suspendLevel(req: Request, res: Response) {
     try {
       const courseId: string = req.params.courseId;
-      const unitId: string = req.params.unitId;
+      const levelId: string = req.params.unitId;
 
-      const updatedCouse = await CoursesManager.suspendUnitByCourseId(
+      const updatedCouse = await CoursesManager.suspendLevelByCourseId(
         courseId,
-        unitId
+        levelId
       );
 
       if (!updatedCouse) {
@@ -183,12 +213,12 @@ export default class CoursesController {
     }
   } // cached
 
-  static async unsuspendUnit(req: Request, res: Response) {
+  static async unsuspendLevel(req: Request, res: Response) {
     try {
       const courseId: string = req.params.courseId;
       const unitId: string = req.params.unitId;
 
-      const updatedCouse = await CoursesManager.unsuspendUnitByCourseId(
+      const updatedCouse = await CoursesManager.unsuspendLevelByCourseId(
         courseId,
         unitId
       );

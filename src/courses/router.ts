@@ -28,11 +28,11 @@ CoursesRouter.post('/', asyncHandler(CoursesController.create));
 
 CoursesRouter.put(
   '/suspendUnit/:courseId/:unitId',
-  asyncHandler(CoursesController.suspendUnit)
+  asyncHandler(CoursesController.suspendLevel)
 )
   .put(
     '/unsuspendUnit/:courseId/:unitId',
-    asyncHandler(CoursesController.unsuspendUnit)
+    asyncHandler(CoursesController.unsuspendLevel)
   )
   .put('/:id', asyncHandler(CoursesController.update));
 

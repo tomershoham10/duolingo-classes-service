@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import LevelsManager from './manager.js';
 import mongoose from 'mongoose';
-import UnitsModel from '../units/model.js';
+import CoursesModel from '../courses/model.js';
 export default class LevelsController {
   static async create(_req: Request, res: Response) {
     try {
@@ -20,33 +20,33 @@ export default class LevelsController {
     }
   }
 
-  static async createByUnit(req: Request, res: Response) {
+  static async createByCourse(req: Request, res: Response) {
     try {
-      const unitId = req.params.unitId;
+      const courseId = req.params.courseId;
 
       const session = await mongoose.startSession();
       session.startTransaction();
 
-      console.log('controller - createByUnit: unitId ', unitId);
-      const unit = await UnitsModel.findById(unitId);
-      console.log('controller - createByUnit: unit ', unit);
-      if (!unit) {
+      console.log('controller - createByCourse: courseId ', courseId);
+      const course = await CoursesModel.findById(courseId);
+      console.log('controller - createByCourse: course ', course);
+      if (!course) {
         await session.abortTransaction();
         session.endSession();
-        return res.status(404).json({ message: 'Unit not found' });
+        return res.status(404).json({ message: 'Course not found' });
       }
 
       const newLevel = await LevelsManager.createLevel();
 
-      unit.levelsIds
-        ? unit.levelsIds.push(newLevel._id.toString())
-        : (unit.levelsIds = [newLevel._id.toString()]);
-      await unit.save({ session: session });
+      course.levelsIds
+        ? course.levelsIds.push(newLevel._id.toString())
+        : (course.levelsIds = [newLevel._id.toString()]);
+      await course.save({ session: session });
       await session.commitTransaction();
       session.endSession();
       res
         .status(201)
-        .json({ message: 'New level created and unit updated successfully' });
+        .json({ message: 'New level created and course updated successfully' });
     } catch (error: any) {
       console.error('Controller Error:', error.message);
       res.status(400).json({ error: error.message });

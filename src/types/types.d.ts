@@ -1,11 +1,13 @@
 /////////////// COURSES //////////////////
 
 interface CoursesType {
+  [x: string]: any // COURSES //////////////////
+  ;
   _id: string;
   name: string;
   description: string;
-  unitsIds: string[];
-  suspendedUnitsIds: string[];
+  levelsIds: string[];
+  suspendedLevelsIds: string[];
 }
 
 /////////////// UNITS //////////////////

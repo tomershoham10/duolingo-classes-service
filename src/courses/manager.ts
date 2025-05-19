@@ -1,7 +1,6 @@
 import { startSession } from 'mongoose';
 import CoursesRepository from './repository.js';
-import UnitsManager from '../units/manager.js';
-import UnitsRepository from '../units/repository.js';
+import LevelsManager from '../levels/manager.js';
 import LevelsRepository from '../levels/repository.js';
 import {
   getFromCache,
@@ -17,12 +16,13 @@ export default class CoursesManager {
     const session = await startSession();
     session.startTransaction();
     try {
-      const createdUnit = await UnitsManager.createUnit({});
-      console.log('createCourse manager - createdUnit', createdUnit);
+      const createdLevel = await LevelsManager.createLevel();
+      console.log('createCourse manager - createdLevel', createdLevel);
       const createdCourse = await CoursesRepository.createCourse({
         name: courseName,
         description: description,
-        unitsIds: [createdUnit._id],
+        levelsIds: [createdLevel._id],
+        suspendedLevelsIds: [],
       });
       await setToCache(
         'courses',
@@ -97,7 +97,7 @@ export default class CoursesManager {
       }
       const courseData = await CoursesRepository.getCourseDataById(courseId);
       await setToCache(
-        'getUnitsByCourseId',
+        'getCourseDataById',
         courseId,
         JSON.stringify(courseData),
         3600
@@ -105,42 +105,42 @@ export default class CoursesManager {
       console.log('courses manager getCourseDataById', courseData);
       return courseData;
     } catch (error: any) {
-      console.error('Manager Error [getUnitsByCourseId]:', error.message);
-      throw new Error('Error in getting units by course id');
+      console.error('Manager Error [getCourseDataById]:', error.message);
+      throw new Error('Error in getting course data by id');
     }
   }
 
-  static async getUnsuspendedUnitsByCourseId(
+  static async getUnsuspendedLevelsByCourseId(
     courseId: string
-  ): Promise<UnitsType[]> {
+  ): Promise<LevelsType[]> {
     try {
-      const cachedUnits = await getFromCache(
-        'getUnsuspendedUnitsByCourseId',
+      const cachedLevels = await getFromCache(
+        'getUnsuspendedLevelsByCourseId',
         courseId
       );
-      if (cachedUnits) {
+      if (cachedLevels) {
         console.log(
-          'Cache hit: courses manager - getUnsuspendedUnitsByCourseId',
+          'Cache hit: courses manager - getUnsuspendedLevelsByCourseId',
           courseId
         );
-        return JSON.parse(cachedUnits); // Parse cached JSON data
+        return JSON.parse(cachedLevels); // Parse cached JSON data
       }
-      const units =
-        await CoursesRepository.getUnsuspendedUnitsByCourseId(courseId);
+      const levels =
+        await CoursesRepository.getUnsuspendedLevelsByCourseId(courseId);
       await setToCache(
-        'getUnsuspendedUnitsByCourseId',
+        'getUnsuspendedLevelsByCourseId',
         courseId,
-        JSON.stringify(units),
+        JSON.stringify(levels),
         3600
       );
-      console.log('courses manager getUnsuspendedUnitsByCourseId', units);
-      return units;
+      console.log('courses manager getUnsuspendedLevelsByCourseId', levels);
+      return levels;
     } catch (error: any) {
       console.error(
-        'Manager Error [getUnsuspendedUnitsByCourseId]:',
+        'Manager Error [getUnsuspendedLevelsByCourseId]:',
         error.message
       );
-      throw new Error('Error in getting unsuspended units by course id');
+      throw new Error('Error in getting unsuspended levels by course id');
     }
   }
 
@@ -151,27 +151,22 @@ export default class CoursesManager {
         console.log('Cache hit: courses manager - getFirstLessonId', courseId);
         return JSON.parse(cachedLessonId);
       }
-      const units =
-        await CoursesRepository.getUnsuspendedUnitsByCourseId(courseId);
-      if (units.length > 0) {
-        const firstUnitId = units[0]._id;
-        const levels =
-          await UnitsRepository.getUnsuspendedLevelsByUnitId(firstUnitId);
-        if (levels.length > 0) {
-          const firstLevelId = levels[0]._id;
-          const lessons =
-            await LevelsRepository.getsLessonsByLevelId(firstLevelId);
-          const lessonId = lessons.length > 0 ? lessons[0]._id : null;
-          lessonId
-            ? await setToCache(
-                'getFirstLessonId',
-                courseId,
-                JSON.stringify(lessonId),
-                2592000
-              )
-            : null;
-          return lessonId;
-        }
+      const levels =
+        await CoursesRepository.getUnsuspendedLevelsByCourseId(courseId);
+      if (levels.length > 0) {
+        const firstLevelId = levels[0]._id;
+        const lessons =
+          await LevelsRepository.getsLessonsByLevelId(firstLevelId);
+        const lessonId = lessons.length > 0 ? lessons[0]._id : null;
+        lessonId
+          ? await setToCache(
+              'getFirstLessonId',
+              courseId,
+              JSON.stringify(lessonId),
+              2592000
+            )
+          : null;
+        return lessonId;
       }
       return null;
     } catch (error: any) {
@@ -180,29 +175,29 @@ export default class CoursesManager {
     }
   }
 
-  static async getNextUnitId(prevUnitId: string): Promise<string | null> {
+  static async getNextLevelId(prevLevelId: string): Promise<string | null> {
     try {
-      const cachedUnitId = await getFromCache('getNextUnitId', prevUnitId);
-      if (cachedUnitId) {
-        console.log('Cache hit: courses manager - getNextUnitId', prevUnitId);
-        return JSON.parse(cachedUnitId);
+      const cachedLevelId = await getFromCache('getNextLevelId', prevLevelId);
+      if (cachedLevelId) {
+        console.log('Cache hit: courses manager - getNextLevelId', prevLevelId);
+        return JSON.parse(cachedLevelId);
       }
-      const nextUnitId = await CoursesRepository.getNextUnitId(prevUnitId);
-      nextUnitId
+      const nextLevelId = await CoursesRepository.getNextLevelId(prevLevelId);
+      nextLevelId
         ? await setToCache(
-            'getNextUnitId',
-            prevUnitId,
-            JSON.stringify(nextUnitId),
+            'getNextLevelId',
+            prevLevelId,
+            JSON.stringify(nextLevelId),
             3600
           )
         : null;
-      console.log('courses manager getNextUnitId', nextUnitId);
-      if (nextUnitId) {
-        return nextUnitId;
+      console.log('courses manager getNextLevelId', nextLevelId);
+      if (nextLevelId) {
+        return nextLevelId;
       } else return null;
     } catch (error: any) {
-      console.error('Manager Error [getNextUnitId]:', error.message);
-      throw new Error('Error in getting next unit id');
+      console.error('Manager Error [getNextLevelId]:', error.message);
+      throw new Error('Error in getting next level id');
     }
   }
 
@@ -240,14 +235,24 @@ export default class CoursesManager {
         courseId,
         filedsToUpdate
       );
-      await setToCache(
-        'courses',
-        courseId,
-        JSON.stringify(updatedCourse),
-        3600
-      );
-      await resetNamespaceCache('getAllCourses', 'allCourses');
-
+      if (updatedCourse) {
+        await setToCache(
+          'courses',
+          courseId,
+          JSON.stringify(updatedCourse),
+          3600
+        );
+        // Reset all related caches
+        await resetNamespaceCache('getCourseDataById', courseId);
+        await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
+        await resetNamespaceCache('getFirstLessonId', courseId);
+        await resetNamespaceCache('getAllCourses', 'allCourses');
+        
+        // Reset name-based cache if name was updated
+        if (filedsToUpdate.name) {
+          await resetNamespaceCache('coursesByName', updatedCourse.name);
+        }
+      }
       return updatedCourse;
     } catch (error: any) {
       console.error('Manager Error [updateCourse]:', error.message);
@@ -255,58 +260,71 @@ export default class CoursesManager {
     }
   }
 
-  static async suspendUnitByCourseId(
+  static async suspendLevelByCourseId(
     courseId: string,
-    unitId: string
+    levelId: string
   ): Promise<CoursesType | null> {
     try {
-      const updatedCourse = await CoursesRepository.suspendUnitByCourseId(
+      const updatedCourse = await CoursesRepository.suspendLevelByCourseId(
         courseId,
-        unitId
+        levelId
       );
-      await setToCache(
-        'courses',
-        courseId,
-        JSON.stringify(updatedCourse),
-        3600
-      );
-      await resetNamespaceCache('getAllCourses', 'allCourses');
-
+      if (updatedCourse) {
+        await setToCache(
+          'courses',
+          courseId,
+          JSON.stringify(updatedCourse),
+          3600
+        );
+        await resetNamespaceCache('getCourseDataById', courseId);
+        await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
+        await resetNamespaceCache('getFirstLessonId', courseId);
+        await resetNamespaceCache('getAllCourses', 'allCourses');
+      }
       return updatedCourse;
     } catch (error: any) {
-      console.error('Manager Error [suspendUnitByCourseId]:', error.message);
-      throw new Error('Error in suspendUnitByCourseId');
+      console.error('Manager Error [suspendLevelByCourseId]:', error.message);
+      throw new Error('Error in suspendLevelByCourseId');
     }
   }
 
-  static async unsuspendUnitByCourseId(
+  static async unsuspendLevelByCourseId(
     courseId: string,
-    unitId: string
+    levelId: string
   ): Promise<CoursesType | null> {
     try {
-      const updatedCourse = await CoursesRepository.unsuspendUnitByCourseId(
+      const updatedCourse = await CoursesRepository.unsuspendLevelByCourseId(
         courseId,
-        unitId
+        levelId
       );
-      await setToCache(
-        'courses',
-        courseId,
-        JSON.stringify(updatedCourse),
-        3600
-      );
-      await resetNamespaceCache('getAllCourses', 'allCourses');
-
+      if (updatedCourse) {
+        await setToCache(
+          'courses',
+          courseId,
+          JSON.stringify(updatedCourse),
+          3600
+        );
+        await resetNamespaceCache('getCourseDataById', courseId);
+        await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
+        await resetNamespaceCache('getFirstLessonId', courseId);
+        await resetNamespaceCache('getAllCourses', 'allCourses');
+      }
       return updatedCourse;
     } catch (error: any) {
-      console.error('Manager Error [unsuspendUnitByCourseId]:', error.message);
-      throw new Error('Error in unsuspendUnitByCourseId');
+      console.error('Manager Error [unsuspendLevelByCourseId]:', error.message);
+      throw new Error('Error in unsuspendLevelByCourseId');
     }
   }
 
   static async deleteCourse(courseId: string): Promise<CoursesType | null> {
     try {
       const status = await CoursesRepository.deleteCourse(courseId);
-      status ? await resetNamespaceCache('courses', courseId) : null;
+      if (status) {
+        await resetNamespaceCache('courses', courseId);
+        await resetNamespaceCache('getCourseDataById', courseId);
+        await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
+        await resetNamespaceCache('getFirstLessonId', courseId);
+      }
       await resetNamespaceCache('getAllCourses', 'allCourses');
       return status;
     } catch (error: any) {

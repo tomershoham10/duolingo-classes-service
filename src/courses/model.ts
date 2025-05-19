@@ -3,17 +3,17 @@ import { model, Schema } from 'mongoose';
 const CoursesSchema = new Schema<CoursesType>({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: false }, 
-  unitsIds: [
+  levelsIds: [
     {
       type: String,
-      ref: 'units',
+      ref: 'levels',
       required: true,
     },
   ],
-  suspendedUnitsIds: [
+  suspendedLevelsIds: [
     {
       type: String,
-      ref: 'units',
+      ref: 'levels',
       required: true,
     },
   ],
