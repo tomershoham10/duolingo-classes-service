@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import LevelsManager from './manager.js';
 import mongoose from 'mongoose';
 import CoursesModel from '../courses/model.js';
+import CoursesManager from '../courses/manager.js';
+
 export default class LevelsController {
   static async create(_req: Request, res: Response) {
     try {
@@ -44,6 +46,11 @@ export default class LevelsController {
       await course.save({ session: session });
       await session.commitTransaction();
       session.endSession();
+      
+      // Import and use CoursesManager to clear course data cache
+      await CoursesManager.clearCourseDataCaches(courseId);
+      console.log(`Cleared course data cache for courseId: ${courseId} after adding new level`);
+      
       res
         .status(201)
         .json({ message: 'New level created and course updated successfully' });

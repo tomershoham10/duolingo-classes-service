@@ -50,17 +50,20 @@ export default class CoursesRepository {
     }
   }
 
-
-
   static async getCourseDataById(courseId: string): Promise<any[] | null> {
     try {
       const course = await CoursesModel.findById(courseId);
       if (course) {
         const courseObjectId = new mongoose.Types.ObjectId(courseId);
+        
+        // First, get all level IDs from the course
+        const levelIds = course.levelsIds || [];
+        console.log('Total level IDs in course:', levelIds.length);
+        
         const courseData = await CoursesModel.aggregate([
           // Match the specific course
           { $match: { _id: courseObjectId } },
-          // Lookup levels directly from levelsIds
+          // Lookup levels directly from levelsIds, ensuring ALL levels are included
           {
             $lookup: {
               from: 'levels',
@@ -82,9 +85,12 @@ export default class CoursesRepository {
                     },
                   },
                 },
-                // Add a field to indicate if the level is suspended
+                // Sort levels based on their position in the levelsIds array to maintain order
                 {
                   $addFields: {
+                    sortIndex: {
+                      $indexOfArray: ['$$levelsIds', { $toString: '$_id' }]
+                    },
                     isSuspended: {
                       $in: [
                         { $toString: '$_id' },
@@ -93,6 +99,7 @@ export default class CoursesRepository {
                     }
                   }
                 },
+                { $sort: { sortIndex: 1 } },
                 {
                   $lookup: {
                     from: 'lessons',
@@ -172,6 +179,13 @@ export default class CoursesRepository {
         ]);
 
         console.log('Aggregated course data:', courseData);
+        console.log('Returned levels count:', courseData[0]?.levels?.length || 0);
+        
+        // Verify all levels were returned
+        if (courseData[0]?.levels?.length !== levelIds.length) {
+          console.warn(`Warning: Expected ${levelIds.length} levels but got ${courseData[0]?.levels?.length}`);
+        }
+        
         return courseData;
       }
       return null;

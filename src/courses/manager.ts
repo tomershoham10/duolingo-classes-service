@@ -90,18 +90,47 @@ export default class CoursesManager {
 
   static async getCourseDataById(courseId: string): Promise<any[] | null> {
     try {
-      const cachedCourse = await getFromCache('getCourseDataById', courseId);
+      // Always get fresh course data to check level count
+      const course = await CoursesRepository.getCourseById(courseId);
+      const levelCount = course ? course.levelsIds.length : 0;
+      const cacheKey = `${courseId}_v2_${levelCount}`;
+      
+      // Include timestamp in cache to limit cache lifetime
+      const now = Math.floor(Date.now() / 1000); // Current time in seconds
+      const maxCacheAge = 60; // Maximum cache age in seconds (1 minute)
+      
+      const cachedCourse = await getFromCache('getCourseDataById', cacheKey);
       if (cachedCourse) {
-        console.log('Cache hit: courses manager - getCourseDataById', courseId);
-        return JSON.parse(cachedCourse); // Parse cached JSON data
+        try {
+          const parsedCache = JSON.parse(cachedCourse);
+          // Check if the cache has timestamp and is fresh enough
+          if (parsedCache._timestamp && (now - parsedCache._timestamp < maxCacheAge)) {
+            console.log('Cache hit: courses manager - getCourseDataById', courseId);
+            return parsedCache.data;
+          } else {
+            console.log('Cache expired or invalid: courses manager - getCourseDataById', courseId);
+          }
+        } catch (e) {
+          console.log('Invalid cache data: courses manager - getCourseDataById', courseId);
+        }
       }
+      
+      // If we get here, we need fresh data
       const courseData = await CoursesRepository.getCourseDataById(courseId);
+      
+      // Store data with timestamp
+      const cacheData = {
+        _timestamp: now,
+        data: courseData
+      };
+      
       await setToCache(
         'getCourseDataById',
-        courseId,
-        JSON.stringify(courseData),
-        3600
+        cacheKey,
+        JSON.stringify(cacheData),
+        maxCacheAge * 2 // Cache TTL slightly longer than our max age check
       );
+      
       console.log('courses manager getCourseDataById', courseData);
       return courseData;
     } catch (error: any) {
@@ -226,14 +255,29 @@ export default class CoursesManager {
     }
   }
 
+  static async clearCourseDataCaches(courseId: string): Promise<void> {
+    try {
+      // Clear specific course data cache
+      await resetNamespaceCache('getCourseDataById', courseId);
+      
+      // To handle our new versioned cache keys, clear using a wildcard pattern
+      // This will ensure that any versions of the cache get cleared
+      await resetNamespaceCache('getCourseDataById', `${courseId}_v*`);
+      
+      console.log(`Cleared all cache keys for course data: ${courseId}`);
+    } catch (error: any) {
+      console.error('Error clearing cache:', error.message);
+    }
+  }
+
   static async updateCourse(
     courseId: string,
-    filedsToUpdate: Partial<CoursesType>
+    fieldsToUpdate: Partial<CoursesType>
   ): Promise<CoursesType | null> {
     try {
       const updatedCourse = await CoursesRepository.updateCourse(
         courseId,
-        filedsToUpdate
+        fieldsToUpdate
       );
       if (updatedCourse) {
         await setToCache(
@@ -242,14 +286,17 @@ export default class CoursesManager {
           JSON.stringify(updatedCourse),
           3600
         );
-        // Reset all related caches
-        await resetNamespaceCache('getCourseDataById', courseId);
+        
+        // Use our comprehensive cache clearing function
+        await this.clearCourseDataCaches(courseId);
+        
+        // Continue clearing other caches
         await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
         await resetNamespaceCache('getFirstLessonId', courseId);
         await resetNamespaceCache('getAllCourses', 'allCourses');
         
         // Reset name-based cache if name was updated
-        if (filedsToUpdate.name) {
+        if (fieldsToUpdate.name) {
           await resetNamespaceCache('coursesByName', updatedCourse.name);
         }
       }
@@ -276,7 +323,7 @@ export default class CoursesManager {
           JSON.stringify(updatedCourse),
           3600
         );
-        await resetNamespaceCache('getCourseDataById', courseId);
+        await this.clearCourseDataCaches(courseId);
         await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
         await resetNamespaceCache('getFirstLessonId', courseId);
         await resetNamespaceCache('getAllCourses', 'allCourses');
@@ -304,7 +351,7 @@ export default class CoursesManager {
           JSON.stringify(updatedCourse),
           3600
         );
-        await resetNamespaceCache('getCourseDataById', courseId);
+        await this.clearCourseDataCaches(courseId);
         await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
         await resetNamespaceCache('getFirstLessonId', courseId);
         await resetNamespaceCache('getAllCourses', 'allCourses');
@@ -321,7 +368,7 @@ export default class CoursesManager {
       const status = await CoursesRepository.deleteCourse(courseId);
       if (status) {
         await resetNamespaceCache('courses', courseId);
-        await resetNamespaceCache('getCourseDataById', courseId);
+        await this.clearCourseDataCaches(courseId);
         await resetNamespaceCache('getUnsuspendedLevelsByCourseId', courseId);
         await resetNamespaceCache('getFirstLessonId', courseId);
       }
