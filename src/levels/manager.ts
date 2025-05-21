@@ -222,9 +222,33 @@ export default class LevelsManager {
 
   static async deleteLevel(levelId: string): Promise<LevelsType | null> {
     try {
+      // First, get the level to get its lesson IDs
+      const levelToDelete = await LevelsRepository.getLevelById(levelId);
+      
+      if (levelToDelete && levelToDelete.lessonsIds && levelToDelete.lessonsIds.length > 0) {
+        // Delete all lessons associated with this level
+        for (const lessonId of levelToDelete.lessonsIds) {
+          try {
+            // Delete lesson and associated exercises
+            await LessonsManager.deleteLesson(lessonId);
+            console.log(`Deleted lesson ${lessonId} from level ${levelId}`);
+          } catch (error) {
+            console.error(`Failed to delete lesson ${lessonId}:`, error);
+            // Continue with other deletions even if one fails
+          }
+        }
+      }
+      
+      // Now delete the level and update any course references
       const status = await LevelsRepository.deleteLevel(levelId);
-      status ? await resetNamespaceCache('levels', levelId) : null;
-      await resetNamespaceCache('getAllLevels', 'allLevels');
+      
+      // Clear all relevant caches
+      if (status) {
+        await resetNamespaceCache('levels', levelId);
+        await resetNamespaceCache('getAllLevels', 'allLevels');
+        await resetNamespaceCache('getsLessonsByLevelId', levelId);
+        await resetNamespaceCache('getsUnsuspendedLessonsByLevelId', levelId);
+      }
 
       return status;
     } catch (error: any) {

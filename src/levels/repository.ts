@@ -214,6 +214,27 @@ export default class LevelsRepository {
 
   static async deleteLevel(levelId: string): Promise<LevelsType | null> {
     try {
+      // First, find courses that reference this level
+      const CourseModel = (await import('../courses/model.js')).default;
+      const coursesWithLevel = await CourseModel.find({
+        levelsIds: levelId
+      });
+      
+      // Update each course to remove the levelId
+      for (const course of coursesWithLevel) {
+        await CourseModel.findByIdAndUpdate(
+          course._id,
+          { $pull: { levelsIds: levelId } },
+          { new: true }
+        );
+        
+        // Clear cache for this course
+        const CoursesManager = (await import('../courses/manager.js')).default;
+        await CoursesManager.clearCourseDataCaches(course._id.toString());
+        console.log(`Removed level ${levelId} from course ${course._id}`);
+      }
+
+      // Delete the level itself
       const status = await LevelsModel.findOneAndDelete({ _id: levelId });
       console.log('lessons repo deleteLevel', status);
       return status;
