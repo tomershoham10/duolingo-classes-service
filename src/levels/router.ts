@@ -5,13 +5,13 @@ import { asyncHandler } from '../middleware/errorHandling/asyncHandler.js';
 const LevelsRouter = Router();
 
 LevelsRouter.get(
-  '/getNextLessonId/:prevLessonId',
-  asyncHandler(LevelsController.getNextLessonId)
+  '/getNextExerciseId/:prevExerciseId',
+  asyncHandler(LevelsController.getNextExerciseId)
 )
-  .get('/getLessonsById/:id', asyncHandler(LevelsController.getLessonsById))
+  .get('/getExercisesById/:id', asyncHandler(LevelsController.getExercisesById))
   .get(
-    '/getsUnsuspendedLessonsById/:id',
-    asyncHandler(LevelsController.getsUnsuspendedLessonsById)
+    '/getsUnsuspendedExercisesById/:id',
+    asyncHandler(LevelsController.getsUnsuspendedExercisesById)
   )
   .get('/:id', asyncHandler(LevelsController.getById))
   .get('/', asyncHandler(LevelsController.getMany));
@@ -22,12 +22,12 @@ LevelsRouter.post(
 ).post('/', asyncHandler(LevelsController.create));
 
 LevelsRouter.put(
-  '/suspendLesson/:levelId/:lessonId',
-  asyncHandler(LevelsController.suspendLesson)
+  '/suspendExercise/:levelId/:exerciseId',
+  asyncHandler(LevelsController.suspendExercise)
 )
   .put(
-    '/unsuspendLesson/:levelId/:lessonId',
-    asyncHandler(LevelsController.unsuspendLesson)
+    '/unsuspendExercise/:levelId/:exerciseId',
+    asyncHandler(LevelsController.unsuspendExercise)
   )
   .put('/:id', asyncHandler(LevelsController.update));
 

@@ -4,10 +4,9 @@ import { asyncHandler } from '../middleware/errorHandling/asyncHandler.js';
 
 const ResultsRouter = Router();
 
-ResultsRouter.get(
-  '/getResultsByLessonAndUser/:lessonId/:userId',
-  asyncHandler(ResultsController.getResultsByLessonAndUser)
-)
+ResultsRouter.get(  
+  '/getResultsByExerciseAndUser/:exerciseId/:userId',
+    asyncHandler(ResultsController.getResultsByExerciseAndUser))
   .get(
     '/getResultsByUserId/:userId',
     asyncHandler(ResultsController.getResultsByUserId)

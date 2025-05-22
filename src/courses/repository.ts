@@ -53,13 +53,33 @@ export default class CoursesRepository {
   static async getCourseDataById(courseId: string): Promise<any[] | null> {
     try {
       const course = await CoursesModel.findById(courseId);
-      if (course) {
-        const courseObjectId = new mongoose.Types.ObjectId(courseId);
-        
-        // First, get all level IDs from the course
-        const levelIds = course.levelsIds || [];
-        console.log('Total level IDs in course:', levelIds.length);
-        
+      if (!course) {
+        console.warn(`Course with ID ${courseId} not found`);
+        return null;
+      }
+
+      const courseObjectId = new mongoose.Types.ObjectId(courseId);
+      
+      // First, get all level IDs from the course
+      const levelIds = course.levelsIds || [];
+      console.log('Total level IDs in course:', levelIds.length);
+
+      // Validate level IDs to ensure they are all valid ObjectIDs
+      const validLevelIds = levelIds.filter(id => {
+        try {
+          new mongoose.Types.ObjectId(id);
+          return true;
+        } catch (err) {
+          console.error(`Invalid level ID found: ${id}`);
+          return false;
+        }
+      });
+
+      if (validLevelIds.length !== levelIds.length) {
+        console.error(`Found ${levelIds.length - validLevelIds.length} invalid level IDs`);
+      }
+      
+      try {
         const courseData = await CoursesModel.aggregate([
           // Match the specific course
           { $match: { _id: courseObjectId } },
@@ -178,20 +198,63 @@ export default class CoursesRepository {
           },
         ]);
 
-        console.log('Aggregated course data:', courseData);
+        console.log('Aggregated course data:', JSON.stringify(courseData));
         console.log('Returned levels count:', courseData[0]?.levels?.length || 0);
         
         // Verify all levels were returned
         if (courseData[0]?.levels?.length !== levelIds.length) {
           console.warn(`Warning: Expected ${levelIds.length} levels but got ${courseData[0]?.levels?.length}`);
+          
+          // Log which level IDs are missing
+          if (courseData[0]?.levels) {
+            const returnedLevelIds = courseData[0].levels.map((level: any) => level._id.toString());
+            const missingLevelIds = levelIds.filter(id => !returnedLevelIds.includes(id));
+            console.warn(`Missing level IDs: ${missingLevelIds.join(', ')}`);
+          }
         }
         
         return courseData;
+      } catch (aggError: any) {
+        console.error('Aggregation pipeline error:', aggError.message);
+        
+        // Fallback: Try to construct course data without the complex aggregation
+        console.log('Attempting fallback data retrieval method');
+        
+        const basicCourseData = await CoursesModel.findById(courseId).lean();
+        if (!basicCourseData) return null;
+        
+        // For each level ID, try to fetch the level directly
+        const levelIds = basicCourseData.levelsIds || [];
+        const levels = [];
+        
+        // Attempt to fetch each level directly without the complex aggregation
+        for (const levelId of levelIds) {
+          try {
+            const level = await LevelsModel.findById(levelId).lean();
+            if (level) {
+              levels.push({
+                ...level,
+                isSuspended: basicCourseData.suspendedLevelsIds?.includes(levelId) || false
+              });
+            } else {
+              console.warn(`Level ID ${levelId} not found in database`);
+            }
+          } catch (err) {
+            console.error(`Error fetching level ${levelId}:`, err);
+          }
+        }
+        
+        console.log(`Fallback method found ${levels.length} of ${levelIds.length} levels`);
+        
+        // Create a simplified version with the levels we were able to fetch
+        return [{
+          ...basicCourseData,
+          levels: levels
+        }];
       }
-      return null;
     } catch (error: any) {
-      console.error('Repository Error:', error.message);
-      throw new Error(`Course repo - getCourseDataById: ${error}`);
+      console.error('Repository Error:', error.message, error.stack);
+      throw new Error(`Course repo - getCourseDataById: ${error.message}`);
     }
   }
 

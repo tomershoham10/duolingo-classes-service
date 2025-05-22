@@ -60,37 +60,37 @@ export default class ResultsManager {
     }
   }
 
-  static async getResultsByLessonAndUser(
-    lessonId: string,
+  static async getResultsByExerciseAndUser(
+    exerciseId: string,
     userId: string
   ): Promise<ResultType[] | null> {
     try {
       const cachedResults = await getFromCache(
-        'getResultsByLessonAndUser',
-        lessonId + userId
+        'getResultsByExerciseAndUser',
+        exerciseId + userId
       );
       if (cachedResults) {
         console.log(
-          'Cache hit: results manager - getResultsByLessonAndUser',
-          lessonId,
+          'Cache hit: results manager - getResultsByExerciseAndUser',
+          exerciseId,
           userId
         );
         return JSON.parse(cachedResults); // Parse cached JSON data
       }
-      const results = await ResultsRepository.getResultsByLessonAndUser(
-        lessonId,
+      const results = await ResultsRepository.getResultsByExerciseAndUser(
+        exerciseId,
         userId
       );
       await setToCache(
-        'getResultsByLessonAndUser',
-        lessonId + userId,
+        'getResultsByExerciseAndUser',
+        exerciseId + userId,
         JSON.stringify(results),
         3600
       );
-      console.log('results manager getResultsByLessonAndUser', results);
+      console.log('results manager getResultsByExerciseAndUser', results);
       return results;
     } catch (error) {
-      throw new Error(`Results repo getResultsByLessonAndUser: ${error}`);
+      throw new Error(`Results repo getResultsByExerciseAndUser: ${error}`);
     }
   }
 

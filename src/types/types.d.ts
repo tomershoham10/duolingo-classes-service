@@ -25,8 +25,8 @@ interface UnitsType {
 
 interface LevelsType {
   _id: string;
-  lessonsIds: string[];
-  suspendedLessonsIds: string[];
+  exercisesIds: string[];
+  suspendedExercisesIds: string[];
 }
 
 /////////////// LESSONS ///////////////
@@ -178,7 +178,6 @@ interface ResultType {
   _id: string;
   userId: string;
   date: Date;
-  lessonId: string;
   exerciseId: string;
   answers: string[];
   score: number;

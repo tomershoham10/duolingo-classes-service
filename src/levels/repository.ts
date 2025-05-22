@@ -1,4 +1,4 @@
-import LessonsModel from '../lessons/model.js';
+import ExerciseModel from '../exercises/model.js';
 // import CoursesController from "../courses/controller.js";
 import CoursesManager from '../courses/manager.js';
 import LevelsModel from './model.js';
@@ -25,78 +25,69 @@ export default class LevelsRepository {
     }
   }
 
-  static async getsLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
+  static async getsExercisesByLevelId(levelId: string): Promise<ExerciseType[]> {
     try {
       const level = await LevelsModel.findById(levelId);
       if (level) {
-        const lessonsIds = level.lessonsIds;
-        if (lessonsIds.length > 0) {
-          const lessonsDetails = await LessonsModel.find({
-            _id: { $in: lessonsIds },
+        const exercisesIds = level.exercisesIds;
+        if (exercisesIds.length > 0) {
+          const exercisesDetails = await ExerciseModel.find({
+            _id: { $in: exercisesIds },
           });
-          // const lessonsInOrder = lessonsDetails.sort((a, b) => {
-          //     const aIndex = lessonsIds.indexOf(a._id);
-          //     const bIndex = lessonsIds.indexOf(b._id);
-          //     return aIndex - bIndex;
-          // });
-
-          // console.log("levels repo getsLessonsByLevelId", levelId);
-          return lessonsDetails;
+          return exercisesDetails;
         } else return [];
       } else return [];
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Level repo - getsLessonsByLevelId: ${error}`);
+      throw new Error(`Level repo - getsExercisesByLevelId: ${error}`);
     }
   }
 
-  static async getsUnsuspendedLessonsByLevelId(
+  static async getsUnsuspendedExercisesByLevelId(
     levelId: string
-  ): Promise<LessonsType[]> {
+  ): Promise<ExerciseType[]> {
     try {
       const level = await LevelsModel.findById(levelId);
       if (level) {
-        const lessonsIds = level.lessonsIds;
-        const unSuspendLessonsIds = lessonsIds.filter(
-          (lessonId) => !level.suspendedLessonsIds.includes(lessonId)
+        const exercisesIds = level.exercisesIds;
+        const unSuspendExercisesIds = exercisesIds.filter(
+          (exerciseId) => !level.suspendedExercisesIds.includes(exerciseId)
         );
 
-        if (unSuspendLessonsIds.length > 0) {
-          // const lessonsInOrder = lessonsIds.map((id: any) => lessonsDetails.find(lesson => lesson._id === id));
-          const lessonsDetails = await LessonsModel.find({
-            _id: { $in: unSuspendLessonsIds },
+        if (unSuspendExercisesIds.length > 0) {
+          const exercisesDetails = await ExerciseModel.find({
+            _id: { $in: unSuspendExercisesIds },
           });
 
-          // console.log("levels repo getsLessonsByLevelId", levelId);
-          return lessonsDetails;
+          return exercisesDetails;
         } else return [];
       } else return [];
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Level repo - getsLessonsByLevelId: ${error}`);
+      throw new Error(`Level repo - getsUnsuspendedExercisesByLevelId: ${error}`);
     }
   }
 
-  static async getNextLessonId(prevLessonId: string): Promise<string | null> {
+  static async getNextExerciseId(prevExerciseId: string): Promise<string | null> {
     try {
       const level = await LevelsModel.findOne({
-        lessons: { $in: [prevLessonId] },
+        exercisesIds: { $in: [prevExerciseId] },
       });
-      console.log('getNextLessonId repo - level', level);
+      console.log('getNextExerciseId repo - level', level);
       if (level) {
-        const lessonsIds = level.lessonsIds;
-        if (lessonsIds) {
-          const prevLessonIdIndex = lessonsIds.indexOf(prevLessonId);
+        const exercisesIds = level.exercisesIds;
+        if (exercisesIds) {
+          const prevExerciseIdIndex = exercisesIds.indexOf(prevExerciseId);
           if (
-            prevLessonIdIndex !== -1 &&
-            prevLessonIdIndex + 1 !== lessonsIds.length
+            prevExerciseIdIndex !== -1 &&
+            prevExerciseIdIndex + 1 !== exercisesIds.length
           ) {
-            const nextLessonId =
-              lessonsIds[lessonsIds.indexOf(prevLessonId) + 1];
-            if (level.suspendedLessonsIds.includes(nextLessonId)) {
-              await this.getNextLessonId(nextLessonId);
+            const nextExerciseId =
+              exercisesIds[exercisesIds.indexOf(prevExerciseId) + 1];
+            if (level.suspendedExercisesIds.includes(nextExerciseId)) {
+              await this.getNextExerciseId(nextExerciseId);
             }
-            return nextLessonId;
+            return nextExerciseId;
           } else {
             const response = await CoursesManager.getNextLevelId(level._id);
             //returns the next level's id
@@ -107,11 +98,11 @@ export default class LevelsRepository {
               }
               const nextLevel = await LevelsModel.findById(response);
               if (nextLevel) {
-                const nextLessonId = nextLevel.lessonsIds[0];
-                if (nextLevel.suspendedLessonsIds.includes(nextLessonId)) {
-                  await this.getNextLessonId(nextLessonId);
+                const nextExerciseId = nextLevel.exercisesIds[0];
+                if (nextLevel.suspendedExercisesIds.includes(nextExerciseId)) {
+                  await this.getNextExerciseId(nextExerciseId);
                 }
-                return nextLessonId;
+                return nextExerciseId;
               } else return null;
             } else return null;
           }
@@ -119,7 +110,7 @@ export default class LevelsRepository {
       } else return null;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Level repo - getNextLessonId: ${error}`);
+      throw new Error(`Level repo - getNextExerciseId: ${error}`);
     }
   }
 
@@ -144,7 +135,7 @@ export default class LevelsRepository {
         fieldsToUpdate,
         { new: true }
       );
-      console.log('lessons repo updateLevel', updatedLevel);
+      console.log('levels repo updateLevel', updatedLevel);
       return updatedLevel;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
@@ -152,9 +143,9 @@ export default class LevelsRepository {
     }
   }
 
-  static async suspendLessonById(
+  static async suspendExerciseById(
     levelId: string,
-    lessonId: string
+    exerciseId: string
   ): Promise<LevelsType | null> {
     try {
       const level = await LevelsModel.findById(levelId);
@@ -162,27 +153,27 @@ export default class LevelsRepository {
         return null;
       }
 
-      const suspendedLessonsIds = level.suspendedLessonsIds;
-      if (suspendedLessonsIds.includes(lessonId)) {
+      const suspendedExercisesIds = level.suspendedExercisesIds;
+      if (suspendedExercisesIds.includes(exerciseId)) {
         return null;
       }
 
       const updatedLevel = await LevelsModel.findByIdAndUpdate(
         levelId,
-        { suspendedLessonsIds: [...suspendedLessonsIds, lessonId] },
+        { suspendedExercisesIds: [...suspendedExercisesIds, exerciseId] },
         { new: true }
       );
-      console.log('lessons repo suspendLessonById', updatedLevel);
+      console.log('levels repo suspendExerciseById', updatedLevel);
       return updatedLevel;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Level repo - suspendLessonById: ${error}`);
+      throw new Error(`Level repo - suspendExerciseById: ${error}`);
     }
   }
 
-  static async unsuspendLessonById(
+  static async unsuspendExerciseById(
     levelId: string,
-    lessonId: string
+    exerciseId: string
   ): Promise<LevelsType | null> {
     try {
       const level = await LevelsModel.findById(levelId);
@@ -190,54 +181,32 @@ export default class LevelsRepository {
         return null;
       }
 
-      const suspendedLessonsIds = level.suspendedLessonsIds;
-      if (!suspendedLessonsIds.includes(lessonId)) {
+      const suspendedExercisesIds = level.suspendedExercisesIds;
+      if (!suspendedExercisesIds.includes(exerciseId)) {
         return null;
       }
 
       const updatedLevel = await LevelsModel.findByIdAndUpdate(
         levelId,
         {
-          suspendedLessonsIds: suspendedLessonsIds.filter(
-            (lesson) => lesson !== lessonId
+          suspendedExercisesIds: suspendedExercisesIds.filter(
+            (id) => id !== exerciseId
           ),
         },
         { new: true }
       );
-      console.log('lessons repo unsuspendLessonById', updatedLevel);
+      console.log('lessons repo unsuspendExerciseById', updatedLevel);
       return updatedLevel;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
-      throw new Error(`Level repo - unsuspendLessonById: ${error}`);
+      throw new Error(`Level repo - unsuspendExerciseById: ${error}`);
     }
   }
 
   static async deleteLevel(levelId: string): Promise<LevelsType | null> {
     try {
-      // First, find courses that reference this level
-      const CourseModel = (await import('../courses/model.js')).default;
-      const coursesWithLevel = await CourseModel.find({
-        levelsIds: levelId
-      });
-      
-      // Update each course to remove the levelId
-      for (const course of coursesWithLevel) {
-        await CourseModel.findByIdAndUpdate(
-          course._id,
-          { $pull: { levelsIds: levelId } },
-          { new: true }
-        );
-        
-        // Clear cache for this course
-        const CoursesManager = (await import('../courses/manager.js')).default;
-        await CoursesManager.clearCourseDataCaches(course._id.toString());
-        console.log(`Removed level ${levelId} from course ${course._id}`);
-      }
-
-      // Delete the level itself
-      const status = await LevelsModel.findOneAndDelete({ _id: levelId });
-      console.log('lessons repo deleteLevel', status);
-      return status;
+      const deletedLevel = await LevelsModel.findByIdAndDelete(levelId);
+      return deletedLevel;
     } catch (error: any) {
       console.error('Repository Error:', error.message);
       throw new Error(`Level repo - deleteLevel: ${error}`);

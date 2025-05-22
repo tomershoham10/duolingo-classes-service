@@ -5,11 +5,10 @@ import { startSession } from 'mongoose';
 export default class ResultsController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { userId, date, lessonId, exerciseId, answers, score } =
+      const { userId, date, exerciseId, answers, score } =
         req.body as {
           userId: string;
           date: Date;
-          lessonId: string;
           exerciseId: string;
           answers: string[];
           score: number;
@@ -18,14 +17,12 @@ export default class ResultsController {
       const result: {
         userId: string;
         date: Date;
-        lessonId: string;
         exerciseId: string;
         answers: string[];
         score: number;
       } = {
         userId: userId,
         date: date,
-        lessonId: lessonId,
         exerciseId: exerciseId,
         answers: answers,
         score: score,
@@ -80,17 +77,17 @@ export default class ResultsController {
     }
   }
 
-  static async getResultsByLessonAndUser(
+  static async getResultsByExerciseAndUser(
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const lessonId: string = req.params.lessonId;
+      const exerciseId: string = req.params.exerciseId;
       const userId: string = req.params.userId;
-      console.log('controller: getResultsByLessonAndUser', lessonId, userId);
-      const results = await ResultsManager.getResultsByLessonAndUser(
-        lessonId,
+      console.log('controller: getResultsByExerciseAndUser', exerciseId, userId);
+      const results = await ResultsManager.getResultsByExerciseAndUser(
+        exerciseId,
         userId
       );
       if (!results) {
@@ -159,9 +156,6 @@ export default class ResultsController {
         session.endSession();
         return res.status(404).json({ message: 'result not found' });
       }
-
-      //if result was updated successfully and the user finished the lesson,
-      //update the user's next lessson id field
 
       res.status(200).json({ updatedResult });
     } catch (error) {

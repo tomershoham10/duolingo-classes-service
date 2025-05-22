@@ -1,6 +1,6 @@
 import { startSession } from 'mongoose';
 import LevelsRepository from './repository.js';
-import LessonsManager from '../lessons/manager.js';
+import ExercisesModel from '../exercises/model.js';
 import {
   getFromCache,
   resetNamespaceCache,
@@ -12,14 +12,12 @@ export default class LevelsManager {
     const session = await startSession();
     session.startTransaction();
     try {
-      const createdLesson = await LessonsManager.createLesson({
-        name: 'New Lesson',
-      });
-      console.log('createLevel manager - createdLesson', createdLesson);
-
+      // Create an empty level without initial exercises
       const createdLevel = await LevelsRepository.createLevel({
-        lessonsIds: [createdLesson._id],
+        exercisesIds: [],
+        suspendedExercisesIds: []
       });
+      
       await setToCache(
         'levels',
         createdLevel._id,
@@ -50,93 +48,93 @@ export default class LevelsManager {
     }
   }
 
-  static async getsLessonsByLevelId(levelId: string): Promise<LessonsType[]> {
+  static async getsExercisesByLevelId(levelId: string): Promise<ExerciseType[]> {
     try {
-      const cachedLesson = await getFromCache('getsLessonsByLevelId', levelId);
-      if (cachedLesson) {
+      const cachedExercises = await getFromCache('getsExercisesByLevelId', levelId);
+      if (cachedExercises) {
         console.log(
-          'Cache hit: levels manager - getsLessonsByLevelId',
+          'Cache hit: levels manager - getsExercisesByLevelId',
           levelId
         );
-        return JSON.parse(cachedLesson); // Parse cached JSON data
+        return JSON.parse(cachedExercises); // Parse cached JSON data
       }
 
-      const lessons = await LevelsRepository.getsLessonsByLevelId(levelId);
-      lessons !== null
+      const exercises = await LevelsRepository.getsExercisesByLevelId(levelId);
+      exercises !== null
         ? await setToCache(
-            'getsLessonsByLevelId',
+            'getsExercisesByLevelId',
             levelId,
-            JSON.stringify(lessons),
+            JSON.stringify(exercises),
             3600
           )
         : null;
 
-      console.log('levels manager getsLessonsByLevelId', lessons);
-      return lessons;
+      console.log('levels manager getsExercisesByLevelId', exercises);
+      return exercises;
     } catch (error: any) {
-      console.error('Manager Error [getsLessonsByLevelId]:', error.message);
-      throw new Error('Error in getsLessonsByLevelId');
+      console.error('Manager Error [getsExercisesByLevelId]:', error.message);
+      throw new Error('Error in getsExercisesByLevelId');
     }
   }
 
-  static async getsUnsuspendedLessonsByLevelId(
+  static async getsUnsuspendedExercisesByLevelId(
     levelId: string
-  ): Promise<LessonsType[]> {
+  ): Promise<ExerciseType[]> {
     try {
-      const cachedLesson = await getFromCache(
-        'getsUnsuspendedLessonsByLevelId',
+      const cachedExercises = await getFromCache(
+        'getsUnsuspendedExercisesByLevelId',
         levelId
       );
-      if (cachedLesson) {
+      if (cachedExercises) {
         console.log(
-          'Cache hit: levels manager - getsUnsuspendedLessonsByLevelId',
+          'Cache hit: levels manager - getsUnsuspendedExercisesByLevelId',
           levelId
         );
-        return JSON.parse(cachedLesson); // Parse cached JSON data
+        return JSON.parse(cachedExercises); // Parse cached JSON data
       }
-      const lessons =
-        await LevelsRepository.getsUnsuspendedLessonsByLevelId(levelId);
-      lessons !== null
+      const exercises =
+        await LevelsRepository.getsUnsuspendedExercisesByLevelId(levelId);
+      exercises !== null
         ? await setToCache(
-            'getsUnsuspendedLessonsByLevelId',
+            'getsUnsuspendedExercisesByLevelId',
             levelId,
-            JSON.stringify(lessons),
+            JSON.stringify(exercises),
             3600
           )
         : null;
-      console.log('levels manager getsUnsuspendedLessonsByLevelId', lessons);
-      return lessons;
+      console.log('levels manager getsUnsuspendedExercisesByLevelId', exercises);
+      return exercises;
     } catch (error: any) {
       console.error(
-        'Manager Error [getsUnsuspendedLessonsByLevelId]:',
+        'Manager Error [getsUnsuspendedExercisesByLevelId]:',
         error.message
       );
-      throw new Error('Error in getsUnsuspendedLessonsByLevelId');
+      throw new Error('Error in getsUnsuspendedExercisesByLevelId');
     }
   }
 
-  static async getNextLessonId(prevLessonId: string): Promise<string | null> {
+  static async getNextExerciseId(prevExerciseId: string): Promise<string | null> {
     try {
-      const cachedLesson = await getFromCache('getNextLessonId', prevLessonId);
-      if (cachedLesson) {
+      const cachedExercise = await getFromCache('getNextExerciseId', prevExerciseId);
+      if (cachedExercise) {
         console.log(
-          'Cache hit: levels manager - getNextLessonId',
-          prevLessonId
+          'Cache hit: levels manager - getNextExerciseId',
+          prevExerciseId
         );
-        return JSON.parse(cachedLesson); // Parse cached JSON data
+        return JSON.parse(cachedExercise); // Parse cached JSON data
       }
-      const nextLessonId = await LevelsRepository.getNextLessonId(prevLessonId);
+      const nextExerciseId = await LevelsRepository.getNextExerciseId(prevExerciseId);
       await setToCache(
-        'getNextLessonId',
-        prevLessonId,
-        JSON.stringify(nextLessonId),
+        'getNextExerciseId',
+        prevExerciseId,
+        JSON.stringify(nextExerciseId),
         3600
       );
-      console.log('levels manager getNextLessonId', nextLessonId, prevLessonId);
-      return nextLessonId;
+      console.log('levels manager getNextExerciseId', nextExerciseId, prevExerciseId);
+      return nextExerciseId;
     } catch (error: any) {
-      console.error('Manager Error [getNextLessonId]:', error.message);
-      throw new Error('Error in getNextLessonId');
+      console.error('Manager Error [getNextExerciseId]:', error.message);
+      throw new Error('Error in getNextExerciseId');
     }
   }
 
@@ -182,75 +180,56 @@ export default class LevelsManager {
     }
   }
 
-  static async suspendLessonById(
+  static async suspendExerciseById(
     levelId: string,
-    lessonId: string
+    exerciseId: string
   ): Promise<LevelsType | null> {
     try {
-      const updatedLevel = await LevelsRepository.suspendLessonById(
+      const updatedLevel = await LevelsRepository.suspendExerciseById(
         levelId,
-        lessonId
+        exerciseId
       );
       await setToCache('levels', levelId, JSON.stringify(updatedLevel), 3600);
       await resetNamespaceCache('getAllLevels', 'allLevels');
+      await resetNamespaceCache('getsExercisesByLevelId', levelId);
+      await resetNamespaceCache('getsUnsuspendedExercisesByLevelId', levelId);
 
       return updatedLevel;
     } catch (error: any) {
-      console.error('Manager Error [suspendLessonById]:', error.message);
-      throw new Error('Error in suspendLessonById');
+      console.error('Manager Error [suspendExerciseById]:', error.message);
+      throw new Error('Error in suspendExerciseById');
     }
   }
 
-  static async unsuspendLessonById(
+  static async unsuspendExerciseById(
     levelId: string,
-    lessonId: string
+    exerciseId: string
   ): Promise<LevelsType | null> {
     try {
-      const updatedLevel = await LevelsRepository.unsuspendLessonById(
+      const updatedLevel = await LevelsRepository.unsuspendExerciseById(
         levelId,
-        lessonId
+        exerciseId
       );
       await setToCache('levels', levelId, JSON.stringify(updatedLevel), 3600);
       await resetNamespaceCache('getAllLevels', 'allLevels');
+      await resetNamespaceCache('getsExercisesByLevelId', levelId);
+      await resetNamespaceCache('getsUnsuspendedExercisesByLevelId', levelId);
 
       return updatedLevel;
     } catch (error: any) {
-      console.error('Manager Error [unsuspendLessonById]:', error.message);
-      throw new Error('Error in unsuspendLessonById');
+      console.error('Manager Error [unsuspendExerciseById]:', error.message);
+      throw new Error('Error in unsuspendExerciseById');
     }
   }
 
   static async deleteLevel(levelId: string): Promise<LevelsType | null> {
     try {
-      // First, get the level to get its lesson IDs
-      const levelToDelete = await LevelsRepository.getLevelById(levelId);
+      const deletedLevel = await LevelsRepository.deleteLevel(levelId);
       
-      if (levelToDelete && levelToDelete.lessonsIds && levelToDelete.lessonsIds.length > 0) {
-        // Delete all lessons associated with this level
-        for (const lessonId of levelToDelete.lessonsIds) {
-          try {
-            // Delete lesson and associated exercises
-            await LessonsManager.deleteLesson(lessonId);
-            console.log(`Deleted lesson ${lessonId} from level ${levelId}`);
-          } catch (error) {
-            console.error(`Failed to delete lesson ${lessonId}:`, error);
-            // Continue with other deletions even if one fails
-          }
-        }
-      }
+      await resetNamespaceCache('levels', levelId);
+      await resetNamespaceCache('getAllLevels', 'allLevels');
       
-      // Now delete the level and update any course references
-      const status = await LevelsRepository.deleteLevel(levelId);
-      
-      // Clear all relevant caches
-      if (status) {
-        await resetNamespaceCache('levels', levelId);
-        await resetNamespaceCache('getAllLevels', 'allLevels');
-        await resetNamespaceCache('getsLessonsByLevelId', levelId);
-        await resetNamespaceCache('getsUnsuspendedLessonsByLevelId', levelId);
-      }
-
-      return status;
+      return deletedLevel;
     } catch (error: any) {
       console.error('Manager Error [deleteLevel]:', error.message);
       throw new Error('Error in deleteLevel');

@@ -184,18 +184,18 @@ export default class CoursesManager {
         await CoursesRepository.getUnsuspendedLevelsByCourseId(courseId);
       if (levels.length > 0) {
         const firstLevelId = levels[0]._id;
-        const lessons =
-          await LevelsRepository.getsLessonsByLevelId(firstLevelId);
-        const lessonId = lessons.length > 0 ? lessons[0]._id : null;
-        lessonId
+        const exercises =
+          await LevelsRepository.getsExercisesByLevelId(firstLevelId);
+        const exerciseId = exercises.length > 0 ? exercises[0]._id : null;
+        exerciseId
           ? await setToCache(
               'getFirstLessonId',
               courseId,
-              JSON.stringify(lessonId),
+              JSON.stringify(exerciseId),
               2592000
             )
           : null;
-        return lessonId;
+        return exerciseId;
       }
       return null;
     } catch (error: any) {

@@ -11,11 +11,6 @@ const ResultsSchema = new Schema<ResultType>({
     default: Date.now,
     required: true,
   },
-  lessonId: {
-    type: String,
-    ref: 'lessons',
-    required: true,
-  },
   exerciseId: {
     type: String,
     ref: 'exercises',
@@ -32,7 +27,7 @@ const ResultsSchema = new Schema<ResultType>({
 });
 
 ResultsSchema.index(
-  { userId: 1, lessonId: 1, exerciseId: 1 },
+  { userId: 1, exerciseId: 1 },
   { unique: true }
 );
 

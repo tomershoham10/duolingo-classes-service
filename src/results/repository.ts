@@ -5,15 +5,14 @@ export default class ResultsRepository {
     try {
       console.log('Results repo create: ', result);
 
-      const startedResults = await ResultsRepository.getResultsByLessonAndUser(
-        result.lessonId as string,
+      // Check if user has already done this exercise
+      const startedResults = await ResultsRepository.getResultsByExerciseAndUser(
+        result.exerciseId as string,
         result.userId as string
       );
-      if (startedResults) {
-        const exercisesIds = startedResults.map((result) => result.exerciseId);
-        if (result.exerciseId && exercisesIds.includes(result.exerciseId)) {
-          throw new Error(`exercise has already been started.`);
-        }
+      
+      if (startedResults && startedResults.length > 0) {
+        throw new Error(`exercise has already been started.`);
       }
 
       const newResult = await ResultsModel.create(result);
@@ -45,19 +44,19 @@ export default class ResultsRepository {
     }
   }
 
-  static async getResultsByLessonAndUser(
-    lessonId: string,
+  static async getResultsByExerciseAndUser(
+    exerciseId: string,
     userId: string
   ): Promise<ResultType[] | null> {
     try {
       const results = await ResultsModel.find({
-        lessonId: lessonId,
+        exerciseId: exerciseId,
         userId: userId,
       });
-      console.log('results repo getResultsByLessonAndUser', results);
+      console.log('results repo getResultsByExerciseAndUser', results);
       return results;
     } catch (error) {
-      throw new Error(`results repo getResultsByLessonAndUser: ${error}`);
+      throw new Error(`results repo getResultsByExerciseAndUser: ${error}`);
     }
   }
 
