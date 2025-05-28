@@ -34,7 +34,17 @@ export default class LevelsRepository {
           const exercisesDetails = await ExerciseModel.find({
             _id: { $in: exercisesIds },
           });
-          return exercisesDetails;
+          
+          // Sort exercises to match the order in exercisesIds array
+          const sortedExercises: ExerciseType[] = [];
+          for (const id of exercisesIds) {
+            const exercise = exercisesDetails.find(exercise => exercise._id.toString() === id);
+            if (exercise) {
+              sortedExercises.push(exercise);
+            }
+          }
+          
+          return sortedExercises;
         } else return [];
       } else return [];
     } catch (error: any) {
@@ -59,7 +69,16 @@ export default class LevelsRepository {
             _id: { $in: unSuspendExercisesIds },
           });
 
-          return exercisesDetails;
+          // Sort exercises to match the order in unSuspendExercisesIds array
+          const sortedExercises: ExerciseType[] = [];
+          for (const id of unSuspendExercisesIds) {
+            const exercise = exercisesDetails.find(exercise => exercise._id.toString() === id);
+            if (exercise) {
+              sortedExercises.push(exercise);
+            }
+          }
+
+          return sortedExercises;
         } else return [];
       } else return [];
     } catch (error: any) {

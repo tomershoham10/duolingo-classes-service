@@ -1,6 +1,8 @@
 import { startSession } from 'mongoose';
 import LevelsRepository from './repository.js';
 import ExercisesModel from '../exercises/model.js';
+import CoursesModel from '../courses/model.js';
+import CoursesManager from '../courses/manager.js';
 import {
   getFromCache,
   resetNamespaceCache,
@@ -170,8 +172,22 @@ export default class LevelsManager {
         levelId,
         filedsToUpdate
       );
+      
+      // Clear level cache
       await setToCache('levels', levelId, JSON.stringify(updatedLevel), 3600);
       await resetNamespaceCache('getAllLevels', 'allLevels');
+      
+      // Clear exercise-related caches for this level
+      await resetNamespaceCache('getsExercisesByLevelId', levelId);
+      await resetNamespaceCache('getsUnsuspendedExercisesByLevelId', levelId);
+      
+      // Find and clear course data cache
+      // Find which course contains this level
+      const course = await CoursesModel.findOne({ levelsIds: levelId });
+      if (course) {
+        console.log(`Clearing course data cache for course ${course._id} after updating level ${levelId}`);
+        await CoursesManager.clearCourseDataCaches(course._id.toString());
+      }
 
       return updatedLevel;
     } catch (error: any) {
